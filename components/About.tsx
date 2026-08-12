@@ -6,19 +6,27 @@ import { skills } from "@/data/skills";
 import { education } from "@/data/education";
 import { siteConfig } from "@/data/site-config";
 
+interface Stat {
+  label: string;
+  value: string;
+  /** Optional second line, rendered smaller below the value. */
+  sub?: string;
+}
+
 // Derived from real data files rather than hand-typed numbers, so
 // these stay accurate as projects/skills are added or removed.
 const totalTechnologies = new Set(skills.flatMap((c) => c.skills.map((s) => s.name))).size;
 const currentProgram = education.find((e) => e.endYear === "In Progress");
 
-const stats = [
+const stats: Stat[] = [
   { label: "Projects Completed", value: String(projects.length) },
   { label: "Technologies", value: `${totalTechnologies}+` },
   // TODO: replace with a real count once you know how long you've been building.
   { label: "Years Building", value: "—" },
   {
     label: "Current Academic Level",
-    value: currentProgram ? "BSc ICT (In Progress)" : "—",
+    value: currentProgram ? "BSc ICT" : "—",
+    sub: currentProgram ? "(In Progress)" : undefined,
   },
 ];
 
@@ -79,10 +87,15 @@ export function About() {
             <div className="grid grid-cols-2 gap-4">
               {stats.map((stat) => (
                 <Card key={stat.label} className="p-5">
-                  <p className="font-display text-3xl font-semibold text-foreground">
+                  <p className="break-words font-display text-2xl font-semibold leading-tight text-foreground sm:text-3xl">
                     {stat.value}
                   </p>
-                  <p className="mt-1 text-sm text-muted">{stat.label}</p>
+                  {stat.sub && (
+                    <p className="mt-0.5 text-sm font-medium leading-tight text-foreground sm:text-lg">
+                      {stat.sub}
+                    </p>
+                  )}
+                  <p className="mt-1 text-xs text-muted sm:text-sm">{stat.label}</p>
                 </Card>
               ))}
             </div>
