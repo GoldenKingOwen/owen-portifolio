@@ -30,7 +30,13 @@ export function SectionHeading({
         className
       )}
     >
-      <span className="font-mono text-sm text-accent-violet/80" aria-hidden="true">
+      {/* Hidden on mobile visually; aria-hidden removes it from the
+          accessibility tree on all breakpoints since the path is
+          purely decorative. */}
+      <span
+        className="hidden font-mono text-sm text-accent-violet/80 sm:block"
+        aria-hidden="true"
+      >
         ~/{path}
       </span>
       <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
