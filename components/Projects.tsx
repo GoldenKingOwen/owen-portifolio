@@ -4,14 +4,17 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProjectCard } from "@/components/ProjectCard";
+import { ProjectModal } from "@/components/ProjectModal";
 import { cn } from "@/lib/utils";
 import { projects } from "@/data/projects";
+import { Project } from "@/types";
 
 const ALL = "All";
 
 export function Projects() {
   const prefersReducedMotion = useReducedMotion();
   const [activeFilter, setActiveFilter] = useState(ALL);
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   const technologies = useMemo(() => {
     const set = new Set<string>();
@@ -63,7 +66,7 @@ export function Projects() {
                 transition={{ duration: 0.3, delay: prefersReducedMotion ? 0 : i * 0.05 }}
                 className={project.featured ? "lg:col-span-2" : ""}
               >
-                <ProjectCard project={project} />
+                <ProjectCard project={project} onViewDetails={() => setActiveProject(project)} />
               </motion.div>
             ))}
           </AnimatePresence>
@@ -75,6 +78,12 @@ export function Projects() {
           </p>
         )}
       </div>
+
+      <AnimatePresence>
+        {activeProject && (
+          <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

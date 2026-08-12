@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ExternalLink, ArrowUpRight } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import { Card } from "@/components/ui/Card";
@@ -6,7 +5,13 @@ import { TechBadge } from "@/components/ui/Badge";
 import { ProjectThumbnail } from "@/components/ui/ProjectThumbnail";
 import { Project } from "@/types";
 
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({
+  project,
+  onViewDetails,
+}: {
+  project: Project;
+  onViewDetails: () => void;
+}) {
   return (
     <Card
       hoverLift
@@ -46,13 +51,14 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-4">
-          <Link
-            href={`/projects/${project.slug}`}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-violet hover:underline"
+          <button
+            type="button"
+            onClick={onViewDetails}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-violet transition-colors hover:text-accent-violet/80"
           >
             View Details
             <ArrowUpRight size={14} aria-hidden="true" />
-          </Link>
+          </button>
 
           {project.links.github && (
             <a
