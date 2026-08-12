@@ -2,7 +2,14 @@ import { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
   name: "Owen Matola",
-  title: "ICT Student | Software Developer | Full-Stack Developer",
+  title: "Software Developer | Full-Stack Developer",
+  roles: [
+    "Software Developer",
+    "Full-Stack Developer",
+    "Web Developer",
+    "Cybersecurity Enthusiast",
+    "Network Enthusiast",
+  ],
   shortBio:
     "ICT student at Mzuzu University building full-stack web applications and exploring cybersecurity. Currently interning at Infi-Tech as a web developer, working across NestJS microservices and Next.js.",
   location: "Mzuzu, Malawi",

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Download, Mail } from "lucide-react";
@@ -13,6 +14,44 @@ const FADE_UP = {
 
 export function Hero() {
   const prefersReducedMotion = useReducedMotion();
+
+  // Typewriter: types the current role out character by character, holds
+  // it, deletes it, then types the next — one role at a time. With reduced
+  // motion the first role renders statically (no timers run).
+  const roles = siteConfig.roles;
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const word = roles[roleIndex % roles.length] ?? "";
+    let delay: number;
+
+    if (!deleting && typed === word) {
+      delay = 1600; // hold the completed word before deleting
+    } else if (deleting && typed === "") {
+      delay = 300; // brief pause before typing the next word
+    } else {
+      delay = deleting ? 35 : 85;
+    }
+
+    const t = setTimeout(() => {
+      if (!deleting && typed === word) {
+        setDeleting(true);
+      } else if (deleting && typed === "") {
+        setDeleting(false);
+        setRoleIndex((i) => (i + 1) % roles.length);
+      } else if (!deleting) {
+        setTyped(word.slice(0, typed.length + 1));
+      } else {
+        setTyped(word.slice(0, typed.length - 1));
+      }
+    }, delay);
+
+    return () => clearTimeout(t);
+  }, [typed, deleting, roleIndex, roles, prefersReducedMotion]);
 
   const transition = (delay: number) =>
     prefersReducedMotion
@@ -79,7 +118,17 @@ export function Hero() {
             transition={transition(0.2)}
             className="mt-3 font-mono text-sm text-accent-violet sm:text-base"
           >
-            {siteConfig.title}
+            {/* Typewriter roles — typed one character at a time.
+                aria-hidden because the sr-only span below exposes the
+                full list to screen readers. */}
+            <span aria-hidden="true" className="inline-flex items-center">
+              <span className="inline-block">{prefersReducedMotion ? roles[0] : typed}</span>
+              <span
+                className="ml-1.5 inline-block h-[1em] w-[2px] animate-pulse bg-accent-violet motion-reduce:animate-none"
+                aria-hidden="true"
+              />
+            </span>
+            <span className="sr-only">{roles.join(", ")}</span>
           </motion.p>
 
           <motion.p

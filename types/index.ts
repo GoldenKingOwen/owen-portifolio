@@ -11,6 +11,8 @@ export interface SocialLink {
   export interface SiteConfig {
     name: string;
     title: string;
+    /** Roles cycled one-at-a-time in the hero (e.g. "Web Developer") */
+    roles: string[];
     shortBio: string;
     location: string;
     email: string;
