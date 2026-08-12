@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import type { CSSProperties } from "react";
 
 interface SectionHeadingProps {
   /** e.g. "about", "projects" — rendered as a terminal-style path like ~/about */
@@ -30,15 +31,17 @@ export function SectionHeading({
         className
       )}
     >
-      {/* Hidden on mobile visually; aria-hidden removes it from the
-          accessibility tree on all breakpoints since the path is
-          purely decorative. */}
+      {/* Decorative terminal path (~/about). The text is rendered by a CSS
+          pseudo-element (see .section-path::before in globals.css) rather
+          than a real text node, so screen readers never announce it — the
+          aria-hidden below is just extra safety. The path is hidden
+          entirely on small screens and the <h2> below is the actual
+          navigation point for screen-reader heading navigation. */}
       <span
-        className="hidden font-mono text-sm text-accent-violet/80 sm:block"
+        className="section-path hidden font-mono text-sm text-accent-violet/80 sm:block"
+        style={{ "--section-path": `~/${path}` } as CSSProperties}
         aria-hidden="true"
-      >
-        ~/{path}
-      </span>
+      />
       <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
         {title}
       </h2>

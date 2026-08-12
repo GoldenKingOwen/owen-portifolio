@@ -81,6 +81,13 @@ section[id] {
   scroll-margin-top: 4.5rem;
 }
 
+/* Decorative section paths (e.g. ~/about) in SectionHeading. The text
+   lives in CSS-generated content, which browsers do not expose to
+   screen readers, keeping the paths purely visual. */
+.section-path::before {
+  content: var(--section-path);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
