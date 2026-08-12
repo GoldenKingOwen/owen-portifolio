@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { siteConfig } from "@/data/site-config";
+import { siteUrl } from "@/lib/seo";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -25,7 +26,31 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000";
+// Structured data (JSON-LD) so search engines can index the site as a
+// person + website: helps "Owen Matola" queries surface this site.
+const seoJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: siteConfig.name,
+    url: siteUrl,
+    jobTitle: "ICT Student & Software Developer",
+    email: siteConfig.email,
+    alumniOf: { "@type": "CollegeOrUniversity", name: "Mzuzu University" },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Mzuzu",
+      addressCountry: "MW",
+    },
+    sameAs: [siteConfig.githubUrl],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: `${siteConfig.name} — Portfolio`,
+    url: siteUrl,
+  },
+];
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -101,6 +126,12 @@ export default function RootLayout({
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
+        <Script
+          id="seo-jsonld"
+          type="application/ld+json"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(seoJsonLd) }}
         />
         <ThemeProvider>
           <Navbar />
