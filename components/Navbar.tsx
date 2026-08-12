@@ -78,17 +78,39 @@ export function Navbar() {
     };
   }, []);
 
+  // Matches the scroll-margin-top set on section[id] in globals.css, so
+  // the section heading lands just below the fixed header.
+  const HEADER_OFFSET = 72;
+
+  // window.scrollTo with a computed position is more reliable on mobile
+  // browsers than scrollIntoView (which some phones cancel when a menu
+  // animation is running).
+  function scrollToSection(href: string) {
+    const el = document.querySelector(href);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+    window.scrollTo({ top, behavior: "smooth" });
+  }
+
   function handleNavClick(href: string) {
     setActiveSection(href); // highlight immediately, scroll confirms below
-    setMobileOpen(false);
 
-    if (pathname === "/") {
-      // On the homepage the target section exists — smooth-scroll to it.
-      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-    } else {
+    if (pathname !== "/") {
       // On a subpage (e.g. a project detail page) the section doesn't
       // exist here — navigate home and let the hash scroll to it.
+      setMobileOpen(false);
       router.push(href); // e.g. "/#home"
+      return;
+    }
+
+    if (mobileOpen) {
+      setMobileOpen(false);
+      // Let the drawer finish collapsing before scrolling — starting a
+      // smooth scroll while the height animation runs can cancel it on
+      // mobile devices.
+      setTimeout(() => scrollToSection(href), 200);
+    } else {
+      scrollToSection(href);
     }
   }
 
