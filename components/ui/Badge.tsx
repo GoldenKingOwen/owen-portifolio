@@ -14,8 +14,8 @@ export function TechBadge({ label, className }: TechBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md border border-white/10 bg-white/[0.03]",
-        "px-2.5 py-1 font-mono text-xs text-slate-300",
+        "inline-flex items-center rounded-md border border-border bg-surface",
+        "px-2.5 py-1 font-mono text-xs text-muted",
         className
       )}
     >
@@ -25,10 +25,10 @@ export function TechBadge({ label, className }: TechBadgeProps) {
 }
 
 const LEVEL_STYLES: Record<SkillLevel, string> = {
-  Comfortable: "border-violet-400/30 bg-violet-400/10 text-violet-200",
-  Intermediate: "border-blue-400/30 bg-blue-400/10 text-blue-200",
-  Familiar: "border-slate-400/30 bg-slate-400/10 text-slate-300",
-  Learning: "border-slate-500/20 bg-slate-500/5 text-slate-400",
+  Comfortable: "border-accent-violet/30 bg-accent-violet/10 text-accent-violet",
+  Intermediate: "border-accent-blue/30 bg-accent-blue/10 text-accent-blue",
+  Familiar: "border-border bg-surface text-muted",
+  Learning: "border-border/60 bg-surface/50 text-muted/80",
 };
 
 interface LevelBadgeProps {

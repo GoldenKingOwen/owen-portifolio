@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -37,8 +38,9 @@ export const metadata: Metadata = {
     "Owen Matola",
     "Software Developer",
     "Full-Stack Developer",
-    "ICT Student",
-    "Mzuzu University",
+    "Web Developer",
+    "Network Engineer",
+    "Cybersecurity Enthusiast",
     "Next.js Developer",
     "NestJS Developer",
     "Malawi Developer",
@@ -84,14 +86,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // suppressHydrationWarning: the inline script below sets data-theme on
+  // <html> from localStorage before hydration, so the server-rendered value
+  // ("dark") legitimately differs from the client's saved theme.
   return (
-    <html lang="en" data-theme="dark">
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
       <body
         className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
       >
+        {/* Runs before hydration to set the persisted theme on <html> (no
+            flash of the wrong theme). Rendered via next/script so React
+            doesn't warn about raw <script> tags in components. */}
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: themeInitScript }}
+        />
         <ThemeProvider>
           <Navbar />
           <main>{children}</main>

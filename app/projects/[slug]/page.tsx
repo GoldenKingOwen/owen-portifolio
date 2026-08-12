@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { projects } from "@/data/projects";
 import { Card } from "@/components/ui/Card";
@@ -5,8 +6,27 @@ import { ExternalLink, ArrowUpRight } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import Link from "next/link";
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = projects.find((p) => p.slug === params.slug);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const project = projects.find((p) => p.slug === slug);
+  return {
+    title: project ? project.name : "Project Not Found",
+    description: project?.shortDescription,
+  };
+}
+
+export default async function ProjectPage({
+  params,
+}: {
+  // Next.js 16: params is a Promise that must be awaited.
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const project = projects.find((p) => p.slug === slug);
 
   if (!project) {
     notFound();

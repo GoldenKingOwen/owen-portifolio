@@ -14,10 +14,10 @@ export function Card({ hoverLift = false, className, children, ...props }: CardP
   return (
     <div
       className={cn(
-        "rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm",
+        "rounded-2xl border border-border bg-surface backdrop-blur-sm",
         "shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset]",
         hoverLift &&
-          "transition-all duration-300 hover:-translate-y-1 hover:border-violet-400/30 hover:shadow-[0_0_30px_-10px_rgba(124,92,252,0.4)]",
+          "transition-all duration-300 hover:-translate-y-1 hover:border-accent-violet/40 hover:shadow-[0_0_30px_-10px_rgba(124,92,252,0.4)]",
         className
       )}
       {...props}

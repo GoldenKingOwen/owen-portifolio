@@ -30,16 +30,16 @@ export function SectionHeading({
         className
       )}
     >
-      <span className="font-mono text-sm text-violet-400/80" aria-hidden="true">
+      <span className="font-mono text-sm text-accent-violet/80" aria-hidden="true">
         ~/{path}
       </span>
-      <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+      <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
         {title}
       </h2>
       {description && (
         <p
           className={cn(
-            "max-w-2xl text-base text-slate-400",
+            "max-w-2xl text-base text-muted",
             align === "center" && "mx-auto"
           )}
         >

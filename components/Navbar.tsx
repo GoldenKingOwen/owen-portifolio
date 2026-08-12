@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
@@ -20,6 +21,8 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 export function Navbar() {
+  const router = useRouter();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("#home");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -78,7 +81,15 @@ export function Navbar() {
   function handleNavClick(href: string) {
     setActiveSection(href); // highlight immediately, scroll confirms below
     setMobileOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+
+    if (pathname === "/") {
+      // On the homepage the target section exists — smooth-scroll to it.
+      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // On a subpage (e.g. a project detail page) the section doesn't
+      // exist here — navigate home and let the hash scroll to it.
+      router.push(href); // e.g. "/#home"
+    }
   }
 
   return (

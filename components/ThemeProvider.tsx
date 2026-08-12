@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 type Theme = "dark" | "light";
 
@@ -14,12 +14,13 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 const STORAGE_KEY = "portfolio-theme";
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
-
-  useEffect(() => {
-    const current = document.documentElement.getAttribute("data-theme") as Theme | null;
-    if (current) setTheme(current);
-  }, []);
+  // The inline script in layout.tsx sets data-theme on <html> before
+  // hydration, so initialize straight from the DOM instead of syncing
+  // in an effect (avoids a cascading-render setState in an effect).
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window === "undefined") return "dark";
+    return (document.documentElement.getAttribute("data-theme") as Theme) ?? "dark";
+  });
 
   function toggleTheme() {
     const next: Theme = theme === "dark" ? "light" : "dark";

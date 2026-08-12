@@ -7,26 +7,59 @@ import { siteConfig } from "@/data/site-config";
 import { Mail } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 
+// Formspree form endpoint — submissions are sent straight from the
+// browser (no server route or API key needed). Uses the AJAX protocol:
+// POST JSON with an `Accept: application/json` header.
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrpzkegj";
+
 export function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("loading");
+    setErrorMessage(null);
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          // `_subject` sets the email subject in Formspree.
+          _subject: formData.subject,
+          message: formData.message,
+          // Honeypot — Formspree drops submissions that fill it in.
+          _gotcha: "",
+        }),
       });
+
+      const data = await res.json().catch(() => null);
+
       if (res.ok) {
         setStatus("success");
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
+        // Surface Formspree's real reason (spam filter, validation, ...)
+        // instead of a generic failure message.
+        const firstError =
+          Array.isArray(data?.errors) && data.errors.length > 0
+            ? typeof data.errors[0] === "string"
+              ? data.errors[0]
+              : (data.errors[0]?.message ?? null)
+            : typeof data?.error === "string"
+              ? data.error
+              : null;
+        setErrorMessage(firstError || "Failed to send message. Please try again.");
         setStatus("error");
       }
     } catch {
+      setErrorMessage("Network error — please check your connection and try again.");
       setStatus("error");
     }
   }
@@ -100,7 +133,9 @@ export function Contact() {
               {status === "loading" ? "Sending..." : "Send Message"}
             </button>
             {status === "success" && <p className="text-sm text-green-600">Message sent successfully!</p>}
-            {status === "error" && <p className="text-sm text-red-600">Failed to send message. Please try again.</p>}
+            {status === "error" && errorMessage && (
+              <p className="text-sm text-red-600">{errorMessage}</p>
+            )}
           </form>
         </Card>
 

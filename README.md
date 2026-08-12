@@ -12,7 +12,7 @@ A personal portfolio and résumé site for **Owen Matola**, an ICT student at Mz
 - **Active-section navigation** — the current section is highlighted in the navbar as you scroll, with smooth-scroll on link click.
 - **Dark / light theme** — persisted preference with a no-flash inline init script; accessible via the toggle in the navbar.
 - **Project detail pages** — each project has its own route (`/projects/[slug]`) with overview, problem statement, objectives, features, architecture, challenges, and solutions.
-- **Contact form** — submits messages via the built-in API route (`app/api/contact/route.ts`) using [Resend](https://resend.com) for email delivery.
+- **Contact form** — submits messages straight to [Formspree](https://formspree.io) from the browser (AJAX), so no email credentials are needed on the server.
 - **Polished UI** — Framer Motion animations, custom glow orbs, hover states, and a reduced-motion–friendly design.
 
 ## 🛠 Tech Stack
@@ -24,7 +24,7 @@ A personal portfolio and résumé site for **Owen Matola**, an ICT student at Mz
 | Animation  | [Framer Motion](https://www.framer.com/motion/)                          |
 | Icons      | [Lucide React](https://lucide.dev)                                       |
 | Fonts      | `next/font` (Space Grotesk, Inter, JetBrains Mono)                       |
-| Email      | [Resend](https://resend.com) (contact form)                              |
+| Email      | [Formspree](https://formspree.io) (contact form)                                                      |
 
 ## 🚀 Getting Started
 
@@ -48,15 +48,9 @@ Copy `.env.example` to `.env.local` and fill in the values:
 ```bash
 # Used for SEO metadata (Open Graph, canonical links)
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-
-# Required for the contact form to send emails (Resend API key)
-RESEND_API_KEY=re_xxxxxxxxxxxx
-
-# Where contact-form messages are delivered
-CONTACT_EMAIL=you@example.com
 ```
 
-> Without `RESEND_API_KEY` / `CONTACT_EMAIL` the contact form returns an honest error — the site works fine, but emails won't be sent.
+> The contact form needs **no** API keys — it submits directly to Formspree from the browser (see `components/Contact.tsx`). To change the delivery inbox, update the form ID in that file or the destination in your Formspree dashboard.
 
 ## 📁 Project Structure
 
@@ -66,7 +60,7 @@ app/
   layout.tsx               # Root layout: fonts, metadata, theme, navbar, footer
   globals.css              # Tailwind v4 import + theme tokens + base styles
   projects/[slug]/page.tsx # Individual project detail pages
-  api/contact/route.ts     # Contact form → Resend API route
+
 components/
   Navbar.tsx               # Sticky nav with active-section scroll spy
   Hero.tsx · About.tsx · Skills.tsx · Projects.tsx · Services.tsx

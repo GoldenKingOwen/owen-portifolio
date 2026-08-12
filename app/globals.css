@@ -75,6 +75,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Sections anchor below the fixed header (used by nav links and
+   scrollIntoView) so headings aren't hidden behind the navbar. */
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
