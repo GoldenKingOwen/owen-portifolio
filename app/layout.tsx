@@ -34,7 +34,7 @@ const seoJsonLd = [
     "@type": "Person",
     name: siteConfig.name,
     url: siteUrl,
-    jobTitle: "ICT Student & Software Developer",
+    jobTitle: "Software Developer & Cybersecurity Enthusiast",
     email: siteConfig.email,
     alumniOf: { "@type": "CollegeOrUniversity", name: "Mzuzu University" },
     address: {
@@ -55,7 +55,7 @@ const seoJsonLd = [
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteConfig.name} | ICT Student & Software Developer`,
+    default: `${siteConfig.name} | Software Developer`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.shortBio,
@@ -75,13 +75,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: siteUrl,
-    title: `${siteConfig.name} | ICT Student & Software Developer`,
+    title: `${siteConfig.name} | Software Developer`,
     description: siteConfig.shortBio,
     siteName: siteConfig.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} | ICT Student & Software Developer`,
+    title: `${siteConfig.name} | Software Developer`,
     description: siteConfig.shortBio,
   },
   alternates: {
