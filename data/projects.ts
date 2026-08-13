@@ -15,7 +15,7 @@ export const projects: Project[] = [
     image: "/projects/chess-practice.png",
     links: {
       github: "https://github.com/GoldenKingOwen/simple-js-chess",
-      live: "https://owen-chess.netlify.app/practice",
+      live: "https://owen-chess.netlify.app/",
     },
     detail: {
       overview:
