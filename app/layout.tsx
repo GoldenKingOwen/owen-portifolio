@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { CursorDot } from "@/components/CursorDot";
 import { siteConfig } from "@/data/site-config";
 import { siteUrl } from "@/lib/seo";
 
@@ -133,11 +134,12 @@ export default function RootLayout({
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(seoJsonLd) }}
         />
-        <ThemeProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </ThemeProvider>
+         <ThemeProvider>
+           <Navbar />
+           <main>{children}</main>
+           <Footer />
+           <CursorDot />
+         </ThemeProvider>
       </body>
     </html>
   );
