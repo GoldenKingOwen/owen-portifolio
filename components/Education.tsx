@@ -1,5 +1,6 @@
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Card } from "@/components/ui/Card";
+import { Certifications } from "@/components/Certifications";
 import { education } from "@/data/education";
 import { formatDateRange } from "@/lib/utils";
 
@@ -59,6 +60,8 @@ export function Education() {
             </li>
           ))}
         </ol>
+
+        <Certifications />
       </div>
     </section>
   );
