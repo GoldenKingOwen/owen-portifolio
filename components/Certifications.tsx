@@ -1,12 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { CertificateModal } from "@/components/CertificateModal";
+import { certifications } from "@/data/certifications";
 import { renderPdfFirstPage } from "@/lib/pdf";
+import { cn } from "@/lib/utils";
 import { Certification } from "@/types";
 
+const PANEL_ID = "certifications-panel";
 const THUMBNAIL_WIDTH_PX = 200;
 
-export function CertificateThumbnail({
+function CertificateThumbnail({
   certification,
   onOpen,
 }: {
@@ -68,5 +75,67 @@ export function CertificateThumbnail({
         {certification.title}
       </span>
     </button>
+  );
+}
+
+/**
+ * Minor, optional disclosure tucked below the Education timeline — not a
+ * peer section. Collapsed on every page load; the thumbnail grid (and the
+ * PDFs behind it) only loads once the user expands it.
+ */
+export function Certifications() {
+  const [expanded, setExpanded] = useState(false);
+  const [selected, setSelected] = useState<Certification | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  return (
+    <div className="mt-10">
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        aria-expanded={expanded}
+        aria-controls={PANEL_ID}
+        className="inline-flex items-center gap-1.5 font-mono text-xs text-muted transition-colors hover:text-foreground"
+      >
+        <ChevronDown
+          size={14}
+          className={cn("transition-transform duration-200", expanded && "rotate-180")}
+          aria-hidden="true"
+        />
+        Certifications ({certifications.length})
+      </button>
+
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            id={PANEL_ID}
+            key="panel"
+            initial={prefersReducedMotion ? false : { height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={prefersReducedMotion ? undefined : { height: 0, opacity: 0 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <Card className="mt-3 p-4">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                {certifications.map((cert) => (
+                  <CertificateThumbnail
+                    key={cert.file}
+                    certification={cert}
+                    onOpen={() => setSelected(cert)}
+                  />
+                ))}
+              </div>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selected && (
+          <CertificateModal certification={selected} onClose={() => setSelected(null)} />
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
