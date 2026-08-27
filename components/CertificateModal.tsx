@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
+import { renderPdfFirstPage } from "@/lib/pdf";
 import { Certification } from "@/types";
 
 interface CertificateModalProps {
@@ -10,13 +11,25 @@ interface CertificateModalProps {
   onClose: () => void;
 }
 
+const MODAL_WIDTH_PX = 720;
+
+/**
+ * View-only certificate viewer — a deterrent, not a guarantee. Nothing here
+ * stops a screenshot. It only removes the *easy* download paths: the PDF is
+ * fetched as bytes and rasterized onto a <canvas> (never exposed as an
+ * <img src> or <a href> that could be right-clicked or copied from
+ * devtools), the context menu is blocked, and text/selection is disabled.
+ */
 export function CertificateModal({ certification, onClose }: CertificateModalProps) {
   const prefersReducedMotion = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null;
+    const controller = new AbortController();
 
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -46,12 +59,28 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
     document.body.style.overflow = "hidden";
     closeButtonRef.current?.focus();
 
+    const canvas = canvasRef.current;
+    if (canvas) {
+      setStatus("loading");
+      renderPdfFirstPage(
+        `/certifications/${certification.file}`,
+        canvas,
+        MODAL_WIDTH_PX,
+        controller.signal
+      )
+        .then(() => setStatus("ready"))
+        .catch(() => {
+          if (!controller.signal.aborted) setStatus("error");
+        });
+    }
+
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
       previouslyFocused?.focus();
+      controller.abort();
     };
-  }, [onClose]);
+  }, [certification.file, onClose]);
 
   const titleId = `certificate-modal-title-${certification.file}`;
   const motionProps = prefersReducedMotion
@@ -105,6 +134,32 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
           >
             <X size={18} aria-hidden="true" />
           </button>
+        </div>
+
+        <div
+          className="flex flex-1 items-center justify-center overflow-auto bg-background p-4 sm:p-6"
+          onContextMenu={(e) => e.preventDefault()}
+        >
+          <div className="relative w-full max-w-2xl">
+            <canvas
+              ref={canvasRef}
+              draggable={false}
+              className="block w-full select-none rounded-lg border border-border"
+            />
+            {status === "loading" && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span
+                  className="h-6 w-6 animate-spin rounded-full border-2 border-muted border-t-transparent"
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+            {status === "error" && (
+              <div className="absolute inset-0 flex items-center justify-center px-4 text-center text-sm text-muted">
+                Couldn&apos;t load this certificate. Please try again later.
+              </div>
+            )}
+          </div>
         </div>
       </motion.div>
     </motion.div>
