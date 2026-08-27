@@ -109,6 +109,20 @@ export interface SocialLink {
     relevantCoursework?: string[];
     achievements?: string[];
   }
+
+  // ─────────────────────────────────────────────────────────────
+  // Certifications
+  // ─────────────────────────────────────────────────────────────
+
+  export interface Certification {
+    title: string;
+    issuer: string;
+    /** Institution or program the certificate was completed through */
+    offeredBy: string;
+    date: string;
+    /** Filename under /public/certifications */
+    file: string;
+  }
   
   // ─────────────────────────────────────────────────────────────
   // Navigation
