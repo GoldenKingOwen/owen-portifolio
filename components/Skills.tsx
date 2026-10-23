@@ -1,39 +1,40 @@
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Card } from "@/components/ui/Card";
-import { LevelBadge } from "@/components/ui/Badge";
+import { Section } from "@/components/ui/Section";
 import { skills } from "@/data/skills";
+import type { SkillLevel } from "@/types";
+
+// Level is typography, not a chip: weight and tone step down with confidence,
+// and the word itself is always printed.
+const LEVEL_STYLE: Record<SkillLevel, string> = {
+  Comfortable: "font-semibold text-foreground",
+  Intermediate: "font-medium text-foreground",
+  Familiar: "text-muted",
+  Learning: "text-muted italic",
+};
 
 export function Skills() {
   return (
-    <section id="skills" aria-labelledby="skills-heading" className="relative py-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <SectionHeading
-          path="skills"
-          title="Technical Skills"
-          description="Organized by area, with an honest level next to each — not proficiency bars pretending to be precise."
-        />
-
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {skills.map((category) => (
-            <Card key={category.category} className="p-6">
-              <h3 className="font-display text-base font-semibold text-foreground">
-                {category.category}
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {category.skills.map((skill) => (
-                  <li
-                    key={skill.name}
-                    className="flex items-center justify-between gap-3"
-                  >
-                    <span className="text-sm text-muted">{skill.name}</span>
-                    <LevelBadge level={skill.level} />
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          ))}
-        </div>
+    <Section id="skills" title="Skills" className="py-12 sm:py-16">
+      <p className="max-w-[60ch] text-sm text-muted">
+        Self-rated: Comfortable, Intermediate, Familiar, Learning.
+      </p>
+      <div className="mt-6 space-y-8">
+        {skills.map((group) => (
+          <div key={group.category}>
+            <h3 className="text-sm font-semibold text-foreground">{group.category}</h3>
+            <dl className="mt-2 grid grid-cols-1 gap-x-10 sm:grid-cols-2">
+              {group.skills.map((skill) => (
+                <div
+                  key={skill.name}
+                  className="flex items-baseline justify-between gap-4 border-b border-border py-2 text-sm"
+                >
+                  <dt className={LEVEL_STYLE[skill.level]}>{skill.name}</dt>
+                  <dd className="font-mono text-xs text-muted">{skill.level}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }
