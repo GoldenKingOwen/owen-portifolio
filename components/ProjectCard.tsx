@@ -18,7 +18,7 @@ export function ProjectCard({ project, lead = false }: { project: Project; lead?
         <h3
           className={cn(
             "font-semibold text-foreground",
-            lead ? "text-h2" : "text-lg leading-snug"
+            lead ? "text-2xl leading-tight tracking-tight sm:text-4xl" : "text-lg leading-snug"
           )}
         >
           {project.name}
@@ -35,8 +35,8 @@ export function ProjectCard({ project, lead = false }: { project: Project; lead?
         {project.problemSolved}
       </p>
 
-      <p className="mt-4 max-w-[60ch] font-mono text-xs leading-relaxed text-muted">
-        {project.technologies.join(" · ")}
+      <p className="mt-4 max-w-[60ch] text-sm leading-relaxed text-muted">
+        {project.technologies.join(", ")}
       </p>
 
       <div className="mt-3 flex flex-wrap items-center gap-x-6">

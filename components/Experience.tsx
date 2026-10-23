@@ -36,8 +36,8 @@ export function Experience() {
               </ul>
             )}
 
-            <p className="mt-4 max-w-[65ch] font-mono text-xs leading-relaxed text-muted">
-              {job.technologies.join(" · ")}
+            <p className="mt-4 max-w-[65ch] text-sm leading-relaxed text-muted">
+              {job.technologies.join(", ")}
             </p>
           </li>
         ))}
