@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Card } from "@/components/ui/Card";
+import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/data/site-config";
-import { Mail } from "lucide-react";
-import { GithubIcon } from "@/components/icons/GithubIcon";
 
 // Formspree form endpoint — submissions are sent straight from the
 // browser (no server route or API key needed). Uses the AJAX protocol:
 // POST JSON with an `Accept: application/json` header.
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrpzkegj";
+
+const fieldClass =
+  "block w-full rounded-ui border border-field bg-background px-3 py-3 text-base text-foreground focus-visible:outline-offset-1";
+const labelClass = "mb-1.5 block text-sm font-medium text-foreground";
+const textLink =
+  "inline-flex min-h-11 items-center text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent";
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
@@ -65,91 +68,102 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="relative py-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <SectionHeading
-          path="contact"
-          title="Get In Touch"
-          description="Have a project in mind or want to collaborate? I'd love to hear from you."
-        />
+    <Section id="contact" title="Contact">
+      <p className="max-w-[60ch] text-base leading-relaxed text-foreground sm:text-lg">
+        Have a project in mind or want to collaborate? Write to me directly, or use the form.
+      </p>
 
-        <Card className="p-6 sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div>
-                <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-foreground">Name</label>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-accent-violet focus:outline-none"
-                  placeholder="Your name"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-foreground">Email</label>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-accent-violet focus:outline-none"
-                  placeholder="you@example.com"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="subject" className="mb-1.5 block text-sm font-medium text-foreground">Subject</label>
-              <input
-                id="subject"
-                type="text"
-                required
-                value={formData.subject}
-                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-accent-violet focus:outline-none"
-                placeholder="What's this about?"
-              />
-            </div>
-            <div>
-              <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-foreground">Message</label>
-              <textarea
-                id="message"
-                rows={5}
-                required
-                value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                className="w-full rounded-lg border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus:border-accent-violet focus:outline-none"
-                placeholder="Tell me about your project..."
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={status === "loading"}
-              className="rounded-lg bg-accent-violet px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-violet/90 disabled:opacity-50"
-            >
-              {status === "loading" ? "Sending..." : "Send Message"}
-            </button>
-            {status === "success" && <p className="text-sm text-green-600">Message sent successfully!</p>}
-            {status === "error" && errorMessage && (
-              <p className="text-sm text-red-600">{errorMessage}</p>
-            )}
-          </form>
-        </Card>
-
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
-          <a href={`mailto:${siteConfig.email}`} className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground">
-            <Mail size={16} aria-hidden="true" />
-            {siteConfig.email}
-          </a>
-          <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-muted hover:text-foreground">
-            <GithubIcon size={16} aria-hidden="true" />
-            GitHub
-          </a>
-        </div>
+      <div className="mt-4 flex flex-wrap gap-x-6">
+        <a href={`mailto:${siteConfig.email}`} className={textLink}>
+          {siteConfig.email}
+        </a>
+        <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer" className={textLink}>
+          GitHub profile
+        </a>
       </div>
-    </section>
+
+      <form onSubmit={handleSubmit} className="mt-10 max-w-xl space-y-5">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <label htmlFor="name" className={labelClass}>
+              Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              required
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className={fieldClass}
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className={labelClass}>
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className={fieldClass}
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="subject" className={labelClass}>
+            Subject
+          </label>
+          <input
+            id="subject"
+            name="subject"
+            type="text"
+            required
+            value={formData.subject}
+            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+            className={fieldClass}
+          />
+        </div>
+        <div>
+          <label htmlFor="message" className={labelClass}>
+            Message
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows={6}
+            required
+            value={formData.message}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            className={fieldClass}
+          />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-4">
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            className="inline-flex min-h-11 items-center rounded-ui bg-accent px-6 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
+          >
+            {status === "loading" ? "Sending…" : "Send message"}
+          </button>
+
+          {/* Live region stays mounted so screen readers announce the result. */}
+          <p role="status" aria-live="polite" className="text-sm font-medium text-success">
+            {status === "success" ? "Message sent. I will reply to the email you gave." : ""}
+          </p>
+        </div>
+        {status === "error" && errorMessage && (
+          <p role="alert" className="text-sm font-medium text-danger">
+            {errorMessage}
+          </p>
+        )}
+      </form>
+    </Section>
   );
 }

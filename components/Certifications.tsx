@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import { Card } from "@/components/ui/Card";
 import { CertificateModal } from "@/components/CertificateModal";
 import { certifications } from "@/data/certifications";
 import { renderPdfFirstPage } from "@/lib/pdf";
@@ -45,10 +44,10 @@ function CertificateThumbnail({
     <button
       type="button"
       onClick={onOpen}
-      className="group flex flex-col gap-2 rounded-lg border border-border bg-surface p-2 text-left transition-colors hover:border-accent-violet/40"
+      className="group flex flex-col gap-2 rounded-ui border border-border p-2 text-left transition-colors hover:bg-raised"
     >
       <div
-        className="relative aspect-[4/3] w-full select-none overflow-hidden rounded-md border border-border bg-background-secondary"
+        className="relative aspect-[4/3] w-full select-none overflow-hidden rounded-ui border border-border bg-raised"
         onContextMenu={(e) => e.preventDefault()}
       >
         <canvas
@@ -66,12 +65,12 @@ function CertificateThumbnail({
           </div>
         )}
         {status === "error" && (
-          <div className="absolute inset-0 flex items-center justify-center px-2 text-center text-[10px] text-muted">
+          <div className="absolute inset-0 flex items-center justify-center px-2 text-center text-xs text-muted">
             Preview unavailable
           </div>
         )}
       </div>
-      <span className="line-clamp-2 text-xs font-medium text-foreground group-hover:text-accent-violet">
+      <span className="line-clamp-2 text-xs font-medium text-foreground group-hover:underline">
         {certification.title}
       </span>
     </button>
@@ -89,13 +88,13 @@ export function Certifications() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <div className="mt-10">
+    <div className="mt-12 border-t border-border pt-4">
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
         aria-expanded={expanded}
         aria-controls={PANEL_ID}
-        className="inline-flex items-center gap-1.5 font-mono text-xs text-muted transition-colors hover:text-foreground"
+        className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent"
       >
         <ChevronDown
           size={14}
@@ -116,7 +115,7 @@ export function Certifications() {
             transition={{ duration: prefersReducedMotion ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <Card className="mt-3 p-4">
+            <div className="mt-3">
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
                 {certifications.map((cert) => (
                   <CertificateThumbnail
@@ -126,7 +125,7 @@ export function Certifications() {
                   />
                 ))}
               </div>
-            </Card>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

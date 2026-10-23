@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { projects } from "@/data/projects";
-import { Card } from "@/components/ui/Card";
-import { ExternalLink, ArrowUpRight } from "lucide-react";
-import { GithubIcon } from "@/components/icons/GithubIcon";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { projects } from "@/data/projects";
 import { JsonLd } from "@/components/JsonLd";
 import { siteConfig } from "@/data/site-config";
 import { projectJsonLd } from "@/lib/structured-data";
@@ -29,10 +27,7 @@ export async function generateMetadata({
   if (!project) return { title: "Project Not Found", robots: { index: false } };
 
   const title = `${project.name} — ${project.technologies.slice(0, 3).join(", ")} project`;
-  const description = truncate(
-    `${project.shortDescription} ${project.detail.overview}`,
-    158
-  );
+  const description = truncate(`${project.shortDescription} ${project.detail.overview}`, 158);
   const path = `/projects/${project.slug}`;
 
   return {
@@ -55,6 +50,28 @@ export async function generateMetadata({
   };
 }
 
+const linkClass =
+  "inline-flex min-h-11 items-center text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent";
+
+function Prose({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section data-block className="border-t border-border pt-6">
+      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
+      <div className="mt-3 max-w-[65ch] text-base leading-relaxed text-foreground">{children}</div>
+    </section>
+  );
+}
+
+function List({ items }: { items: string[] }) {
+  return (
+    <ul className="list-disc space-y-2 pl-5 marker:text-muted">
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
 export default async function ProjectPage({
   params,
 }: {
@@ -68,118 +85,93 @@ export default async function ProjectPage({
     notFound();
   }
 
+  const { detail } = project;
+
   return (
-    <div className="relative py-24">
+    <article className="pb-16 pt-28 sm:pb-24 sm:pt-32">
       <JsonLd data={projectJsonLd(project)} />
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <Link
           href="/#projects"
-          className="mb-6 inline-flex items-center gap-1 text-sm text-muted hover:text-foreground"
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted hover:text-foreground"
         >
-          <ArrowUpRight size={14} className="-rotate-90" aria-hidden="true" />
-          Back to Projects
+          <ArrowLeft size={14} aria-hidden="true" />
+          All projects
         </Link>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1.2fr_1fr]">
-          <div className="space-y-6">
-            <div>
-              <h1 className="font-display text-3xl font-semibold text-foreground">{project.name}</h1>
-              <p className="mt-1 text-sm text-muted">
-                Status: {project.status}. Built by {siteConfig.name} with{" "}
-                {project.technologies.join(", ")}.
-              </p>
-              <p className="mt-2 text-base text-muted">{project.shortDescription}</p>
-            </div>
+        <header className="mt-4 max-w-3xl">
+          <h1 className="text-h2 font-semibold text-foreground sm:text-4xl sm:leading-tight">
+            {project.name}
+          </h1>
+          <p className="mt-4 max-w-[60ch] text-lead text-muted">{project.shortDescription}</p>
+        </header>
 
-            <div className="flex flex-wrap gap-2">
-              {project.technologies.map((tech) => (
-                <span
-                  key={tech}
-                  className="rounded-full border border-border bg-surface px-3 py-1 font-mono text-xs text-muted"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-
-            <div className="flex flex-wrap gap-4">
-              {project.links.github && (
-                <a
-                  href={project.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
-                >
-                  <GithubIcon size={14} aria-hidden="true" />
-                  View {project.name} source code on GitHub
-                </a>
-              )}
-              {project.links.live && (
-                <a
-                  href={project.links.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
-                >
-                  <ExternalLink size={14} aria-hidden="true" />
-                  Open {project.name} live demo
-                </a>
-              )}
-            </div>
-
-            <Card className="p-6">
-              <h2 className="font-display text-lg font-semibold text-foreground">Overview</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{project.detail.overview}</p>
-            </Card>
-
-            <Card className="p-6">
-              <h2 className="font-display text-lg font-semibold text-foreground">Problem Statement</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{project.detail.problemStatement}</p>
-            </Card>
-
-            <Card className="p-6">
-              <h2 className="font-display text-lg font-semibold text-foreground">Objectives</h2>
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
-                {project.detail.objectives.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </Card>
-
-            <Card className="p-6">
-              <h2 className="font-display text-lg font-semibold text-foreground">Key Features</h2>
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
-                {project.detail.features.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </Card>
-
-            <Card className="p-6">
-              <h2 className="font-display text-lg font-semibold text-foreground">Architecture</h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{project.detail.architecture}</p>
-            </Card>
-
-            <Card className="p-6">
-              <h2 className="font-display text-lg font-semibold text-foreground">Challenges</h2>
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
-                {project.detail.challenges.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </Card>
-
-            <Card className="p-6">
-              <h2 className="font-display text-lg font-semibold text-foreground">Solutions</h2>
-              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-muted">
-                {project.detail.solutions.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </Card>
+        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_15rem]">
+          <div className="space-y-10">
+            <Prose title="Overview">
+              <p>{detail.overview}</p>
+            </Prose>
+            <Prose title="Problem statement">
+              <p>{detail.problemStatement}</p>
+            </Prose>
+            <Prose title="Objectives">
+              <List items={detail.objectives} />
+            </Prose>
+            <Prose title="Key features">
+              <List items={detail.features} />
+            </Prose>
+            <Prose title="Architecture">
+              <p>{detail.architecture}</p>
+            </Prose>
+            <Prose title="Challenges">
+              <List items={detail.challenges} />
+            </Prose>
+            <Prose title="Solutions">
+              <List items={detail.solutions} />
+            </Prose>
           </div>
+
+          <aside aria-label="Project facts" className="lg:sticky lg:top-24 lg:self-start">
+            <dl className="border-t border-border text-sm">
+              <div className="border-b border-border py-3">
+                <dt className="text-muted">Status</dt>
+                <dd className="mt-1 text-foreground">{project.status}</dd>
+              </div>
+              <div className="border-b border-border py-3">
+                <dt className="text-muted">Built with</dt>
+                <dd className="mt-1 font-mono text-xs leading-relaxed text-foreground">
+                  {project.technologies.join(" · ")}
+                </dd>
+              </div>
+              <div className="border-b border-border py-3">
+                <dt className="text-muted">Links</dt>
+                <dd className="mt-1 flex flex-col">
+                  {project.links.github && (
+                    <a
+                      href={project.links.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClass}
+                    >
+                      {project.name} source on GitHub
+                    </a>
+                  )}
+                  {project.links.live && (
+                    <a
+                      href={project.links.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClass}
+                    >
+                      Open {project.name} live
+                    </a>
+                  )}
+                </dd>
+              </div>
+            </dl>
+          </aside>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

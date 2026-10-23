@@ -99,7 +99,7 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
       <div
         aria-hidden="true"
         onClick={onClose}
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/60"
       />
 
       <motion.div
@@ -111,13 +111,13 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={prefersReducedMotion ? undefined : { opacity: 0, y: 16, scale: 0.98 }}
         {...motionProps}
-        className="relative z-10 flex max-h-[90vh] w-full max-w-3xl select-none flex-col overflow-hidden rounded-2xl border border-border bg-background-secondary shadow-2xl"
+        className="relative z-10 flex max-h-[90vh] w-full max-w-3xl select-none flex-col overflow-hidden rounded-ui border border-border bg-background"
       >
         <div className="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
           <div>
             <h2
               id={titleId}
-              className="font-display text-base font-semibold text-foreground sm:text-lg"
+              className="text-base font-semibold text-foreground sm:text-lg"
             >
               {certification.title}
             </h2>
@@ -130,7 +130,7 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
             type="button"
             onClick={onClose}
             aria-label="Close certificate viewer"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface text-muted transition-colors hover:text-foreground"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-ui border border-border text-foreground transition-colors hover:bg-raised"
           >
             <X size={18} aria-hidden="true" />
           </button>
@@ -144,7 +144,7 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
             <canvas
               ref={canvasRef}
               draggable={false}
-              className="block w-full select-none rounded-lg border border-border"
+              className="block w-full select-none rounded-ui border border-border"
             />
             {status === "loading" && (
               <div className="absolute inset-0 flex items-center justify-center">
