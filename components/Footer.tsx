@@ -1,34 +1,33 @@
-import { Mail, MessageCircle } from "lucide-react";
-import { GithubIcon } from "@/components/icons/GithubIcon";
 import { siteConfig } from "@/data/site-config";
 import { getWhatsAppLink } from "@/lib/utils";
 
 const FOOTER_NAV = [
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+  { label: "About", href: "/#about" },
+  { label: "Skills", href: "/#skills" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Experience", href: "/#experience" },
+  { label: "Contact", href: "/#contact" },
 ];
+
+const linkClass =
+  "inline-flex min-h-11 items-center text-sm text-muted underline-offset-4 hover:text-foreground hover:underline";
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border py-10">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 sm:px-6 md:flex-row md:justify-between">
-        <div className="text-center md:text-left">
-          <p className="font-display text-base font-semibold text-foreground">
-            {siteConfig.name}
-          </p>
+    <footer data-section="footer" className="border-t border-border py-10">
+      <div className="mx-auto grid max-w-5xl gap-8 px-4 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto_auto] md:gap-12">
+        <div>
+          <p className="text-base font-semibold text-foreground">{siteConfig.name}</p>
           <p className="mt-1 text-sm text-muted">{siteConfig.title}</p>
         </div>
 
         <nav aria-label="Footer navigation">
-          <ul className="flex flex-wrap items-center justify-center gap-5">
+          <ul>
             {FOOTER_NAV.map((item) => (
               <li key={item.href}>
-                <a href={item.href} className="text-sm text-muted hover:text-foreground">
+                <a href={item.href} className={linkClass}>
                   {item.label}
                 </a>
               </li>
@@ -36,38 +35,38 @@ export function Footer() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-3">
-          <a
-            href={siteConfig.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub profile"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-muted hover:text-foreground"
-          >
-            <GithubIcon size={16} aria-hidden="true" />
-          </a>
-          <a
-            href={`mailto:${siteConfig.email}`}
-            aria-label="Send an email"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-muted hover:text-foreground"
-          >
-            <Mail size={16} aria-hidden="true" />
-          </a>
-          <a
-            href={getWhatsAppLink(siteConfig.whatsapp)}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Message on WhatsApp"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-muted hover:text-foreground"
-          >
-            <MessageCircle size={16} aria-hidden="true" />
-          </a>
-        </div>
+        <ul aria-label="Elsewhere">
+          <li>
+            <a
+              href={siteConfig.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${siteConfig.email}`} className={linkClass}>
+              Email
+            </a>
+          </li>
+          <li>
+            <a
+              href={getWhatsAppLink(siteConfig.whatsapp)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={linkClass}
+            >
+              WhatsApp
+            </a>
+          </li>
+        </ul>
       </div>
 
-      <div className="mx-auto mt-8 max-w-6xl border-t border-border px-4 pt-6 text-center sm:px-6">
+      <div className="mx-auto mt-8 max-w-5xl border-t border-border px-4 pt-6 sm:px-6">
         <p className="text-xs text-muted">
-          © {year} {siteConfig.name}. Built with Next.js.
+          © <span className="tabular">{year}</span> {siteConfig.name}. Built with Next.js.
         </p>
       </div>
     </footer>
