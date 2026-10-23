@@ -12,14 +12,14 @@ export function ArchitectureDiagram() {
       <div className="space-y-2">
         <div className={`${box} text-foreground`}>Two Next.js frontends</div>
 
-        <div className="flex justify-center text-muted" aria-hidden="true">↓</div>
+        <div className="mx-auto h-4 w-px bg-field" aria-hidden="true" />
 
         <div className="rounded-ui border-2 border-accent px-3 py-2 text-foreground">
           <span className="font-semibold">API gateway</span>
           <span className="text-muted"> — edge-only, no database. Verifies JWT, rate-limits, derives tenant context.</span>
         </div>
 
-        <div className="flex justify-center text-muted" aria-hidden="true">↓</div>
+        <div className="mx-auto h-4 w-px bg-field" aria-hidden="true" />
 
         <ul className="grid grid-cols-2 gap-2 sm:grid-cols-5">
           {SERVICES.map((name) => (
@@ -30,7 +30,7 @@ export function ArchitectureDiagram() {
           ))}
         </ul>
 
-        <div className="flex justify-center text-muted" aria-hidden="true">↕</div>
+        <div className="mx-auto h-4 w-px bg-field" aria-hidden="true" />
 
         <div className={`${box} text-muted`}>
           <span className="font-medium text-foreground">RabbitMQ</span> — transactional outbox
