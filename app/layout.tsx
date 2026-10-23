@@ -7,7 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CursorDot } from "@/components/CursorDot";
 import { siteConfig } from "@/data/site-config";
-import { siteUrl } from "@/lib/seo";
+import { siteUrl } from "@/lib/site";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -27,69 +27,55 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-// Structured data (JSON-LD) so search engines can index the site as a
-// person + website: helps "Owen Matola" queries surface this site.
-const seoJsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: siteConfig.name,
-    url: siteUrl,
-    jobTitle: "Software Developer & Cybersecurity Enthusiast",
-    email: siteConfig.email,
-    alumniOf: { "@type": "CollegeOrUniversity", name: "Mzuzu University" },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Mzuzu",
-      addressCountry: "MW",
-    },
-    sameAs: [siteConfig.githubUrl],
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: `${siteConfig.name} — Portfolio`,
-    url: siteUrl,
-  },
-];
+const homeTitle = `${siteConfig.name} | Full-Stack Software Developer in Malawi`;
+const homeDescription =
+  "Owen Matola is a full-stack software developer and cybersecurity enthusiast in Mzuzu, Malawi, building NestJS and Next.js apps. See projects, skills and CV.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteConfig.name} | Software Developer`,
+    default: homeTitle,
     template: `%s | ${siteConfig.name}`,
   },
-  description: siteConfig.shortBio,
+  description: homeDescription,
+  applicationName: `${siteConfig.name} — Portfolio`,
   keywords: [
     "Owen Matola",
-    "Software Developer",
-    "Full-Stack Developer",
-    "Web Developer",
-    "Network Engineer",
-    "Cybersecurity Enthusiast",
+    "Owen Matola developer",
+    "Full-Stack Developer Malawi",
+    "Software Developer Mzuzu",
+    "NestJS Developer Malawi",
     "Next.js Developer",
-    "NestJS Developer",
-    "Malawi Developer",
+    "Cybersecurity",
   ],
-  authors: [{ name: siteConfig.name }],
+  authors: [{ name: siteConfig.name, url: siteUrl }],
   creator: siteConfig.name,
+  alternates: { canonical: "/" },
   openGraph: {
-    type: "website",
-    url: siteUrl,
-    title: `${siteConfig.name} | Software Developer`,
-    description: siteConfig.shortBio,
-    siteName: siteConfig.name,
+    type: "profile",
+    url: "/",
+    title: homeTitle,
+    description: homeDescription,
+    siteName: `${siteConfig.name} — Portfolio`,
+    locale: "en_US",
+    firstName: "Owen",
+    lastName: "Matola",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} | Software Developer`,
-    description: siteConfig.shortBio,
+    title: homeTitle,
+    description: homeDescription,
   },
-  alternates: {
-    canonical: siteUrl,
-  },
-  icons: {
-    icon: "/favicon.ico",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -127,12 +113,6 @@ export default function RootLayout({
           id="theme-init"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
-        />
-        <Script
-          id="seo-jsonld"
-          type="application/ld+json"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(seoJsonLd) }}
         />
          <ThemeProvider>
            <Navbar />
