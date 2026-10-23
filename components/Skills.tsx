@@ -5,7 +5,7 @@ import { skills } from "@/data/skills";
 
 export function Skills() {
   return (
-    <section id="skills" className="relative py-24">
+    <section id="skills" aria-labelledby="skills-heading" className="relative py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           path="skills"

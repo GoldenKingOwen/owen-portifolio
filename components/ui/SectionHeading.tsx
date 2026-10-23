@@ -42,7 +42,7 @@ export function SectionHeading({
         style={{ "--section-path": `~/${path}` } as CSSProperties}
         aria-hidden="true"
       />
-      <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+      <h2 id={`${path}-heading`} className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
         {title}
       </h2>
       {description && (

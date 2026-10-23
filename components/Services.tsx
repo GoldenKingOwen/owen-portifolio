@@ -32,7 +32,7 @@ const SERVICES = [
 
 export function Services() {
   return (
-    <section id="services" className="relative py-24">
+    <section id="services" aria-labelledby="services-heading" className="relative py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading path="services" title="What I Can Help With" />
 

@@ -9,7 +9,7 @@ export function GitHubActivity() {
   const repos = projects.filter((p) => p.links.github);
 
   return (
-    <section id="github" className="relative py-24">
+    <section id="github" aria-labelledby="github-heading" className="relative py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           path="github"

@@ -6,7 +6,7 @@ import { formatDateRange } from "@/lib/utils";
 
 export function Education() {
   return (
-    <section id="education" className="relative py-24">
+    <section id="education" aria-labelledby="education-heading" className="relative py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading path="education" title="Education" />
 
