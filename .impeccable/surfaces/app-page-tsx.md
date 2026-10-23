@@ -17,7 +17,7 @@ OWN-WORLD: Cool-neutral paper ground (oklch 0.985, hue 250) with near-black ink;
 
 STORY: In under 60 seconds a recruiter learns who Owen is, what he ships (a multi-tenant NestJS and Next.js system, secured with JWT, evented with RabbitMQ), and where to go: CV, GitHub, project write-ups, contact.
 
-FIRST VIEWPORT: Left, 2/3 width: name in display size with the role phrase beneath, one honest sentence, then CV as the solid primary action with GitHub and Contact as text links, then a four-row facts list (now, studying, based, working with). Right, 1/3: a single rectangular portrait. No scroll cue, no badge.
+FIRST VIEWPORT: Left, 2/3 width: name in display size with the role phrase beneath, one honest sentence, then CV as the solid primary action with GitHub and Contact as text links, then a five-row facts list (now, studying, based, working with, availability). Right, 1/3: a single rectangular portrait. No scroll cue, no badge.
 
 FORM: Asymmetric editorial layout, section title in a left margin column and content in the right column, from the form list of dossier / engineering record. Seed key: brief-pinned (no roll; the user's brief pinned editorial/technical).
 
