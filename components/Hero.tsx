@@ -65,6 +65,7 @@ export function Hero() {
   return (
     <section
       id="home"
+      aria-labelledby="hero-heading"
       className="relative flex min-h-screen items-center overflow-hidden pt-16"
     >
       {/* Ambient background */}
@@ -102,6 +103,7 @@ export function Hero() {
           </motion.div>
 
           <motion.h1
+            id="hero-heading"
             initial="hidden"
             animate="visible"
             variants={FADE_UP}
@@ -109,6 +111,9 @@ export function Hero() {
             className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
           >
             {siteConfig.name}
+            <span className="mt-3 block font-sans text-xl font-medium tracking-normal text-muted sm:text-2xl">
+              Full-Stack Software Developer in Malawi
+            </span>
           </motion.h1>
 
           <motion.p
@@ -186,9 +191,10 @@ export function Hero() {
         >
           <Image
             src="/images/owen.jpeg"
-            alt={siteConfig.name}
+            alt="Portrait of Owen Matola, full-stack software developer from Mzuzu, Malawi"
             fill
             priority
+            quality={80}
             sizes="(min-width: 640px) 288px, 224px"
             className="object-cover"
           />

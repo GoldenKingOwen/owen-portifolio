@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/Card";
 import { projects } from "@/data/projects";
 import { skills } from "@/data/skills";
 import { education } from "@/data/education";
-import { siteConfig } from "@/data/site-config";
 
 interface Stat {
   label: string;
@@ -16,6 +15,8 @@ interface Stat {
 // Derived from real data files rather than hand-typed numbers, so
 // these stay accurate as projects/skills are added or removed.
 const totalTechnologies = new Set(skills.flatMap((c) => c.skills.map((s) => s.name))).size;
+const earliestStartYear = Math.min(...education.map((e) => Number(e.startYear)));
+const yearsInComputing = new Date().getFullYear() - earliestStartYear;
 const currentProgram = education.find((e) => e.endYear === "In Progress");
 
 const stats: Stat[] = [
@@ -32,7 +33,7 @@ const stats: Stat[] = [
 
 export function About() {
   return (
-    <section id="about" className="relative py-24">
+    <section id="about" aria-labelledby="about-heading" className="relative py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           path="about"
@@ -77,9 +78,10 @@ export function About() {
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-border">
               <Image
                 src="/images/king.jpeg"
-                alt={siteConfig.name}
+                alt="Owen Matola, ICT student at Mzuzu University and software developer"
                 fill
-                sizes="(min-width: 1024px) 400px, 100vw"
+                quality={75}
+                sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
                 className="object-cover"
               />
             </div>

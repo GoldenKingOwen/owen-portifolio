@@ -65,7 +65,7 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="relative py-24">
+    <section id="contact" aria-labelledby="contact-heading" className="relative py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           path="contact"
