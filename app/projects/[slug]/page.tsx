@@ -6,6 +6,7 @@ import { projects } from "@/data/projects";
 import { JsonLd } from "@/components/JsonLd";
 import { siteConfig } from "@/data/site-config";
 import { projectJsonLd } from "@/lib/structured-data";
+import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 
 export const dynamicParams = false;
 
@@ -121,6 +122,7 @@ export default async function ProjectPage({
               <List items={detail.features} />
             </Prose>
             <Prose title="Architecture">
+              {project.slug === "tenant-feedback-portal" && <ArchitectureDiagram />}
               <p>{detail.architecture}</p>
             </Prose>
             <Prose title="Challenges">
@@ -139,8 +141,8 @@ export default async function ProjectPage({
               </div>
               <div className="border-b border-border py-3">
                 <dt className="text-muted">Built with</dt>
-                <dd className="mt-1 font-mono text-xs leading-relaxed text-foreground">
-                  {project.technologies.join(" · ")}
+                <dd className="mt-1 text-sm leading-relaxed text-foreground">
+                  {project.technologies.join(", ")}
                 </dd>
               </div>
               <div className="border-b border-border py-3">
@@ -151,9 +153,10 @@ export default async function ProjectPage({
                       href={project.links.github}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`${project.name} source on GitHub`}
                       className={linkClass}
                     >
-                      {project.name} source on GitHub
+                      Source on GitHub
                     </a>
                   )}
                   {project.links.live && (
@@ -161,9 +164,10 @@ export default async function ProjectPage({
                       href={project.links.live}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`Open ${project.name} live`}
                       className={linkClass}
                     >
-                      Open {project.name} live
+                      Live demo
                     </a>
                   )}
                 </dd>
