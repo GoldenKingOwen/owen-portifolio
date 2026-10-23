@@ -5,6 +5,19 @@ import { Card } from "@/components/ui/Card";
 import { ExternalLink, ArrowUpRight } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import Link from "next/link";
+import { JsonLd } from "@/components/JsonLd";
+import { siteConfig } from "@/data/site-config";
+import { projectJsonLd } from "@/lib/structured-data";
+
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return projects.map((p) => ({ slug: p.slug }));
+}
+
+function truncate(text: string, max: number) {
+  return text.length <= max ? text : `${text.slice(0, max - 1).trimEnd()}…`;
+}
 
 export async function generateMetadata({
   params,
@@ -13,9 +26,32 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
+  if (!project) return { title: "Project Not Found", robots: { index: false } };
+
+  const title = `${project.name} — ${project.technologies.slice(0, 3).join(", ")} project`;
+  const description = truncate(
+    `${project.shortDescription} ${project.detail.overview}`,
+    158
+  );
+  const path = `/projects/${project.slug}`;
+
   return {
-    title: project ? project.name : "Project Not Found",
-    description: project?.shortDescription,
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "article",
+      url: path,
+      title: `${project.name} | ${siteConfig.name}`,
+      description,
+      siteName: `${siteConfig.name} — Portfolio`,
+      authors: [siteConfig.name],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.name} | ${siteConfig.name}`,
+      description,
+    },
   };
 }
 
@@ -34,6 +70,7 @@ export default async function ProjectPage({
 
   return (
     <div className="relative py-24">
+      <JsonLd data={projectJsonLd(project)} />
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Link
           href="/#projects"
@@ -47,6 +84,10 @@ export default async function ProjectPage({
           <div className="space-y-6">
             <div>
               <h1 className="font-display text-3xl font-semibold text-foreground">{project.name}</h1>
+              <p className="mt-1 text-sm text-muted">
+                Status: {project.status}. Built by {siteConfig.name} with{" "}
+                {project.technologies.join(", ")}.
+              </p>
               <p className="mt-2 text-base text-muted">{project.shortDescription}</p>
             </div>
 
@@ -70,7 +111,7 @@ export default async function ProjectPage({
                   className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
                 >
                   <GithubIcon size={14} aria-hidden="true" />
-                  View Code
+                  View {project.name} source code on GitHub
                 </a>
               )}
               {project.links.live && (
@@ -81,7 +122,7 @@ export default async function ProjectPage({
                   className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
                 >
                   <ExternalLink size={14} aria-hidden="true" />
-                  Live Demo
+                  Open {project.name} live demo
                 </a>
               )}
             </div>

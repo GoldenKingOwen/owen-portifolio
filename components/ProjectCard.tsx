@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ExternalLink, ArrowUpRight } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import { Card } from "@/components/ui/Card";
@@ -5,13 +6,7 @@ import { TechBadge } from "@/components/ui/Badge";
 import { ProjectThumbnail } from "@/components/ui/ProjectThumbnail";
 import { Project } from "@/types";
 
-export function ProjectCard({
-  project,
-  onViewDetails,
-}: {
-  project: Project;
-  onViewDetails: () => void;
-}) {
+export function ProjectCard({ project }: { project: Project }) {
   return (
     <Card
       hoverLift
@@ -51,18 +46,19 @@ export function ProjectCard({
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-4">
-          <button
-            type="button"
-            onClick={onViewDetails}
+          <Link
+            href={`/projects/${project.slug}`}
+            aria-label={`View details of ${project.name}`}
             className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-violet transition-colors hover:text-accent-violet/80"
           >
             View Details
             <ArrowUpRight size={14} aria-hidden="true" />
-          </button>
+          </Link>
 
           {project.links.github && (
             <a
               href={project.links.github}
+              aria-label={`${project.name} source code on GitHub`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
@@ -75,6 +71,7 @@ export function ProjectCard({
           {project.links.live && (
             <a
               href={project.links.live}
+              aria-label={`${project.name} live demo`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground"
