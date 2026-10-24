@@ -31,6 +31,10 @@ Static Next.js site on Vercel. Content lives in `data/` (projects, skills, exper
 - Performance matters: slow mobile connections are the norm for the audience.
 - SEO work is already done (metadata, JSON-LD, sitemap, OG images); the redesign must not regress it (single h1, landmarks, canonical, alt text).
 
+## Brand Commitments
+
+Stated by the user when opening the `redesign/cards` branch: Cards are allowed, as ONE component (`components/ui/Card.tsx`) with a defined anatomy: a flat tinted surface, a 1px border, the single 3px radius, no shadow, no gradient. Still refused: nested cards (never a Card inside a Card), identical-card grids with no hierarchy, glow orbs, gradients, glassmorphism and backdrop blur, shadows as decoration, icon-in-rounded-tile stacks, pill-badge clouds, and eyebrow chips.
+
 ## Evidence on Hand
 
 Real content in `data/`: three projects with repos and (for two) live demos, an internship description with concrete architecture details, education history, skills with honest levels, certificate PDFs, a GitHub profile (GoldenKingOwen). Absent and not to be fabricated: testimonials, client names, metrics, screenshots of projects (the project thumbnail is currently an honest placeholder), LinkedIn URL.

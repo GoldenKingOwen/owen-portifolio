@@ -105,14 +105,15 @@ components:
 
 **Creative North Star: "The Ruled Record"**
 
-The site is set like an engineering record: facts, architecture and repo links are the visual content, and the interface recedes. Structure comes from hairline rules and a two-column margin layout, never from cards, glow, or ornament. It reads in daylight on a phone first; a dark theme is a deep blue-black, not a navy gradient.
+The site is set like an engineering record: facts, architecture and repo links are the visual content, and the interface recedes. Structure comes from hairline rules, a two-column margin layout, and one flat Card component for grouped content; never from glow, glass, or ornament. It reads in daylight on a phone first; a dark theme is a deep blue-black, not a navy gradient.
 
 One accent, signal teal, appears only where something is actionable or focused (plus one structural marker in the architecture diagram). Everything else is ink on paper, with weight and tone (not chips or badges) carrying hierarchy. Geist does all the talking; Geist Mono appears only for data.
 
 Rhythm varies by purpose rather than repeating one block: reference lists (Skills, Education) run tight, the work (Projects) and the close (Contact) run roomy, and only the closing section gets a larger title.
 
 **Key Characteristics:**
-- Hairline rules are the only container; no cards, no shadows, no gradients on page surfaces. The one boxed form is the architecture diagram.
+- Hairline rules and the single Card component are the only containers; no shadows, no gradients, no backdrop blur on any surface. The architecture diagram is outlined rules, never a Card.
+- Cards are allowed, as ONE component (`components/ui/Card.tsx`) with a defined anatomy: a flat tinted surface, a 1px border, the single 3px radius, no shadow, no gradient. Still refused: nested cards (never a Card inside a Card), identical-card grids with no hierarchy, glow orbs, gradients, glassmorphism and backdrop blur, shadows as decoration, icon-in-rounded-tile stacks, pill-badge clouds, and eyebrow chips.
 - Section title sits in a left margin column (13rem), content in the right.
 - One radius (3px), one accent, two themes switched by `data-theme` on `<html>`.
 - Hit targets are at least 44px (`min-h-11`); focus is always visible.
@@ -226,7 +227,9 @@ A ruled, typographic diagram of the multi-tenant portal, shown in the lead proje
 - **Do** derive hero facts from `data/` so the first screen stays true.
 
 ### Don't:
-- **Don't** use shadows, gradients, glow, glass, or colored backgrounds as containers.
+- **Don't** use shadows, gradients, glow, glass, or backdrop blur on any surface; a card is a flat tint, a border and a radius.
+- **Don't** nest a Card inside a Card, or lay out identical cards with no hierarchy (one featured card leads; the rest are quieter).
+- **Don't** put icons in rounded tiles, or fill a card with pill badges or eyebrow chips.
 - **Don't** add pills, badges, status dots, or icon tiles.
 - **Don't** introduce a second accent or a second radius.
 - **Don't** set Geist Mono on headings or prose.
