@@ -44,7 +44,7 @@ function CertificateThumbnail({
     <button
       type="button"
       onClick={onOpen}
-      className="group flex flex-col gap-2 rounded-ui border border-border p-2 text-left transition-colors hover:bg-raised"
+      className="group flex flex-col gap-2 rounded-ui border border-border bg-raised p-2 text-left transition-colors duration-150 hover:border-field hover:bg-raised-hover"
     >
       <div
         className="relative aspect-[4/3] w-full select-none overflow-hidden rounded-ui border border-border bg-raised"

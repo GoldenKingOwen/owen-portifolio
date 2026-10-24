@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Section } from "@/components/ui/Section";
 import { ExternalLink } from "@/components/ui/ExternalLink";
+import { Card } from "@/components/ui/Card";
 import { siteConfig } from "@/data/site-config";
 
 // Formspree form endpoint — submissions are sent straight from the
@@ -83,7 +84,8 @@ export function Contact() {
         </ExternalLink>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-10 max-w-xl space-y-5">
+      <Card as="div" className="mt-10 max-w-xl">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
             <label htmlFor="name" className={labelClass}>
@@ -165,6 +167,7 @@ export function Contact() {
           </p>
         )}
       </form>
+      </Card>
     </Section>
   );
 }
