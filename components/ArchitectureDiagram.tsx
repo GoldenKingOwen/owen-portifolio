@@ -8,7 +8,7 @@ const box = "rounded-ui border border-field px-3 py-2";
 
 export function ArchitectureDiagram() {
   return (
-    <figure data-diagram className="not-prose mb-2 text-sm">
+    <figure data-diagram className="mb-6 text-sm">
       <div className="space-y-2">
         <div className={`${box} text-foreground`}>Two Next.js frontends</div>
 
@@ -38,7 +38,7 @@ export function ArchitectureDiagram() {
         </div>
       </div>
       <figcaption className="mt-3 text-xs text-muted">
-        Request path and event path, as described in the architecture notes below.
+        Labels taken from the project notes; not a full deployment diagram.
       </figcaption>
     </figure>
   );
