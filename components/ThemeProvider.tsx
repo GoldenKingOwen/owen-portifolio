@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { flushSync } from "react-dom";
 
 type Theme = "dark" | "light";
 
@@ -24,9 +25,24 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   function toggleTheme() {
     const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    window.localStorage.setItem(STORAGE_KEY, next);
+    const apply = () => {
+      // flushSync so the toggle icon updates inside the same view-transition frame.
+      flushSync(() => setTheme(next));
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        window.localStorage.setItem(STORAGE_KEY, next);
+      } catch {}
+    };
+
+    // A cross-fade between two page snapshots (View Transitions API): the browser
+    // fades the old and new frames on the compositor, so no element is individually
+    // transitioned. Unsupported browsers and reduced-motion visitors switch instantly.
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce && typeof document.startViewTransition === "function") {
+      document.startViewTransition(apply);
+    } else {
+      apply();
+    }
   }
 
   return (

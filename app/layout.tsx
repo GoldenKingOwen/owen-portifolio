@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { MotionLoader } from "@/components/motion/MotionLoader";
 import { siteConfig } from "@/data/site-config";
 import { siteUrl } from "@/lib/site";
 
@@ -83,6 +83,16 @@ const themeInitScript = `
   } catch (e) {
     document.documentElement.setAttribute('data-theme', 'light');
   }
+  // Motion flag. Set only when the visitor allows motion and the device is not
+  // low-end; the CSS that pre-positions content keys off it, so no-JS visitors,
+  // reduced-motion visitors and low-end devices always see the final state.
+  try {
+    var n = navigator;
+    var low = (n.deviceMemory && n.deviceMemory <= 2) || (n.hardwareConcurrency && n.hardwareConcurrency <= 2);
+    if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches && !low) {
+      document.documentElement.setAttribute('data-motion', 'pending');
+    }
+  } catch (e) {}
 })();
 `;
 
@@ -96,21 +106,20 @@ export default function RootLayout({
   // ("dark") legitimately differs from the client's saved theme.
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
+      <head>
+        {/* A real inline script: the browser runs it while parsing, before anything paints, so
+            the theme and the motion flag are set on first paint. (next/script's
+            beforeInteractive queue runs only after the framework chunk loads.) */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body
         className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}
       >
-        {/* Runs before hydration to set the persisted theme on <html> (no
-            flash of the wrong theme). Rendered via next/script so React
-            doesn't warn about raw <script> tags in components. */}
-        <Script
-          id="theme-init"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: themeInitScript }}
-        />
          <ThemeProvider>
            <Navbar />
            <main>{children}</main>
            <Footer />
+           <MotionLoader />
          </ThemeProvider>
       </body>
     </html>

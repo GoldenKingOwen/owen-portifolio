@@ -142,3 +142,40 @@ html {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Motion contract ─────────────────────────────────────────────
+   html[data-motion] is set by an inline script before paint, and only when
+   the visitor allows motion. Everything below is therefore invisible to
+   no-JS, reduced-motion and low-end visitors, who always get final states.
+   Hero blocks are pre-offset with transform only (so the LCP element is
+   always painted); below-the-fold reveals also start transparent. GSAP
+   animates to the final state, then sets data-revealed. If the motion chunk
+   never loads, the fail-safe animation shows everything after 2.5s. */
+@keyframes motion-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+html[data-motion] [data-hero]:not([data-revealed]) {
+  transform: translateY(14px);
+}
+
+html[data-motion] [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+html[data-motion="pending"] [data-hero]:not([data-revealed]),
+html[data-motion="pending"] [data-reveal]:not([data-revealed]) {
+  animation: motion-failsafe 0s linear 2.5s forwards;
+}
+
+/* Theme switch: a short cross-fade between two page snapshots (View Transitions
+   API, started in ThemeProvider). Compositor-driven; no per-element transitions. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: ease;
+}
