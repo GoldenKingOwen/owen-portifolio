@@ -3,6 +3,19 @@ import { skills } from "@/data/skills";
 import { absoluteUrl, siteUrl } from "@/lib/site";
 import type { Project } from "@/types";
 
+// Real programming languages only. Frameworks, databases, infrastructure and
+// markup go to `keywords`, so programmingLanguage never lists "Docker".
+const PROGRAMMING_LANGUAGES = new Set([
+  "JavaScript",
+  "TypeScript",
+  "PHP",
+  "Python",
+  "Java",
+  "C",
+  "C++",
+  "SQL",
+]);
+
 export const personId = `${siteUrl}/#person`;
 const websiteId = `${siteUrl}/#website`;
 
@@ -44,6 +57,8 @@ export function homeJsonLd() {
 export function projectJsonLd(project: Project) {
   const url = absoluteUrl(`/projects/${project.slug}`);
   const github = project.links.github;
+  const languages = project.technologies.filter((t) => PROGRAMMING_LANGUAGES.has(t));
+  const tools = project.technologies.filter((t) => !PROGRAMMING_LANGUAGES.has(t));
   return {
     "@context": "https://schema.org",
     "@type": github ? "SoftwareSourceCode" : "CreativeWork",
@@ -52,7 +67,14 @@ export function projectJsonLd(project: Project) {
     description: project.shortDescription,
     author: { "@id": personId },
     ...(github
-      ? { codeRepository: github, programmingLanguage: project.technologies }
-      : { keywords: project.technologies.join(", ") }),
+      ? {
+          codeRepository: github,
+          ...(languages.length > 0 ? { programmingLanguage: languages } : {}),
+        }
+      : {}),
+    // Without a repository there is no code to describe, so every technology is a keyword.
+    ...((github ? tools : project.technologies).length > 0
+      ? { keywords: (github ? tools : project.technologies).join(", ") }
+      : {}),
   };
 }
