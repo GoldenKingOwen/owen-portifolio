@@ -20,7 +20,7 @@ const DENSITY = {
 /**
  * Every home-page section: a hairline rule, the title in a left margin
  * column, and the content in the right column. No eyebrow, no card.
- * `data-section` / `data-reveal` are stable hooks for a later motion pass.
+ * `data-section` / `data-section-body` are stable hooks for a later motion pass (cards carry `data-reveal`).
  */
 export function Section({ id, title, children, density = "default", emphasis = false }: SectionProps) {
   return (
@@ -40,7 +40,7 @@ export function Section({ id, title, children, density = "default", emphasis = f
         >
           {title}
         </h2>
-        <div data-reveal>{children}</div>
+        <div data-section-body>{children}</div>
       </div>
     </section>
   );

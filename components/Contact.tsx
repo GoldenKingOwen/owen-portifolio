@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Section } from "@/components/ui/Section";
 import { ExternalLink } from "@/components/ui/ExternalLink";
+import { Card } from "@/components/ui/Card";
 import { siteConfig } from "@/data/site-config";
 
 // Formspree form endpoint — submissions are sent straight from the
@@ -83,88 +84,90 @@ export function Contact() {
         </ExternalLink>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-10 max-w-xl space-y-5">
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <Card as="div" className="mt-10 max-w-xl">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <div>
+              <label htmlFor="name" className={labelClass}>
+                Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autoComplete="name"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className={fieldClass}
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className={labelClass}>
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className={fieldClass}
+              />
+            </div>
+          </div>
           <div>
-            <label htmlFor="name" className={labelClass}>
-              Name
+            <label htmlFor="subject" className={labelClass}>
+              Subject
             </label>
             <input
-              id="name"
-              name="name"
+              id="subject"
+              name="subject"
               type="text"
-              autoComplete="name"
               required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              value={formData.subject}
+              onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
               className={fieldClass}
             />
           </div>
           <div>
-            <label htmlFor="email" className={labelClass}>
-              Email
+            <label htmlFor="message" className={labelClass}>
+              Message
             </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
+            <textarea
+              id="message"
+              name="message"
+              rows={6}
               required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              value={formData.message}
+              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               className={fieldClass}
             />
           </div>
-        </div>
-        <div>
-          <label htmlFor="subject" className={labelClass}>
-            Subject
-          </label>
-          <input
-            id="subject"
-            name="subject"
-            type="text"
-            required
-            value={formData.subject}
-            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-            className={fieldClass}
-          />
-        </div>
-        <div>
-          <label htmlFor="message" className={labelClass}>
-            Message
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows={6}
-            required
-            value={formData.message}
-            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-            className={fieldClass}
-          />
-        </div>
 
-        <div className="flex flex-wrap items-center gap-4">
-          <button
-            type="submit"
-            disabled={status === "loading"}
-            className="inline-flex min-h-11 items-center rounded-ui bg-accent px-6 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
-          >
-            {status === "loading" ? "Sending…" : "Send message"}
-          </button>
+          <div className="flex flex-wrap items-center gap-4">
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="inline-flex min-h-11 items-center rounded-ui bg-accent px-6 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
+            >
+              {status === "loading" ? "Sending…" : "Send message"}
+            </button>
 
-          {/* Live region stays mounted so screen readers announce the result. */}
-          <p role="status" aria-live="polite" className="text-sm font-medium text-success">
-            {status === "success" ? "Message sent. I will reply to the email you gave." : ""}
-          </p>
-        </div>
-        {status === "error" && errorMessage && (
-          <p role="alert" className="text-sm font-medium text-danger">
-            {errorMessage}
-          </p>
-        )}
-      </form>
+            {/* Live region stays mounted so screen readers announce the result. */}
+            <p role="status" aria-live="polite" className="text-sm font-medium text-success">
+              {status === "success" ? "Message sent. I will reply to the email you gave." : ""}
+            </p>
+          </div>
+          {status === "error" && errorMessage && (
+            <p role="alert" className="text-sm font-medium text-danger">
+              {errorMessage}
+            </p>
+          )}
+        </form>
+      </Card>
     </Section>
   );
 }

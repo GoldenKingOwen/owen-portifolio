@@ -10,6 +10,7 @@
 @theme inline {
   --color-background: var(--bg);
   --color-raised: var(--bg-raised);
+  --color-raised-hover: var(--bg-raised-hover);
   --color-foreground: var(--ink);
   --color-muted: var(--ink-muted);
   --color-border: var(--rule);
@@ -47,6 +48,8 @@
 [data-theme="light"] {
   --bg: oklch(0.985 0.003 250);
   --bg-raised: oklch(0.96 0.004 250);
+  /* Interactive card hover: the card surface moved 5% toward the ink. Flat, no filter. */
+  --bg-raised-hover: color-mix(in oklch, var(--bg-raised), var(--ink) 5%);
   --ink: oklch(0.2 0.015 255);
   --ink-muted: oklch(0.46 0.018 255);
   --rule: oklch(0.88 0.006 250);
@@ -62,6 +65,7 @@
 [data-theme="dark"] {
   --bg: oklch(0.17 0.012 255);
   --bg-raised: oklch(0.21 0.014 255);
+  --bg-raised-hover: color-mix(in oklch, var(--bg-raised), var(--ink) 6%);
   --ink: oklch(0.94 0.008 250);
   --ink-muted: oklch(0.72 0.014 255);
   --rule: oklch(0.32 0.014 255);
