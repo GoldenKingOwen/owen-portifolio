@@ -23,11 +23,11 @@ export function About() {
           the system level, not just the application layer.
         </p>
         <p>
-          I&apos;m currently interning as a software developer, building a multi-tenant feedback
-          and support portal from the ground up — a NestJS microservices backend behind an
-          authenticated API gateway, paired with Next.js frontends. It&apos;s given me hands-on
-          experience with the kind of architecture decisions (tenant isolation, event-driven
-          services, secure auth) that don&apos;t come up in coursework alone.
+          I&apos;m currently interning as a software developer at Infi-Tech. My assessment
+          project there is a multi-tenant feedback and support portal — a NestJS microservices
+          backend behind an authenticated API gateway, paired with Next.js frontends. It&apos;s
+          given me hands-on experience with the kind of architecture decisions (tenant isolation,
+          event-driven services, secure auth) that don&apos;t come up in coursework alone.
         </p>
         <p>
           I care about building software that&apos;s secure and maintainable by default, not as an
