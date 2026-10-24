@@ -18,8 +18,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Contact", href: "#contact" },
 ];
 
-// Matches the scroll-margin-top set on section[id] in globals.css.
-const HEADER_OFFSET = 72;
+// Matches --header-h (4rem) in globals.css, which is also the section[id] scroll-margin-top.
+const HEADER_OFFSET = 64;
 
 const controlClass =
   "flex h-11 w-11 items-center justify-center rounded-ui border border-border text-foreground transition-colors hover:bg-raised";
@@ -107,7 +107,7 @@ export function Navbar() {
     >
       <nav
         aria-label="Primary"
-        className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6"
+        className="mx-auto flex h-[var(--header-h)] max-w-5xl items-center justify-between px-4 sm:px-6"
       >
         <a
           href="#home"
@@ -152,7 +152,7 @@ export function Navbar() {
             href={siteConfig.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="GitHub profile"
+            aria-label="GitHub profile, opens in a new tab"
             className={cn(controlClass, "hidden md:flex")}
           >
             <GithubIcon size={16} aria-hidden="true" />

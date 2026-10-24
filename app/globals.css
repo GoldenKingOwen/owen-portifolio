@@ -37,6 +37,12 @@
 }
 
 /* ── Light theme (default): daylight reading on a phone ───────── */
+/* Fixed header height. Sections anchor exactly this far down, so a section's
+   top rule sits under the header's own border instead of showing a second line. */
+:root {
+  --header-h: 4rem;
+}
+
 :root,
 [data-theme="light"] {
   --bg: oklch(0.985 0.003 250);
@@ -67,8 +73,12 @@
   color-scheme: dark;
 }
 
-* {
-  border-color: var(--rule);
+/* Default hairline colour. Kept in the base layer so utilities such as
+   border-field and border-accent can override it (an unlayered rule would win). */
+@layer base {
+  * {
+    border-color: var(--rule);
+  }
 }
 
 html {
@@ -86,7 +96,7 @@ body {
 
 /* Sections anchor below the fixed header. */
 section[id] {
-  scroll-margin-top: 4.5rem;
+  scroll-margin-top: var(--header-h);
 }
 
 h1,
