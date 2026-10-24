@@ -263,6 +263,26 @@ A button in the Education disclosure that borrows the card tokens (raised surfac
 ### Architecture Diagram
 A ruled, typographic diagram of the multi-tenant portal, shown inside the lead project card and on the tenant project page. Labels come from the project copy: frontends, an edge-only gateway, five services, and RabbitMQ. Boxes are 1px field-stroke rectangles (3px radius, 8px by 12px padding); the gateway box is 2px teal. Connectors are 1px vertical rules in field-stroke, 16px tall. Services sit in a 2-column grid, 5 from sm. A small muted caption states the diagram is drawn from project notes. Its boxes are outlined rules, not Cards, so it does not break the no-nesting rule when placed in the lead card.
 
+### Motion
+
+Motion shows order and arrival. Everything is transform or opacity (plus paint-only `clip-path` and stroke drawing), eased with `power3.out` (scrubbed rules use `none`), and lasts 0.4 to 0.9s; hover and page-enter may be shorter (150 to 300ms). Nothing loops, nothing parallaxes, there is no preloader and no smooth-scroll library (native `scroll-behavior: smooth` stays, and anchors land at `--header-h`). Reduced-motion and low-end visitors get final states and never download GSAP. All content is in the server HTML first; GSAP only enhances it. Hooks: `data-hero`, `data-split`, `data-reveal`, `data-rule`, `data-timeline`, `data-draw`, `data-magnetic`, `data-cursor`.
+
+- **Hero:** the name and subtitle rise line by line out of a mask (SplitText), the portrait opens with a `clip-path` inset, all in one timeline of at most 900ms. The portrait and heading are painted before JavaScript runs; the animation starts from a small offset.
+- **About lead:** the lead paragraph's words scrub from 25% to full opacity across the scroll range (opacity only, at most 120 words); the other paragraphs fade up together in one batch.
+- **Reveals:** one batched ScrollTrigger group per list, `once: true`, stagger 0.06.
+- **Ruled lists and timeline:** rules draw with `scaleX` (list rows) or a scrubbed `scaleY` (the timeline rail); each timeline card reveals as its node is reached.
+- **Architecture diagram:** connectors are SVG lines drawn with DrawSVG once when the diagram enters view; box outlines wipe in with a `clip-path`.
+- **Route change:** enter only, a short fade and rise (at most 300ms); no exit animation.
+- **Theme switch:** a View Transitions cross-fade, not GSAP.
+
+#### Cursor follower and magnetic elements (a documented exception)
+
+A 36px ring (accent border, no blend mode, no blur, no glow) follows the pointer with `gsap.quickTo`. The native cursor is never hidden. It exists only when the device has `(hover: hover)` and `(pointer: fine)` and motion is allowed, is `aria-hidden`, never focusable, and ignores the pointer. States come from the element under it: links scale it to 1.5, project cards grow it and show "View", text fields shrink and fade it; it hides when the pointer leaves the window. At most six elements (Download CV, the nav GitHub button, the theme toggle, the contact email, the send button) are magnetic: the inner span follows 25% of the pointer offset within about 80px and springs back with `elastic.out(1, 0.4)`; the hit target and focus ring do not move, and keyboard focus is unaffected. This is a deliberate decorative exception to "no decoration that carries no information": it is a cursor affordance, it is off for touch, reduced-motion and low-end visitors, and the design detector may flag it. Keep it if it does; the rationale is this paragraph.
+
+#### Timeline, ruled list and prose
+
+The Experience and Education cards hang off a 1px vertical rail with small square nodes and dates in Geist Mono (the Card rules still apply: current role featured, older roles quieter). "What I can help with" is a ruled list: a title and one honest line per row, no icons, five rows at most; a row hover slides a short rule in and shifts the text 4px. The About section is prose with one large lead paragraph, never cards.
+
 ### Icon Control
 44px square, hairline border, 3px radius, ink glyph, raised-paper fill on hover.
 
@@ -281,6 +301,8 @@ A ruled, typographic diagram of the multi-tenant portal, shown inside the lead p
 - **Do** derive hero facts from `data/` so the first screen stays true.
 
 ### Don't:
+- **Don't** animate layout properties, blur, shadows or filters; don't loop anything; don't add a preloader or a smooth-scroll library; don't hide server-rendered content until JavaScript runs.
+- **Don't** repeat one component down the whole page: vary the form of each section (cards, ruled list, prose, timeline).
 - **Don't** use shadows, gradients, glow, glass, or backdrop blur on any surface; a card is a flat tint, a border and a radius.
 - **Don't** nest a Card inside a Card, or lay out identical cards with no hierarchy (one featured card leads; the rest are quieter).
 - **Don't** put icons in rounded tiles, or fill a card with pill badges, status dots or eyebrow chips.
