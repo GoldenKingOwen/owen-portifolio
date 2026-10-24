@@ -1,30 +1,38 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-23T00:00:00Z",
+  "generatedAt": "2026-10-24T00:00:00Z",
   "title": "Design System: Owen Matola Portfolio",
   "extensions": {
     "colorMeta": {
       "signal-teal": { "role": "primary", "displayName": "Signal Teal", "canonical": "oklch(0.46 0.1 195)", "tonalRamp": ["oklch(0.15 0.1 195)", "oklch(0.25 0.1 195)", "oklch(0.35 0.1 195)", "oklch(0.46 0.1 195)", "oklch(0.58 0.1 195)", "oklch(0.7 0.1 195)", "oklch(0.82 0.1 195)", "oklch(0.95 0.1 195)"] },
+      "signal-teal-night": { "role": "primary", "displayName": "Signal Teal (night)", "canonical": "oklch(0.8 0.11 190)", "tonalRamp": ["oklch(0.15 0.11 190)", "oklch(0.3 0.11 190)", "oklch(0.45 0.11 190)", "oklch(0.6 0.11 190)", "oklch(0.7 0.11 190)", "oklch(0.8 0.11 190)", "oklch(0.88 0.11 190)", "oklch(0.95 0.11 190)"] },
       "paper": { "role": "neutral", "displayName": "Cool Paper", "canonical": "oklch(0.985 0.003 250)", "tonalRamp": ["oklch(0.15 0.003 250)", "oklch(0.3 0.003 250)", "oklch(0.45 0.003 250)", "oklch(0.6 0.003 250)", "oklch(0.75 0.003 250)", "oklch(0.88 0.003 250)", "oklch(0.95 0.003 250)", "oklch(0.985 0.003 250)"] },
       "ink": { "role": "neutral", "displayName": "Ink", "canonical": "oklch(0.2 0.015 255)", "tonalRamp": ["oklch(0.15 0.015 255)", "oklch(0.2 0.015 255)", "oklch(0.3 0.015 255)", "oklch(0.46 0.018 255)", "oklch(0.6 0.012 255)", "oklch(0.75 0.01 255)", "oklch(0.88 0.006 250)", "oklch(0.95 0.004 250)"] },
-      "rule": { "role": "neutral", "displayName": "Hairline", "canonical": "oklch(0.88 0.006 250)", "tonalRamp": ["oklch(0.15 0.006 250)", "oklch(0.3 0.006 250)", "oklch(0.45 0.006 250)", "oklch(0.6 0.006 250)", "oklch(0.72 0.006 250)", "oklch(0.8 0.006 250)", "oklch(0.88 0.006 250)", "oklch(0.95 0.006 250)"] }
+      "rule": { "role": "neutral", "displayName": "Hairline", "canonical": "oklch(0.88 0.006 250)", "tonalRamp": ["oklch(0.15 0.006 250)", "oklch(0.3 0.006 250)", "oklch(0.45 0.006 250)", "oklch(0.6 0.006 250)", "oklch(0.72 0.006 250)", "oklch(0.8 0.006 250)", "oklch(0.88 0.006 250)", "oklch(0.95 0.006 250)"] },
+      "rule-strong": { "role": "neutral", "displayName": "Field Stroke", "canonical": "oklch(0.6 0.012 255)", "tonalRamp": ["oklch(0.15 0.012 255)", "oklch(0.3 0.012 255)", "oklch(0.45 0.012 255)", "oklch(0.6 0.012 255)", "oklch(0.7 0.012 255)", "oklch(0.8 0.012 255)", "oklch(0.9 0.012 255)", "oklch(0.96 0.012 255)"] }
     },
     "typographyMeta": {
       "display": { "displayName": "Display", "purpose": "Hero name only." },
+      "headline-large": { "displayName": "Headline Large", "purpose": "Lead project title (2.25rem from sm) and the emphasized closing section title (3rem from sm). One of each per page." },
       "headline": { "displayName": "Headline", "purpose": "Section titles in the margin column; current job title." },
-      "lead": { "displayName": "Lead", "purpose": "Role phrase and project short description." },
-      "data": { "displayName": "Data", "purpose": "Geist Mono for dates, skill levels, stacks." }
+      "lead": { "displayName": "Lead", "purpose": "Role phrase, first About paragraph, project short description." },
+      "data": { "displayName": "Data", "purpose": "Geist Mono for dates, skill levels, project status, years." }
     },
     "shadows": [],
     "motion": [
       { "name": "opacity-hover", "value": "transition-opacity, hover opacity 0.9", "purpose": "Primary button hover." },
+      { "name": "colors-hover", "value": "transition-colors", "purpose": "Icon control and nav hover." },
       { "name": "reduced-motion", "value": "durations collapse to 0.01ms; smooth scroll off", "purpose": "prefers-reduced-motion override." }
     ],
     "breakpoints": [
       { "name": "sm", "value": "640px" },
       { "name": "md", "value": "768px" },
       { "name": "lg", "value": "1024px" }
-    ]
+    ],
+    "layout": {
+      "headerHeight": "var(--header-h) = 4rem; section[id] scroll-margin-top uses the same token",
+      "sectionDensity": { "tight": "40px / 56px from sm", "default": "56px / 80px from sm", "roomy": "64px / 112px from sm" }
+    }
   },
   "components": [
     {
@@ -38,15 +46,22 @@
     {
       "name": "Text Link",
       "kind": "custom",
-      "description": "Secondary actions as underlined text.",
-      "html": "<a class=\"ds-link\" href=\"#\">GitHub profile</a>",
+      "description": "Internal link as underlined text; no arrow.",
+      "html": "<a class=\"ds-link\" href=\"#\">Read the write-up</a>",
       "css": ".ds-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 500; color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 2px; text-underline-offset: 4px; } .ds-link:hover { text-decoration-color: var(--accent); } .ds-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }"
+    },
+    {
+      "name": "External Link",
+      "kind": "custom",
+      "description": "Outbound link; the up-right arrow means the link leaves the site.",
+      "html": "<a class=\"ds-link ds-ext\" href=\"#\"><span>GitHub profile<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></span></a>",
+      "css": ".ds-ext { gap: 4px; display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 500; color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 2px; text-underline-offset: 4px; } .ds-ext svg { margin-left: 4px; display: inline-block; vertical-align: -0.125em; } .ds-ext:hover { text-decoration-color: var(--accent); } .ds-ext:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }"
     },
     {
       "name": "Text Field",
       "kind": "input",
       "refersTo": "field",
-      "description": "Form input with label above.",
+      "description": "Form input with label above; stroke is the rule-strong token.",
       "html": "<label class=\"ds-label\" for=\"n\">Name</label><input class=\"ds-field\" id=\"n\" type=\"text\">",
       "css": ".ds-label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: var(--ink); } .ds-field { display: block; width: 100%; box-sizing: border-box; padding: 12px; background: var(--bg); color: var(--ink); border: 1px solid var(--rule-strong); border-radius: 3px; font-size: 16px; } .ds-field:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }"
     },
@@ -65,33 +80,51 @@
       "css": ".ds-dl { border-top: 1px solid var(--rule); font-size: 14px; margin: 0; } .ds-dl > div { display: grid; grid-template-columns: 7rem 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rule); } .ds-dl dt { color: var(--ink-muted); } .ds-dl dd { margin: 0; color: var(--ink); }"
     },
     {
-      "name": "Skill Row",
+      "name": "Skill Level Group",
       "kind": "custom",
-      "description": "Level as typography; mono level word at right.",
-      "html": "<div class=\"ds-skill\"><span class=\"ds-skill-name\">TypeScript</span><span class=\"ds-skill-level\">Comfortable</span></div>",
-      "css": ".ds-skill { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 14px; } .ds-skill-name { font-weight: 600; color: var(--ink); } .ds-skill-level { font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; color: var(--ink-muted); }"
+      "description": "Skills grouped by level; the level is printed once per group in mono, names carry confidence through weight and tone.",
+      "html": "<dl class=\"ds-skills\"><div><dt>Comfortable</dt><dd class=\"ds-s-strong\">TypeScript, NestJS</dd></div><div><dt>Familiar</dt><dd class=\"ds-s-muted\">Docker</dd></div></dl>",
+      "css": ".ds-skills { border-top: 1px solid var(--rule); margin: 0; font-size: 14px; } .ds-skills > div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--rule); } .ds-skills dt { font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; line-height: 24px; color: var(--ink-muted); } .ds-skills dd { margin: 0; line-height: 24px; color: var(--ink); } .ds-s-strong { font-weight: 600; } .ds-s-muted { color: var(--ink-muted); }"
+    },
+    {
+      "name": "Project Entry",
+      "kind": "card",
+      "description": "Not a card: title, one mono status line, description, hairline above for secondary projects.",
+      "html": "<article class=\"ds-project\"><h3>Chess Practice</h3><p class=\"ds-meta\">Completed</p><p class=\"ds-desc\">A short description of the project.</p></article>",
+      "css": ".ds-project { border-top: 1px solid var(--rule); padding-top: 24px; } .ds-project h3 { margin: 0; font-size: 18px; line-height: 1.375; font-weight: 600; color: var(--ink); } .ds-meta { margin: 4px 0 0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; color: var(--ink-muted); } .ds-desc { margin: 12px 0 0; max-width: 60ch; font-size: 16px; color: var(--ink); }"
+    },
+    {
+      "name": "Architecture Diagram",
+      "kind": "custom",
+      "description": "Ruled typographic diagram: 1px field-stroke boxes, 1px rule connectors, teal 2px gateway outline.",
+      "html": "<figure class=\"ds-diagram\"><div class=\"ds-box\">Two Next.js frontends</div><div class=\"ds-conn\"></div><div class=\"ds-gateway\"><strong>API gateway</strong> <span>edge-only, no database</span></div><div class=\"ds-conn\"></div><div class=\"ds-box\">identity-service<br><small>own Prisma schema</small></div></figure>",
+      "css": ".ds-diagram { margin: 0; font-size: 14px; color: var(--ink); } .ds-box { border: 1px solid var(--rule-strong); border-radius: 3px; padding: 8px 12px; } .ds-gateway { border: 2px solid var(--accent); border-radius: 3px; padding: 8px 12px; } .ds-gateway span { color: var(--ink-muted); } .ds-conn { width: 1px; height: 16px; margin: 8px auto; background: var(--rule-strong); } .ds-box small { font-size: 12px; color: var(--ink-muted); }"
     }
   ],
   "narrative": {
     "northStar": "The Ruled Record",
-    "overview": "The site is set like an engineering record: facts, architecture and repo links are the visual content, and the interface recedes. Structure comes from hairline rules and a two-column margin layout, never from cards, glow, or ornament. It reads in daylight on a phone first; a dark theme is a deep blue-black, not a navy gradient.\n\nOne accent, signal teal, appears only where something is actionable or focused. Everything else is ink on paper, with weight and tone (not chips or badges) carrying hierarchy. Geist does all the talking; Geist Mono appears only for data.",
+    "overview": "The site is set like an engineering record: facts, architecture and repo links are the visual content, and the interface recedes. Structure comes from hairline rules and a two-column margin layout, never from cards, glow, or ornament. It reads in daylight on a phone first; a dark theme is a deep blue-black, not a navy gradient.\n\nOne accent, signal teal, appears only where something is actionable or focused (plus one structural marker in the architecture diagram). Everything else is ink on paper, with weight and tone (not chips or badges) carrying hierarchy. Geist does all the talking; Geist Mono appears only for data.\n\nRhythm varies by purpose rather than repeating one block: reference lists (Skills, Education) run tight, the work (Projects) and the close (Contact) run roomy, and only the closing section gets a larger title.",
     "keyCharacteristics": [
-      "Hairline rules are the only container; no cards, no shadows, no gradients.",
+      "Hairline rules are the only container; no cards, no shadows, no gradients on page surfaces. The one boxed form is the architecture diagram.",
       "Section title sits in a left margin column (13rem), content in the right.",
       "One radius (3px), one accent, two themes switched by `data-theme` on `<html>`.",
-      "Hit targets are at least 44px (`min-h-11`); focus is always visible."
+      "Hit targets are at least 44px (`min-h-11`); focus is always visible.",
+      "An arrow means the link leaves the site."
     ],
     "rules": [
-      { "name": "The One Signal Rule", "body": "Teal marks links-in-waiting, focus, and the single primary action per view. If it is decorative, it is wrong.", "section": "colors" },
-      { "name": "The Hairline Container Rule", "body": "Grouping is a 1px rule above or below, never a box, fill, or shadow.", "section": "colors" },
-      { "name": "The Mono Is Data Rule", "body": "Geist Mono is for dates, levels, versions and stacks only, never headings or prose.", "section": "typography" },
-      { "name": "The Level-As-Weight Rule", "body": "Skill confidence is conveyed by weight and tone (semibold, medium, regular muted, italic muted) with the level word always printed.", "section": "typography" },
+      { "name": "The One Signal Rule", "body": "Teal marks links-in-waiting, focus, and the single primary action per view. The only structural use is the diagram's gateway outline. If it is decorative, it is wrong.", "section": "colors" },
+      { "name": "The Hairline Container Rule", "body": "Grouping is a 1px rule above or below, never a box, fill, or shadow. The architecture diagram is the single deliberate exception, because boxes are its content.", "section": "colors" },
+      { "name": "The Mono Is Data Rule", "body": "Geist Mono is for dates, levels, status and years only, never headings or prose.", "section": "typography" },
+      { "name": "The Level-As-Weight Rule", "body": "Skill confidence is conveyed by weight and tone (semibold, medium, regular muted, italic muted). Skills are grouped by level within each category and the level word is printed once per group, in the left column of the group's row.", "section": "typography" },
       { "name": "The Flat-Always Rule", "body": "No box-shadow, no blur, no glow on page surfaces; state changes use underline color, opacity, or a raised-paper fill.", "section": "elevation" }
     ],
     "dos": [
       "Do put grouping in hairline rules and the left-margin title column.",
-      "Do keep teal to the primary action, focus, active nav and link-hover underline.",
+      "Do keep teal to the primary action, focus, active nav, link-hover underline, and the diagram gateway.",
+      "Do route every outbound link through `ExternalLink`; keep internal links arrow-free.",
       "Do use `rounded-ui` (3px) for every control and set mono type only for data.",
+      "Do use `border-field` (rule-strong) for form and diagram strokes; leave the hairline as the default.",
+      "Do set section rhythm with the density prop and reserve `emphasis` for the closing section.",
       "Do keep 44px minimum hit targets and honor `prefers-reduced-motion`.",
       "Do derive hero facts from `data/` so the first screen stays true."
     ],
@@ -99,7 +132,8 @@
       "Don't use shadows, gradients, glow, glass, or colored backgrounds as containers.",
       "Don't add pills, badges, status dots, or icon tiles.",
       "Don't introduce a second accent or a second radius.",
-      "Don't set Geist Mono on headings or prose."
+      "Don't set Geist Mono on headings or prose.",
+      "Don't repeat the level word on every skill row or put an arrow on a link that stays on the site."
     ]
   }
 }
