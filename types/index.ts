@@ -77,7 +77,8 @@ export interface SocialLink {
     technologies: string[];
     status: ProjectStatus;
     featured: boolean;
-    image: string; // path under /public/projects
+    image: string; // path under /public/projects; empty when the project has no real imagery
+    imageAlt?: string; // describes what the real image shows
     links: ProjectLinks;
     detail: ProjectDetail;
   }

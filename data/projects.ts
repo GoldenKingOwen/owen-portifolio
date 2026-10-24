@@ -12,7 +12,9 @@ export const projects: Project[] = [
     technologies: ["JavaScript", "HTML5", "CSS3"],
     status: "Live",
     featured: false,
-    image: "/projects/chess-practice.png",
+    image: "/projects/chess-practice.jpg",
+    imageAlt:
+      "Screenshot of the live Chess Practice demo: its home screen, with options to play online, play the bot, or start a local game.",
     links: {
       github: "https://github.com/GoldenKingOwen/simple-js-chess",
       live: "https://owen-chess.netlify.app/",
@@ -53,7 +55,7 @@ export const projects: Project[] = [
     technologies: ["ReactJs", "TailwindCSS", "TypeScript", "NodeJs", "ExpressJs", "PostgreSQL"],
     status: "In Development",
     featured: false,
-    image: "/projects/cyber-awareness.png",
+    image: "",
     links: {
       github: "https://github.com/GoldenKingOwen/cyber_awareness",
     },
@@ -101,7 +103,7 @@ export const projects: Project[] = [
     ],
     status: "In Development",
     featured: true,
-    image: "/projects/tenant-feedback-portal.png",
+    image: "",
     links: {
       github: "https://github.com/GoldenKingOwen/Tenant-Client-Feedback",
     },

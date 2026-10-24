@@ -14,7 +14,8 @@ export function Projects() {
         <ProjectCard project={lead} lead>
           {lead.slug === "tenant-feedback-portal" && <ArchitectureDiagram />}
         </ProjectCard>
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+        {/* items-start: cards keep their natural height, so a card without an image is never padded to match one with it. */}
+        <div className="grid items-start gap-4 sm:gap-6 md:grid-cols-2">
           {others.map((project) => (
             <ProjectCard key={project.slug} project={project} />
           ))}
