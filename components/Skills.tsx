@@ -20,11 +20,11 @@ export function Skills() {
       <p className="max-w-[60ch] text-sm text-muted">
         Self-rated, strongest first: Comfortable, Intermediate, Familiar, Learning.
       </p>
-      {/* CSS columns, not a grid: groups differ in height, and columns pack them
-          without leaving empty space inside the shorter cards. */}
-      <div className="mt-6 columns-1 gap-4 sm:columns-2 sm:gap-6 lg:columns-3">
+      {/* A row-major grid, so reading order is the data order. Cards keep their natural
+          height (items-start): short groups never stretch into empty boxes. */}
+      <div className="mt-6 grid items-start gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {skills.map((group) => (
-          <Card key={group.category} className="mb-4 break-inside-avoid sm:mb-6">
+          <Card key={group.category}>
             <CardHeader>
               <CardTitle className="text-base">{group.category}</CardTitle>
             </CardHeader>
