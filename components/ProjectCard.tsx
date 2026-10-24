@@ -49,20 +49,23 @@ export function ProjectCard({
         {children && <div className="mt-6 max-w-[65ch] [&_figure]:mb-0">{children}</div>}
       </CardBody>
 
-      {(project.links.github || project.links.live) && (
-        <CardFooter>
-          {project.links.github && (
-            <ExternalLink href={project.links.github} className={linkClass}>
-              {project.name} source on GitHub
-            </ExternalLink>
-          )}
-          {project.links.live && (
-            <ExternalLink href={project.links.live} className={linkClass}>
-              Open {project.name} live
-            </ExternalLink>
-          )}
-        </CardFooter>
-      )}
+      <CardFooter>
+        {/* Visible cue that the whole card opens the write-up. Not a second link:
+            aria-hidden, and it ignores the pointer so the stretched title link takes the click. */}
+        <span aria-hidden="true" className={`${linkClass} cursor-pointer`}>
+          Read the write-up
+        </span>
+        {project.links.github && (
+          <ExternalLink href={project.links.github} className={linkClass}>
+            {project.name} source on GitHub
+          </ExternalLink>
+        )}
+        {project.links.live && (
+          <ExternalLink href={project.links.live} className={linkClass}>
+            Open {project.name} live
+          </ExternalLink>
+        )}
+      </CardFooter>
     </Card>
   );
 }

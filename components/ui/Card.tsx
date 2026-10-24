@@ -83,7 +83,7 @@ export function CardTitle({
         <Link
           href={href}
           // Outline is drawn on the card (see Card); the ::after stretches the target.
-          className="card-link underline decoration-border decoration-2 underline-offset-4 outline-none transition-[text-decoration-color] duration-150 after:absolute after:inset-0 after:content-[''] group-hover:decoration-accent"
+          className="card-link underline decoration-field decoration-2 underline-offset-4 outline-none transition-[text-decoration-color] duration-150 after:absolute after:inset-0 after:content-[''] hover:decoration-accent"
         >
           {children}
         </Link>
@@ -111,7 +111,7 @@ export function CardFooter({ children, className }: { children: ReactNode; class
   return (
     <footer
       className={cn(
-        "pointer-events-none relative z-10 mt-5 flex flex-wrap gap-x-6 gap-y-2 [&_a]:pointer-events-auto",
+        "pointer-events-none relative z-10 mt-5 flex flex-wrap gap-x-6 [&_a]:pointer-events-auto",
         className
       )}
     >
