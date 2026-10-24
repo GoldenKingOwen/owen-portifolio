@@ -28,9 +28,9 @@ export function CursorFollower() {
     <div
       data-cursor-follower=""
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[60] opacity-0"
+      className="group pointer-events-none fixed left-0 top-0 z-[60] opacity-0"
     >
-      <div data-cursor-ring="" className="h-9 w-9 rounded-full border-[1.5px] border-accent" />
+      <div data-cursor-ring="" className="h-9 w-9 rounded-full border-[1.5px] border-accent transition-colors duration-200 group-data-[state=view]:bg-background" />
       <span
         data-cursor-label=""
         className="absolute inset-0 flex items-center justify-center text-xs font-medium text-accent opacity-0"

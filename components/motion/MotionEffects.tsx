@@ -336,6 +336,7 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
                 if (e.target !== lastTarget) {
                   lastTarget = e.target as Element | null;
                   const state = cursorState(lastTarget);
+                  if (follower) follower.dataset.state = state;
                   gsap.to(ring, {
                     scale: state === "link" ? 1.5 : state === "view" ? 2.2 : state === "text" ? 0.5 : 1,
                     opacity: state === "text" ? 0.35 : 1,
