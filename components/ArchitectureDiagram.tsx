@@ -8,7 +8,7 @@ const box = "rounded-ui border border-field px-3 py-2";
 
 export function ArchitectureDiagram() {
   return (
-    <figure data-diagram className="not-prose mb-6 text-sm">
+    <figure data-diagram className="not-prose mb-2 text-sm">
       <div className="space-y-2">
         <div className={`${box} text-foreground`}>Two Next.js frontends</div>
 

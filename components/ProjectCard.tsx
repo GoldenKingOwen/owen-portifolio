@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/types";
@@ -11,7 +12,15 @@ const linkClass =
  * problem statement); the rest are quieter ruled rows. Not a card: the
  * hairline above is the only container.
  */
-export function ProjectCard({ project, lead = false }: { project: Project; lead?: boolean }) {
+export function ProjectCard({
+  project,
+  lead = false,
+  children,
+}: {
+  project: Project;
+  lead?: boolean;
+  children?: ReactNode;
+}) {
   return (
     <article data-project={project.slug} className="border-t border-border pt-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -38,6 +47,8 @@ export function ProjectCard({ project, lead = false }: { project: Project; lead?
       <p className="mt-4 max-w-[60ch] text-sm leading-relaxed text-muted">
         {project.technologies.join(", ")}
       </p>
+
+      {children && <div className="mt-6 max-w-[65ch]">{children}</div>}
 
       <div className="mt-3 flex flex-wrap items-center gap-x-6">
         <Link href={`/projects/${project.slug}`} className={linkClass}>
