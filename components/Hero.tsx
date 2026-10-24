@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import { ExternalLink } from "@/components/ui/ExternalLink";
@@ -9,8 +10,16 @@ const current = experience[0];
 const studying = education.find((e) => e.endYear === "In Progress");
 
 // Facts are derived from data/, so the first screen stays true as it changes.
-const facts: { label: string; value: string }[] = [
-  { label: "Now", value: `${current.position}, ${current.organization}` },
+const facts: { label: string; value: ReactNode }[] = [
+  {
+    label: "Now",
+    // nowrap keeps "Infi-Tech" from breaking at its hyphen on narrow screens.
+    value: (
+      <>
+        {current.position}, <span className="whitespace-nowrap">{current.organization}</span>
+      </>
+    ),
+  },
   ...(studying
     ? [{ label: "Studying", value: `${studying.program}, ${studying.institution}` }]
     : []),
