@@ -52,7 +52,7 @@ export function ProjectCard({
 
       {children && <div className="mt-6 max-w-[65ch]">{children}</div>}
 
-      <div className="mt-3 flex flex-wrap items-center gap-x-6">
+      <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2">
         <Link href={`/projects/${project.slug}`} className={linkClass}>
           Read the {project.name} write-up
         </Link>
