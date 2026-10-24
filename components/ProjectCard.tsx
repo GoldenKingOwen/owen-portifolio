@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 import type { Project } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -22,18 +22,20 @@ export function ProjectCard({
   children?: ReactNode;
 }) {
   return (
-    <article data-project={project.slug} className="border-t border-border pt-6">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h3
-          className={cn(
-            "font-semibold text-foreground",
-            lead ? "text-2xl leading-tight tracking-tight sm:text-4xl" : "text-lg leading-snug"
-          )}
-        >
-          {project.name}
-        </h3>
-        <p className="font-mono text-xs text-muted">{project.status}</p>
-      </div>
+    <article
+      data-project={project.slug}
+      className={cn(!lead && "border-t border-border pt-6")}
+    >
+      <h3
+        className={cn(
+          "font-semibold text-foreground",
+          lead ? "text-2xl leading-tight tracking-tight sm:text-4xl" : "text-lg leading-snug"
+        )}
+      >
+        {project.name}
+      </h3>
+      {/* One meta line under every title, so status never depends on wrapping. */}
+      <p className="mt-1 font-mono text-xs text-muted">{project.status}</p>
 
       <p className={cn("mt-3 max-w-[60ch] text-foreground", lead ? "text-lead" : "text-base")}>
         {project.shortDescription}
@@ -53,27 +55,16 @@ export function ProjectCard({
       <div className="mt-3 flex flex-wrap items-center gap-x-6">
         <Link href={`/projects/${project.slug}`} className={linkClass}>
           Read the {project.name} write-up
-          <ArrowUpRight size={14} aria-hidden="true" />
         </Link>
         {project.links.github && (
-          <a
-            href={project.links.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={linkClass}
-          >
+          <ExternalLink href={project.links.github} className={linkClass}>
             {project.name} source on GitHub
-          </a>
+          </ExternalLink>
         )}
         {project.links.live && (
-          <a
-            href={project.links.live}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={linkClass}
-          >
+          <ExternalLink href={project.links.live} className={linkClass}>
             Open {project.name} live
-          </a>
+          </ExternalLink>
         )}
       </div>
     </article>
