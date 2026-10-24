@@ -135,7 +135,7 @@ Cool-neutral paper and near-black ink, hue 250-255, with a single teal signal. V
 - **Danger / Success** (`danger`, `success`, with night variants): form error and sent confirmation text only.
 
 ### Named Rules
-**The One Signal Rule.** Teal marks links-in-waiting, focus, and the single primary action per view. The only structural use is the diagram's gateway outline. If it is decorative, it is wrong.
+**The One Signal Rule.** Teal marks links-in-waiting, focus, and the single primary action per view. The only structural use is the diagram's gateway outline, chosen during the redesign; revisit if wanted. If it is decorative, it is wrong.
 
 **The Hairline Container Rule.** Grouping is a 1px rule above or below, never a box, fill, or shadow. The architecture diagram is the single deliberate exception, because boxes are its content.
 
