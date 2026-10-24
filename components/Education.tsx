@@ -23,7 +23,7 @@ export function Education() {
                 <span
                   data-node=""
                   aria-hidden="true"
-                  className="absolute -left-8 top-7 block h-[9px] w-[9px] rounded-full border border-field bg-background"
+                  className="absolute -left-8 top-7 block h-[9px] w-[9px] border border-field bg-background"
                 />
                 <Card data-entry>
                   <CardHeader>

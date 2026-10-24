@@ -27,7 +27,7 @@ export function Experience() {
                   data-node=""
                   aria-hidden="true"
                   className={cn(
-                    "absolute -left-8 block h-[9px] w-[9px] rounded-full border",
+                    "absolute -left-8 block h-[9px] w-[9px] border",
                     current ? "top-9 border-accent bg-accent" : "top-7 border-field bg-background"
                   )}
                 />
