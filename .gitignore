@@ -46,3 +46,8 @@ next-env.d.ts
 # local logs / scripts
 next.log
 launch_chrome.sh
+
+# impeccable scratch (screenshots, build state)
+.impeccable/review/
+.impeccable/build/
+.impeccable/mocks/

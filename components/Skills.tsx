@@ -1,39 +1,46 @@
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Card } from "@/components/ui/Card";
-import { LevelBadge } from "@/components/ui/Badge";
+import { Section } from "@/components/ui/Section";
 import { skills } from "@/data/skills";
+import type { SkillLevel } from "@/types";
+
+const LEVEL_ORDER: SkillLevel[] = ["Comfortable", "Intermediate", "Familiar", "Learning"];
+
+// Level is stated once per group and carried by weight: names step down in
+// weight and tone with confidence, so the page does not repeat a label per row.
+const LEVEL_STYLE: Record<SkillLevel, string> = {
+  Comfortable: "font-semibold text-foreground",
+  Intermediate: "font-medium text-foreground",
+  Familiar: "text-muted",
+  Learning: "text-muted italic",
+};
 
 export function Skills() {
   return (
-    <section id="skills" aria-labelledby="skills-heading" className="relative py-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <SectionHeading
-          path="skills"
-          title="Technical Skills"
-          description="Organized by area, with an honest level next to each — not proficiency bars pretending to be precise."
-        />
-
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {skills.map((category) => (
-            <Card key={category.category} className="p-6">
-              <h3 className="font-display text-base font-semibold text-foreground">
-                {category.category}
-              </h3>
-              <ul className="mt-4 space-y-3">
-                {category.skills.map((skill) => (
-                  <li
-                    key={skill.name}
-                    className="flex items-center justify-between gap-3"
+    <Section id="skills" title="Skills" density="tight">
+      <p className="max-w-[60ch] text-sm text-muted">
+        Self-rated, strongest first: Comfortable, Intermediate, Familiar, Learning.
+      </p>
+      <div className="mt-6 space-y-8">
+        {skills.map((group) => (
+          <div key={group.category}>
+            <h3 className="text-sm font-semibold text-foreground">{group.category}</h3>
+            <dl className="mt-2 border-t border-border">
+              {LEVEL_ORDER.map((level) => {
+                const names = group.skills.filter((s) => s.level === level).map((s) => s.name);
+                if (names.length === 0) return null;
+                return (
+                  <div
+                    key={level}
+                    className="grid grid-cols-[6.5rem_1fr] gap-4 border-b border-border py-2.5 text-sm"
                   >
-                    <span className="text-sm text-muted">{skill.name}</span>
-                    <LevelBadge level={skill.level} />
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          ))}
-        </div>
+                    <dt className="font-mono text-xs leading-6 text-muted">{level}</dt>
+                    <dd className={`leading-6 ${LEVEL_STYLE[level]}`}>{names.join(", ")}</dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }

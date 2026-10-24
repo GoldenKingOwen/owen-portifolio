@@ -22,11 +22,11 @@ export function renderOg({
           flexDirection: "column",
           justifyContent: "center",
           padding: "72px",
-          background: "linear-gradient(135deg, #0a0e1a 0%, #17153a 100%)",
+          background: "#0d1117",
           color: "#e8eaf0",
         }}
       >
-        <div style={{ display: "flex", fontSize: 30, color: "#7c5cfc" }}>{eyebrow}</div>
+        <div style={{ display: "flex", fontSize: 30, color: "#5fd0d3" }}>{eyebrow}</div>
         <div
           style={{
             display: "flex",
@@ -48,7 +48,7 @@ export function renderOg({
             width: 160,
             height: 8,
             borderRadius: 4,
-            background: "linear-gradient(90deg, #7c5cfc, #4c8dff)",
+            background: "#5fd0d3",
           }}
         />
       </div>

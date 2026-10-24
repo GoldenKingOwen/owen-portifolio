@@ -18,8 +18,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // hydration, so initialize straight from the DOM instead of syncing
   // in an effect (avoids a cascading-render setState in an effect).
   const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "dark";
-    return (document.documentElement.getAttribute("data-theme") as Theme) ?? "dark";
+    if (typeof window === "undefined") return "light";
+    return (document.documentElement.getAttribute("data-theme") as Theme) ?? "light";
   });
 
   function toggleTheme() {

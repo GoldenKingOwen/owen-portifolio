@@ -1,27 +1,20 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { CursorDot } from "@/components/CursorDot";
 import { siteConfig } from "@/data/site-config";
 import { siteUrl } from "@/lib/site";
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-const inter = Inter({
+const geist = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   display: "swap",
@@ -85,10 +78,10 @@ const themeInitScript = `
 (function() {
   try {
     var stored = localStorage.getItem('portfolio-theme');
-    var theme = stored === 'light' ? 'light' : 'dark';
+    var theme = stored === 'dark' || stored === 'light' ? stored : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);
   } catch (e) {
-    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'light');
   }
 })();
 `;
@@ -102,9 +95,9 @@ export default function RootLayout({
   // <html> from localStorage before hydration, so the server-rendered value
   // ("dark") legitimately differs from the client's saved theme.
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html lang="en" data-theme="light" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}
       >
         {/* Runs before hydration to set the persisted theme on <html> (no
             flash of the wrong theme). Rendered via next/script so React
@@ -118,7 +111,6 @@ export default function RootLayout({
            <Navbar />
            <main>{children}</main>
            <Footer />
-           <CursorDot />
          </ThemeProvider>
       </body>
     </html>
