@@ -1,4 +1,5 @@
 import { siteConfig } from "@/data/site-config";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 import { getWhatsAppLink } from "@/lib/utils";
 
 const linkClass =
@@ -18,14 +19,9 @@ export function Footer() {
         <nav aria-label="Elsewhere">
           <ul className="flex flex-wrap gap-x-5">
             <li>
-              <a
-                href={siteConfig.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkClass}
-              >
+              <ExternalLink href={siteConfig.githubUrl} className={`${linkClass} gap-1`}>
                 GitHub
-              </a>
+              </ExternalLink>
             </li>
             <li>
               <a href={`mailto:${siteConfig.email}`} className={linkClass}>
@@ -33,14 +29,12 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a
+              <ExternalLink
                 href={getWhatsAppLink(siteConfig.whatsapp)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkClass}
+                className={`${linkClass} gap-1`}
               >
                 WhatsApp
-              </a>
+              </ExternalLink>
             </li>
           </ul>
         </nav>

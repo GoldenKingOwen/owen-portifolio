@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Section } from "@/components/ui/Section";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 import { siteConfig } from "@/data/site-config";
 
 // Formspree form endpoint — submissions are sent straight from the
@@ -77,9 +78,9 @@ export function Contact() {
         <a href={`mailto:${siteConfig.email}`} className={textLink}>
           {siteConfig.email}
         </a>
-        <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer" className={textLink}>
+        <ExternalLink href={siteConfig.githubUrl} className={`${textLink} gap-1`}>
           GitHub profile
-        </a>
+        </ExternalLink>
       </div>
 
       <form onSubmit={handleSubmit} className="mt-10 max-w-xl space-y-5">

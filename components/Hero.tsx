@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowDown } from "lucide-react";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 import { siteConfig } from "@/data/site-config";
 import { experience } from "@/data/experience";
 import { education } from "@/data/education";
@@ -53,10 +54,9 @@ export function Hero() {
               <ArrowDown size={16} aria-hidden="true" />
               Download CV
             </a>
-            <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer" className={textLink}>
+            <ExternalLink href={siteConfig.githubUrl} className={textLink}>
               GitHub profile
-              <ArrowUpRight size={14} aria-hidden="true" />
-            </a>
+            </ExternalLink>
             <a href="#contact" className={textLink}>
               Contact
             </a>

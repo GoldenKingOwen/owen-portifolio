@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { siteConfig } from "@/data/site-config";
 import { projectJsonLd } from "@/lib/structured-data";
 import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 
 export const dynamicParams = false;
 
@@ -52,7 +53,7 @@ export async function generateMetadata({
 }
 
 const linkClass =
-  "inline-flex min-h-11 items-center text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent";
+  "inline-flex min-h-11 items-center gap-1 text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent";
 
 function Prose({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -149,26 +150,22 @@ export default async function ProjectPage({
                 <dt className="text-muted">Links</dt>
                 <dd className="mt-1 flex flex-col">
                   {project.links.github && (
-                    <a
+                    <ExternalLink
                       href={project.links.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${project.name} source on GitHub`}
+                      aria-label={`${project.name} source on GitHub, opens in a new tab`}
                       className={linkClass}
                     >
                       Source on GitHub
-                    </a>
+                    </ExternalLink>
                   )}
                   {project.links.live && (
-                    <a
+                    <ExternalLink
                       href={project.links.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Open ${project.name} live`}
+                      aria-label={`Open ${project.name} live, opens in a new tab`}
                       className={linkClass}
                     >
                       Live demo
-                    </a>
+                    </ExternalLink>
                   )}
                 </dd>
               </div>
