@@ -15,7 +15,7 @@ const LEVEL_STYLE: Record<SkillLevel, string> = {
 
 export function Skills() {
   return (
-    <Section id="skills" title="Skills" className="py-12 sm:py-16">
+    <Section id="skills" title="Skills" density="tight">
       <p className="max-w-[60ch] text-sm text-muted">
         Self-rated, strongest first: Comfortable, Intermediate, Familiar, Learning.
       </p>

@@ -68,7 +68,7 @@ export function Contact() {
   }
 
   return (
-    <Section id="contact" title="Contact">
+    <Section id="contact" title="Contact" density="roomy" emphasis>
       <p className="max-w-[60ch] text-base leading-relaxed text-foreground sm:text-lg">
         Have a project in mind or want to collaborate? Write to me directly, or use the form.
       </p>

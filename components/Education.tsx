@@ -5,7 +5,7 @@ import { formatDateRange } from "@/lib/utils";
 
 export function Education() {
   return (
-    <Section id="education" title="Education">
+    <Section id="education" title="Education" density="tight">
       <ol className="space-y-10">
         {education.map((entry, i) => (
           <li

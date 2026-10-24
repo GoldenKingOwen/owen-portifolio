@@ -7,8 +7,8 @@ const currentProgram = education.find((e) => e.endYear === "In Progress");
 export function About() {
   return (
     <Section id="about" title="About">
-      <div className="max-w-[65ch] space-y-5 text-base leading-relaxed text-foreground sm:text-lg">
-        <p>
+      <div className="max-w-[65ch] space-y-5 text-base leading-relaxed text-foreground">
+        <p className="text-lead">
           I&apos;m an ICT student at <strong className="font-semibold">Mzuzu University</strong>,
           currently pursuing a Bachelor of Science in Information and Communication Technology.
           Before that, I completed diplomas in Computing and Information Systems (Levels 4 and 5)
