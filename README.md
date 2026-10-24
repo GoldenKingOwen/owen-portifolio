@@ -13,7 +13,7 @@ A personal portfolio and résumé site for **Owen Matola**, an ICT student at Mz
 - **Dark / light theme** — persisted preference with a no-flash inline init script; accessible via the toggle in the navbar.
 - **Project detail pages** — each project has its own route (`/projects/[slug]`) with overview, problem statement, objectives, features, architecture, challenges, and solutions.
 - **Contact form** — submits messages straight to [Formspree](https://formspree.io) from the browser (AJAX), so no email credentials are needed on the server.
-- **Polished UI** — Framer Motion animations, custom glow orbs, hover states, and a reduced-motion–friendly design.
+- **Polished UI** — GSAP entrance and scroll reveals (opacity and transform only), a view-transition theme fade, hover states, and a design that skips motion entirely for reduced-motion and low-end visitors.
 
 ## 🛠 Tech Stack
 
@@ -21,7 +21,7 @@ A personal portfolio and résumé site for **Owen Matola**, an ICT student at Mz
 | ---------- | ----------------------------------------------------------------------- |
 | Framework  | [Next.js 16](https://nextjs.org) (App Router) · React 19 · TypeScript    |
 | Styling    | [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config via `@theme inline`) |
-| Animation  | [Framer Motion](https://www.framer.com/motion/)                          |
+| Animation  | [GSAP](https://gsap.com) with ScrollTrigger                              |
 | Icons      | [Lucide React](https://lucide.dev)                                       |
 | Fonts      | `next/font` (Space Grotesk, Inter, JetBrains Mono)                       |
 | Email      | [Formspree](https://formspree.io) (contact form)                                                      |

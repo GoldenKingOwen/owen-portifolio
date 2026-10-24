@@ -27,7 +27,7 @@ Static Next.js site on Vercel. Content lives in `data/` (projects, skills, exper
 - Routes: `/` (single-page sections) and `/projects/[slug]` (three projects: chess-practice, cyber-awareness, tenant-feedback-portal).
 - Do not change copy meaning, routes, or the `data/` structure.
 - No new heavy dependencies; no stock photography or placeholder imagery; no lorem ipsum.
-- Motion is deferred to a later GSAP pass: no new animation now, keep markup animation-friendly (stable class hooks, data attributes).
+- Motion is GSAP only (core and ScrollTrigger). Opacity and transform only; nothing loops; reduced-motion and low-end visitors get final states and never download GSAP. Hooks: `data-hero`, `data-reveal`, `data-revealed`, `data-section`. Hover states are CSS, and the theme switch is a View Transition.
 - Performance matters: slow mobile connections are the norm for the audience.
 - SEO work is already done (metadata, JSON-LD, sitemap, OG images); the redesign must not regress it (single h1, landmarks, canonical, alt text).
 
