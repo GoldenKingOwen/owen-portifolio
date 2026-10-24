@@ -43,18 +43,18 @@ export function Hero() {
     >
       <div className="mx-auto grid max-w-5xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-16">
         <div>
-          <h1 id="hero-heading" className="font-semibold text-foreground">
+          <h1 id="hero-heading" data-hero="" className="font-semibold text-foreground">
             <span className="block text-display">{siteConfig.name}</span>
             <span className="mt-4 block text-lead font-normal text-muted">
               Full-Stack Software Developer in Malawi
             </span>
           </h1>
 
-          <p className="mt-8 max-w-[60ch] text-base leading-relaxed text-foreground sm:text-lg">
+          <p data-hero="" className="mt-8 max-w-[60ch] text-base leading-relaxed text-foreground sm:text-lg">
             {siteConfig.shortBio}
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
+          <div data-hero="" className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
             <a
               href="/cv/OwenCV.pdf"
               download
@@ -71,7 +71,7 @@ export function Hero() {
             </a>
           </div>
 
-          <dl className="mt-12 max-w-[60ch] border-t border-border text-sm">
+          <dl data-hero="" className="mt-12 max-w-[60ch] border-t border-border text-sm">
             {facts.map((fact) => (
               <div
                 key={fact.label}
@@ -84,7 +84,7 @@ export function Hero() {
           </dl>
         </div>
 
-        <div className="order-first lg:order-none">
+        <div data-hero="" className="order-first lg:order-none">
           <div className="relative aspect-[4/5] w-40 overflow-hidden rounded-ui border border-border bg-raised sm:w-56 lg:w-full">
             <Image
               src="/images/owen.jpeg"

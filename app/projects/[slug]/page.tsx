@@ -57,7 +57,7 @@ const linkClass =
 
 function Prose({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section data-block className="border-t border-border pt-6">
+    <section data-block data-reveal="" className="border-t border-border pt-6">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       <div className="mt-3 max-w-[65ch] text-base leading-relaxed text-foreground">{children}</div>
     </section>

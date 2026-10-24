@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
 import { cn } from "@/lib/utils";
+import { setNavActive, syncNavLink } from "@/lib/nav-active";
 import { siteConfig } from "@/data/site-config";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { NavItem } from "@/types";
@@ -24,42 +25,16 @@ const HEADER_OFFSET = 64;
 const controlClass =
   "flex h-11 w-11 items-center justify-center rounded-ui border border-border text-foreground transition-colors hover:bg-raised";
 
+// The current section is marked with data-active (and aria-current) by the
+// scroll-spy in MotionEffects; the look is pure CSS, so no React state is
+// involved and no scroll listener runs here.
+const linkClass =
+  "inline-flex min-h-11 items-center px-3 text-sm text-muted underline-offset-8 transition-colors hover:text-foreground data-[active=true]:font-medium data-[active=true]:text-foreground data-[active=true]:underline data-[active=true]:decoration-accent data-[active=true]:decoration-2";
+
 export function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>("");
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  // The active section is the last one whose top edge has passed a probe line
-  // ~35% down the viewport. At the page bottom the last item wins.
-  useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 24);
-
-      const probe = window.innerHeight * 0.35;
-      let current = "";
-      for (const item of NAV_ITEMS) {
-        const el = document.querySelector(item.href);
-        if (!el) continue;
-        if (el.getBoundingClientRect().top <= probe) current = item.href;
-        else break;
-      }
-      const atBottom =
-        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-      if (atBottom) current = NAV_ITEMS[NAV_ITEMS.length - 1].href;
-
-      setActiveSection(current);
-    }
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
 
   // Escape closes the mobile menu, so keyboard users are never trapped in it.
   useEffect(() => {
@@ -71,6 +46,8 @@ export function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
 
+  // Native smooth scrolling is kept: it costs no JavaScript, and GSAP's
+  // ScrollToPlugin would add weight for the same result.
   function scrollToSection(href: string) {
     const el = document.querySelector(href);
     if (!el) return;
@@ -79,7 +56,7 @@ export function Navbar() {
   }
 
   function handleNavClick(href: string) {
-    setActiveSection(href);
+    setNavActive(href.slice(1)); // highlight immediately; the scroll-spy confirms as the page settles
 
     if (pathname !== "/") {
       // On a project page the section doesn't exist: go home and let the hash scroll.
@@ -100,9 +77,10 @@ export function Navbar() {
   return (
     <header
       data-site-header
+      // data-scrolled is set by the header ScrollTrigger in MotionEffects.
       className={cn(
-        "fixed inset-x-0 top-0 z-50 bg-background",
-        scrolled || mobileOpen ? "border-b border-border" : "border-b border-transparent"
+        "fixed inset-x-0 top-0 z-50 border-b border-transparent bg-background data-[scrolled=true]:border-border",
+        mobileOpen && "border-border"
       )}
     >
       <nav
@@ -122,29 +100,21 @@ export function Navbar() {
         </a>
 
         <ul className="hidden items-center gap-1 md:flex">
-          {NAV_ITEMS.map((item) => {
-            const active = activeSection === item.href;
-            return (
-              <li key={item.href}>
-                <a
-                  href={`/${item.href}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(item.href);
-                  }}
-                  aria-current={active ? "location" : undefined}
-                  className={cn(
-                    "inline-flex min-h-11 items-center px-3 text-sm underline-offset-8 transition-colors",
-                    active
-                      ? "font-medium text-foreground underline decoration-accent decoration-2"
-                      : "text-muted hover:text-foreground"
-                  )}
-                >
-                  {item.label}
-                </a>
-              </li>
-            );
-          })}
+          {NAV_ITEMS.map((item) => (
+            <li key={item.href}>
+              <a
+                href={`/${item.href}`}
+                data-nav-link={item.href.slice(1)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.href);
+                }}
+                className={linkClass}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
         </ul>
 
         <div className="flex items-center gap-2">
@@ -177,12 +147,13 @@ export function Navbar() {
             <li key={item.href} className="border-t border-border first:border-t-0">
               <a
                 href={`/${item.href}`}
+                data-nav-link={item.href.slice(1)}
+                ref={syncNavLink}
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick(item.href);
                 }}
-                aria-current={activeSection === item.href ? "location" : undefined}
-                className="flex min-h-12 items-center text-base text-foreground"
+                className="flex min-h-12 items-center text-base text-foreground data-[active=true]:font-medium data-[active=true]:underline data-[active=true]:decoration-accent data-[active=true]:decoration-2 data-[active=true]:underline-offset-8"
               >
                 {item.label}
               </a>

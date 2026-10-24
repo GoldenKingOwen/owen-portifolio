@@ -1,4 +1,5 @@
 import { Section } from "@/components/ui/Section";
+import { Reveal } from "@/components/motion/Reveal";
 import { education } from "@/data/education";
 
 const earliestStartYear = Math.min(...education.map((e) => Number(e.startYear)));
@@ -7,7 +8,7 @@ const currentProgram = education.find((e) => e.endYear === "In Progress");
 export function About() {
   return (
     <Section id="about" title="About">
-      <div className="max-w-[65ch] space-y-5 text-base leading-relaxed text-foreground">
+      <Reveal className="max-w-[65ch] space-y-5 text-base leading-relaxed text-foreground">
         <p className="text-lead">
           I&apos;m an ICT student at <strong className="font-semibold">Mzuzu University</strong>,
           currently pursuing a Bachelor of Science in Information and Communication Technology.
@@ -35,9 +36,9 @@ export function About() {
           term, I want to keep deepening both sides of that: shipping full-stack products and
           understanding how to break and defend them.
         </p>
-      </div>
+      </Reveal>
 
-      <dl className="mt-10 max-w-[65ch] border-t border-border text-sm">
+      <Reveal as="dl" className="mt-10 max-w-[65ch] border-t border-border text-sm">
         <div className="grid grid-cols-[11rem_1fr] gap-4 border-b border-border py-3">
           <dt className="text-muted">Studying computing since</dt>
           <dd className="tabular font-mono text-foreground">{earliestStartYear}</dd>
@@ -48,7 +49,7 @@ export function About() {
             <dd className="text-foreground">BSc ICT, in progress</dd>
           </div>
         )}
-      </dl>
+      </Reveal>
     </Section>
   );
 }
