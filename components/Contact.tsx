@@ -17,7 +17,7 @@ const fieldClass =
   "block w-full rounded-ui border border-field bg-background px-3 py-3 text-base text-foreground focus-visible:outline-offset-1";
 const labelClass = "mb-1.5 block text-sm font-medium text-foreground";
 const channelLink =
-  "inline-flex min-h-11 items-center gap-1 text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent";
+  "inline-flex min-h-11 min-w-0 [overflow-wrap:anywhere] items-center gap-1 text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent";
 
 export function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
@@ -89,7 +89,7 @@ export function Contact() {
         <Magnetic>
           <a
             href={`mailto:${siteConfig.email}`}
-            className="inline-flex min-h-11 items-center text-2xl font-semibold tracking-tight text-foreground underline decoration-border decoration-2 underline-offset-8 hover:decoration-accent sm:text-4xl"
+            className="inline-flex min-h-11 items-center text-xl font-semibold tracking-tight text-foreground [overflow-wrap:anywhere] underline decoration-border decoration-2 underline-offset-8 hover:decoration-accent sm:text-4xl"
           >
             {siteConfig.email}
           </a>

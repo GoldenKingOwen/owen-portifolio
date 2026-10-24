@@ -18,10 +18,11 @@ export function About() {
           data-split="words-scrub"
           className="text-2xl font-medium leading-snug tracking-tight sm:text-3xl"
         >
-          I&apos;m an ICT student at <strong className="font-semibold">Mzuzu University</strong>,
-          currently pursuing a Bachelor of Science in Information and Communication Technology.
-          Before that, I completed diplomas in Computing and Information Systems (Levels 4 and 5)
-          through the University of Malawi under ABMA.
+          I&apos;m currently interning as a software developer at Infi-Tech. My assessment
+          project there is a multi-tenant feedback and support portal — a NestJS microservices
+          backend behind an authenticated API gateway, paired with Next.js frontends. It&apos;s
+          given me hands-on experience with the kind of architecture decisions (tenant isolation,
+          event-driven services, secure auth) that don&apos;t come up in coursework alone.
         </p>
         <Reveal as="p">
           My academic and project work spans full-stack web development — building with React,
@@ -31,11 +32,10 @@ export function About() {
           the system level, not just the application layer.
         </Reveal>
         <Reveal as="p">
-          I&apos;m currently interning as a software developer at Infi-Tech. My assessment
-          project there is a multi-tenant feedback and support portal — a NestJS microservices
-          backend behind an authenticated API gateway, paired with Next.js frontends. It&apos;s
-          given me hands-on experience with the kind of architecture decisions (tenant isolation,
-          event-driven services, secure auth) that don&apos;t come up in coursework alone.
+          I&apos;m an ICT student at <strong className="font-semibold">Mzuzu University</strong>,
+          currently pursuing a Bachelor of Science in Information and Communication Technology.
+          Before that, I completed diplomas in Computing and Information Systems (Levels 4 and 5)
+          through the University of Malawi under ABMA.
         </Reveal>
         <Reveal as="p">
           I care about building software that&apos;s secure and maintainable by default, not as an

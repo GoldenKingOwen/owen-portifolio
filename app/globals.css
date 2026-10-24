@@ -98,7 +98,11 @@ body {
   caret-color: var(--accent);
 }
 
-/* Sections anchor below the fixed header. */
+/* Sections and keyboard focus both land below the fixed header. */
+html {
+  scroll-padding-top: var(--header-h);
+}
+
 section[id] {
   scroll-margin-top: var(--header-h);
 }

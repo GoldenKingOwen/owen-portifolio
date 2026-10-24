@@ -43,7 +43,7 @@ export function Hero() {
         <div>
           {/* The name stays the largest type on the page. The two spans are split into
               characters and lines by the motion layer (and restored afterwards). */}
-          <h1 id="hero-heading" className="font-semibold text-foreground">
+          <h1 id="hero-heading" aria-label={`${siteConfig.name}, Full-Stack Software Developer in Malawi`} className="font-semibold text-foreground">
             <span data-hero-split="chars" className="block text-display">
               {siteConfig.name}
             </span>

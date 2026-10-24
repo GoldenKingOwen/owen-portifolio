@@ -125,12 +125,12 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
               }
               gsap.fromTo(
                 split.words,
-                { opacity: 0.25 },
+                { opacity: 0.4 },
                 {
                   opacity: 1,
                   ease: "none",
                   stagger: 0.1,
-                  scrollTrigger: { trigger: el, start: "top 80%", end: "bottom 45%", scrub: 0.5 },
+                  scrollTrigger: { trigger: el, start: "top 80%", end: "bottom 60%", scrub: 0.5 },
                 }
               );
             });
@@ -249,6 +249,9 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
             const blocks = qa('[data-hero]:not([data-hero="clip"]):not([data-revealed])');
             const portrait = qa('[data-hero="clip"]:not([data-revealed])');
             if (!nameEl && !blocks.length && !portrait.length) return;
+            // A breakpoint change re-runs this callback; the name plays once per page.
+            if (nameEl?.dataset.played) return;
+            if (nameEl) nameEl.dataset.played = "1";
 
             const tl = gsap.timeline({
               defaults: { ease: EASE },
@@ -292,6 +295,7 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
                   cy: 0,
                   reach: 0,
                   active: false,
+                  hidden: false,
                   xTo: gsap.quickTo(inner, "x", { duration: 0.4, ease: EASE }),
                   yTo: gsap.quickTo(inner, "y", { duration: 0.4, ease: EASE }),
                 };
@@ -302,6 +306,7 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
               const scrollY = window.scrollY;
               for (const m of magnets) {
                 const r = m.outer.getBoundingClientRect();
+                m.hidden = r.width === 0;
                 m.cx = r.left + r.width / 2;
                 m.cy = r.top + r.height / 2 + (m.fixed ? 0 : scrollY);
                 m.reach = 80 + Math.max(r.width, r.height) / 2;
@@ -344,6 +349,7 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
               if (magnets.length) {
                 const scrollY = window.scrollY;
                 for (const m of magnets) {
+                  if (m.hidden) continue;
                   const dx = e.clientX - m.cx;
                   const dy = e.clientY - (m.fixed ? m.cy : m.cy - scrollY);
                   if (Math.hypot(dx, dy) < m.reach) {
@@ -362,11 +368,14 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
               for (const m of magnets) if (m.active) release(m);
             };
 
+            const onOut = (e: PointerEvent) => {
+              if (!e.relatedTarget) onLeave();
+            };
             window.addEventListener("pointermove", onMove, { passive: true });
-            document.documentElement.addEventListener("pointerleave", onLeave);
+            document.addEventListener("pointerout", onOut);
             cleanups.push(() => {
               window.removeEventListener("pointermove", onMove);
-              document.documentElement.removeEventListener("pointerleave", onLeave);
+              document.removeEventListener("pointerout", onOut);
               ScrollTrigger.removeEventListener("refresh", measure);
               gsap.set(magnets.map((m) => m.inner), { clearProps: "transform" });
             });
