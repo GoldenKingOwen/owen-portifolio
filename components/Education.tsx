@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/Section";
 import { Card, CardBody, CardHeader, CardMeta, CardTitle } from "@/components/ui/Card";
-import { CertificationsLazy } from "@/components/CertificationsLazy";
+import { Certifications } from "@/components/Certifications";
 import { education } from "@/data/education";
 import { cn, formatDateRange } from "@/lib/utils";
 
@@ -53,7 +53,7 @@ export function Education() {
         })}
       </ol>
 
-      <CertificationsLazy />
+      <Certifications />
     </Section>
   );
 }
