@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
+import { CursorFollower } from "@/components/motion/CursorFollower";
 
 // GSAP lives in its own async chunk. It is not requested until the page has
 // hydrated and the browser is idle, so it never competes with first paint.
@@ -52,5 +53,11 @@ export function MotionLoader() {
     };
   }, [mode, pathname]);
 
-  return mode === "motion" && ready ? <MotionEffects pathname={pathname} /> : null;
+  if (mode !== "motion") return null;
+  return (
+    <>
+      <CursorFollower />
+      {ready && <MotionEffects pathname={pathname} />}
+    </>
+  );
 }

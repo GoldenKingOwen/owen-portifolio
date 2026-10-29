@@ -35,9 +35,13 @@ Static Next.js site on Vercel. Content lives in `data/` (projects, skills, exper
 
 Stated by the user when opening the `redesign/cards` branch: Cards are allowed, as ONE component (`components/ui/Card.tsx`) with a defined anatomy: a flat tinted surface, a 1px border, the single 3px radius, no shadow, no gradient. Still refused: nested cards (never a Card inside a Card), identical-card grids with no hierarchy, glow orbs, gradients, glassmorphism and backdrop blur, shadows as decoration, icon-in-rounded-tile stacks, pill-badge clouds, and eyebrow chips.
 
+## Motion Commitments
+
+Motion principles, stated by the user for the `feat/inspired-polish-motion` branch: motion is purposeful (it shows order, arrival or state, never decoration); it animates transform and opacity only (clip-path insets and stroke drawing are paint-only and allowed); it uses one easing family (`power3.out` for entrances, `none` for scrubbed rules) and durations between 0.4s and 0.9s (hover and page-enter may be shorter); nothing loops; reduced-motion and low-end visitors get final states; content is always in the server HTML and must stay visible without JavaScript. The cursor follower and magnetic elements are a deliberate, documented exception to the quiet principle, limited to fine-pointer devices (see DESIGN.md). Section forms vary on purpose: cards, ruled lists, prose and a timeline, never one repeated component. Patterns are taken from references, never their layouts, copy or imagery.
+
 ## Evidence on Hand
 
-Real content in `data/`: three projects with repos and (for two) live demos, an internship description with concrete architecture details, education history, skills with honest levels, certificate PDFs, a GitHub profile (GoldenKingOwen). Absent and not to be fabricated: testimonials, client names, metrics, screenshots of projects (the project thumbnail is currently an honest placeholder), LinkedIn URL.
+Real content in `data/`: three projects with repos and (for two) live demos, an internship description with concrete architecture details, education history, skills with honest levels, certificate PDFs, a GitHub profile (GoldenKingOwen). Absent and not to be fabricated: testimonials (a hidden-when-empty slot exists in `data/testimonials.ts`), client names, metrics, LinkedIn URL. Real imagery exists only for the Chess project (a screenshot of the live demo); the other projects show no image, and no placeholder or mock-up is ever drawn. The internship is a software development internship; the multi-tenant portal was its assessment project, not its only work.
 
 ## Product Principles
 

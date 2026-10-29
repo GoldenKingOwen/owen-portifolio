@@ -20,7 +20,7 @@ export function cn(...classes: Array<string | false | null | undefined>): string
    * "In Progress" / "Present" pass through unchanged.
    */
   export function formatDateRange(start: string, end: string): string {
-    return `${start} — ${end}`;
+    return start === end ? start : `${start} — ${end}`;
   }
   
   /**

@@ -37,6 +37,7 @@ export function Card({
       // Stable hooks for the motion pass.
       data-card={featured ? `${variant}-featured` : variant}
       data-reveal=""
+      data-cursor={interactive ? "view" : undefined}
       className={cn(
         "group relative flex min-w-0 flex-col rounded-ui border border-border bg-raised",
         featured ? "border-t-2 border-t-accent p-6 sm:p-8" : "p-5 sm:p-6",

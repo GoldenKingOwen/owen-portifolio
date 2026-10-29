@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { setNavActive, syncNavLink } from "@/lib/nav-active";
 import { siteConfig } from "@/data/site-config";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Magnetic } from "@/components/motion/Magnetic";
 import { NavItem } from "@/types";
 
 const NAV_ITEMS: NavItem[] = [
@@ -118,16 +119,20 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
-          <a
-            href={siteConfig.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub profile, opens in a new tab"
-            className={cn(controlClass, "hidden md:flex")}
-          >
-            <GithubIcon size={16} aria-hidden="true" />
-          </a>
-          <ThemeToggle />
+          <Magnetic className="max-md:hidden">
+            <a
+              href={siteConfig.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub profile, opens in a new tab"
+              className={controlClass}
+            >
+              <GithubIcon size={16} aria-hidden="true" />
+            </a>
+          </Magnetic>
+          <Magnetic>
+            <ThemeToggle />
+          </Magnetic>
           <button
             type="button"
             onClick={() => setMobileOpen((v) => !v)}

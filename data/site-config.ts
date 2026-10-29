@@ -11,7 +11,7 @@ export const siteConfig: SiteConfig = {
     "Network Enthusiast",
   ],
   shortBio:
-    "ICT student at Mzuzu University building full-stack web applications and exploring cybersecurity. Currently interning at Infi-Tech as a web developer, working across NestJS microservices and Next.js.",
+    "ICT student at Mzuzu University building full-stack web applications and exploring cybersecurity. Currently a software development intern at Infi-Tech, working across NestJS microservices and Next.js.",
   location: "Mzuzu, Malawi",
   email: "matolaowen1@gmail.com",
   whatsapp: "+265885450302",

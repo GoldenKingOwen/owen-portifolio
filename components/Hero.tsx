@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import { ExternalLink } from "@/components/ui/ExternalLink";
+import { Magnetic } from "@/components/motion/Magnetic";
+import { LocalTime } from "@/components/LocalTime";
 import { siteConfig } from "@/data/site-config";
 import { experience } from "@/data/experience";
 import { education } from "@/data/education";
@@ -12,18 +14,14 @@ const studying = education.find((e) => e.endYear === "In Progress");
 // Facts are derived from data/, so the first screen stays true as it changes.
 const facts: { label: string; value: ReactNode }[] = [
   {
-    label: "Now",
-    // nowrap keeps "Infi-Tech" from breaking at its hyphen on narrow screens.
+    label: "Based",
     value: (
       <>
-        {current.position}, <span className="whitespace-nowrap">{current.organization}</span>
+        {siteConfig.location}
+        <LocalTime />
       </>
     ),
   },
-  ...(studying
-    ? [{ label: "Studying", value: `${studying.program}, ${studying.institution}` }]
-    : []),
-  { label: "Based", value: siteConfig.location },
   { label: "Working with", value: current.technologies.slice(0, 6).join(", ") },
   ...(siteConfig.availableForOpportunities
     ? [{ label: "Availability", value: "Open to opportunities" }]
@@ -43,26 +41,42 @@ export function Hero() {
     >
       <div className="mx-auto grid max-w-5xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-16">
         <div>
-          <h1 id="hero-heading" data-hero="" className="font-semibold text-foreground">
-            <span className="block text-display">{siteConfig.name}</span>
-            <span className="mt-4 block text-lead font-normal text-muted">
+          {/* The name stays the largest type on the page. The two spans are split into
+              characters and lines by the motion layer (and restored afterwards). */}
+          <h1 id="hero-heading" aria-label={`${siteConfig.name}, Full-Stack Software Developer in Malawi`} className="font-semibold text-foreground">
+            <span data-hero-split="chars" className="block text-display">
+              {siteConfig.name}
+            </span>
+            <span data-hero-split="lines" className="mt-4 block text-lead font-normal text-muted">
               Full-Stack Software Developer in Malawi
             </span>
           </h1>
 
-          <p data-hero="" className="mt-8 max-w-[60ch] text-base leading-relaxed text-foreground sm:text-lg">
+          {/* One line, derived from data/: what I am doing now. */}
+          <p data-hero="" className="mt-6 max-w-[60ch] text-base leading-relaxed text-foreground">
+            <span className="font-medium">Now:</span>
+            <span className="text-muted">
+              {" "}
+              {current.position} at <span className="whitespace-nowrap">{current.organization}</span>
+              {studying ? ", studying for a BSc ICT at " + studying.institution : ""}.
+            </span>
+          </p>
+
+          <p data-hero="" className="mt-4 max-w-[60ch] text-base leading-relaxed text-foreground sm:text-lg">
             {siteConfig.shortBio}
           </p>
 
           <div data-hero="" className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
-            <a
-              href="/cv/OwenCV.pdf"
-              download
-              className="inline-flex min-h-11 items-center gap-2 rounded-ui bg-accent px-5 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
-            >
-              <ArrowDown size={16} aria-hidden="true" />
-              Download CV
-            </a>
+            <Magnetic>
+              <a
+                href="/cv/OwenCV.pdf"
+                download
+                className="inline-flex min-h-11 items-center gap-2 rounded-ui bg-accent px-5 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
+              >
+                <ArrowDown size={16} aria-hidden="true" />
+                Download CV
+              </a>
+            </Magnetic>
             <ExternalLink href={siteConfig.githubUrl} className={textLink}>
               GitHub profile
             </ExternalLink>
@@ -84,8 +98,11 @@ export function Hero() {
           </dl>
         </div>
 
-        <div data-hero="" className="order-first lg:order-none">
-          <div className="relative aspect-[4/5] w-40 overflow-hidden rounded-ui border border-border bg-raised sm:w-56 lg:w-full">
+        <div className="order-first lg:order-none">
+          <div
+            data-hero="clip"
+            className="relative aspect-[4/5] w-40 overflow-hidden rounded-ui border border-border bg-raised sm:w-56 lg:w-full"
+          >
             <Image
               src="/images/owen.jpeg"
               alt="Portrait of Owen Matola, full-stack software developer from Mzuzu, Malawi"

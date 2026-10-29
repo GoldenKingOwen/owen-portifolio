@@ -14,10 +14,26 @@ const LEVEL_STYLE: Record<SkillLevel, string> = {
   Learning: "text-muted italic",
 };
 
+const namesAt = (category: string, level: SkillLevel) =>
+  skills
+    .find((group) => group.category === category)
+    ?.skills.filter((s) => s.level === level)
+    .map((s) => s.name) ?? [];
+
+// One line above the grid, built only from what data/skills.ts says: the backend and
+// database tools rated Comfortable, and whatever is marked Learning.
+const comfortable = [...namesAt("Backend", "Comfortable").slice(0, 2), ...namesAt("Database", "Comfortable").slice(0, 1)];
+const learning = namesAt("Mobile Development", "Learning");
+const summary =
+  comfortable.length && learning.length
+    ? `Backend-leaning full-stack, comfortable with ${comfortable.join(", ")}; learning ${learning.join(" and ")}.`
+    : "";
+
 export function Skills() {
   return (
     <Section id="skills" title="Skills" density="tight">
-      <p className="max-w-[60ch] text-sm text-muted">
+      {summary && <p className="max-w-[60ch] text-base text-foreground sm:text-lg">{summary}</p>}
+      <p className="mt-2 max-w-[60ch] text-sm text-muted">
         Self-rated, strongest first: Comfortable, Intermediate, Familiar, Learning.
       </p>
       {/* A row-major grid, so reading order is the data order. Cards keep their natural

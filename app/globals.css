@@ -98,7 +98,11 @@ body {
   caret-color: var(--accent);
 }
 
-/* Sections anchor below the fixed header. */
+/* Sections and keyboard focus both land below the fixed header. */
+html {
+  scroll-padding-top: var(--header-h);
+}
+
 section[id] {
   scroll-margin-top: var(--header-h);
 }
@@ -155,6 +159,7 @@ html {
   to {
     opacity: 1;
     transform: none;
+    clip-path: none;
   }
 }
 
@@ -162,13 +167,45 @@ html[data-motion] [data-hero]:not([data-revealed]) {
   transform: translateY(14px);
 }
 
+/* The portrait opens from a small clip-path inset: it is painted from the first frame
+   (so it can still be the LCP element), and paint-only, so it never causes layout. */
+html[data-motion] [data-hero="clip"]:not([data-revealed]) {
+  transform: none;
+  clip-path: inset(10% 0 0 0);
+}
+
 html[data-motion] [data-reveal]:not([data-revealed]) {
   opacity: 0;
   transform: translateY(24px);
 }
 
-html[data-motion="pending"] [data-hero]:not([data-revealed]),
-html[data-motion="pending"] [data-reveal]:not([data-revealed]) {
+/* Ruled lists: hairlines start collapsed and draw in with scaleX. */
+html[data-motion] [data-rule]:not([data-revealed]) {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* Timeline: the rail starts collapsed (scrubbed scaleY); nodes start small and invisible. */
+html[data-motion] [data-timeline-rail]:not([data-revealed]) {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+html[data-motion] [data-node]:not([data-revealed]) {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+/* Architecture diagram: boxes wipe in with a clip-path, connectors are drawn (DrawSVG). */
+html[data-motion] [data-diagram-box]:not([data-revealed]) {
+  clip-path: inset(0 100% 0 0);
+}
+
+html[data-motion] [data-draw]:not([data-revealed]) {
+  opacity: 0;
+}
+
+html[data-motion="pending"] :is([data-hero], [data-reveal], [data-rule], [data-timeline-rail], [data-node], [data-diagram-box], [data-draw]):not([data-revealed]) {
   animation: motion-failsafe 0s linear 2.5s forwards;
 }
 
