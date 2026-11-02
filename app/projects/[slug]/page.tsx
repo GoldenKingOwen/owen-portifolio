@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -88,6 +89,7 @@ export default async function ProjectPage({
   }
 
   const { detail } = project;
+  const related = projects.filter((p) => p.slug !== project.slug).slice(0, 2);
 
   return (
     <article className="pb-16 pt-28 sm:pb-24 sm:pt-32">
@@ -108,6 +110,20 @@ export default async function ProjectPage({
           <p className="mt-4 max-w-[60ch] text-lead text-muted">{project.shortDescription}</p>
         </header>
 
+        {project.image && (
+          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-ui border border-border bg-raised">
+            <Image
+              src={project.image}
+              alt={project.imageAlt ?? ""}
+              fill
+              priority
+              sizes="(min-width: 1024px) 960px, 100vw"
+              quality={80}
+              className="object-cover object-top"
+            />
+          </div>
+        )}
+
         <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_15rem]">
           <div className="space-y-10">
             <Prose title="Overview">
@@ -116,22 +132,52 @@ export default async function ProjectPage({
             <Prose title="Problem statement">
               <p>{detail.problemStatement}</p>
             </Prose>
-            <Prose title="Objectives">
+            <Prose title="Goals and constraints">
+              <p className="font-medium text-foreground">Goals</p>
               <List items={detail.objectives} />
+              {detail.constraints && detail.constraints.length > 0 && (
+                <>
+                  <p className="mt-4 font-medium text-foreground">Constraints</p>
+                  <List items={detail.constraints} />
+                </>
+              )}
             </Prose>
-            <Prose title="Key features">
+            {detail.role && (
+              <Prose title="My role and contributions">
+                <p>{detail.role}</p>
+              </Prose>
+            )}
+            <Prose title="Technical approach">
               <List items={detail.features} />
             </Prose>
             <Prose title="Architecture">
               {project.slug === "tenant-feedback-portal" && <ArchitectureDiagram />}
               <p>{detail.architecture}</p>
             </Prose>
+            {detail.decisions && detail.decisions.length > 0 && (
+              <Prose title="Implementation decisions">
+                <List items={detail.decisions} />
+              </Prose>
+            )}
             <Prose title="Challenges">
               <List items={detail.challenges} />
             </Prose>
-            <Prose title="Solutions">
-              <List items={detail.solutions} />
+            {detail.solutions.length > 0 && (
+              <Prose title="Solutions">
+                <List items={detail.solutions} />
+              </Prose>
+            )}
+            <Prose title="Current status and limitations">
+              <p>
+                <span className="font-medium text-foreground">Status:</span> {project.status}.
+                {detail.limitations ? ` ${detail.limitations}` : ""}
+              </p>
             </Prose>
+            {detail.lessons && detail.lessons.length > 0 && (
+              <Prose title="Lessons learned">
+                <List items={detail.lessons} />
+              </Prose>
+            )}
           </div>
 
           <aside aria-label="Project facts" className="lg:sticky lg:top-24 lg:self-start">
@@ -172,6 +218,32 @@ export default async function ProjectPage({
             </dl>
           </aside>
         </div>
+
+        <nav aria-labelledby="related-projects-heading" className="mt-16 border-t border-border pt-8">
+          <h2 id="related-projects-heading" className="text-lg font-semibold text-foreground">
+            Related projects
+          </h2>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            {related.map((item) => (
+              <li key={item.slug}>
+                <Link
+                  href={`/projects/${item.slug}`}
+                  className="flex min-h-14 flex-col justify-center rounded-ui border border-border px-4 py-3 transition-colors hover:border-field hover:bg-raised"
+                >
+                  <span className="text-sm font-medium text-foreground">{item.name}</span>
+                  <span className="mt-1 font-mono text-xs text-muted">{item.status}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/#projects"
+            className="mt-6 inline-flex min-h-11 items-center gap-1.5 text-sm text-muted hover:text-foreground"
+          >
+            <ArrowLeft size={14} aria-hidden="true" />
+            Back to all projects
+          </Link>
+        </nav>
       </div>
     </article>
   );

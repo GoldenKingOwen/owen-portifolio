@@ -47,6 +47,16 @@ export function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen]);
 
+  // Browser back/forward should not leave the panel open. In-app navigation
+  // closes it in handleNavClick, so no pathname effect is needed.
+  useEffect(() => {
+    function onPopState() {
+      setMobileOpen(false);
+    }
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
   // Native smooth scrolling is kept: it costs no JavaScript, and GSAP's
   // ScrollToPlugin would add weight for the same result.
   function scrollToSection(href: string) {
@@ -92,6 +102,7 @@ export function Navbar() {
           href="#home"
           onClick={(e) => {
             e.preventDefault();
+            setMobileOpen(false);
             if (pathname !== "/") router.push("/");
             else window.scrollTo({ top: 0, behavior: "smooth" });
           }}
