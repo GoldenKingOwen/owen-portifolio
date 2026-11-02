@@ -5,6 +5,8 @@ import { Projects } from "@/components/Projects";
 import { Experience } from "@/components/Experience";
 import { Education } from "@/components/Education";
 import { Contact } from "@/components/Contact";
+import { Services } from "@/components/Services";
+import { Testimonials } from "@/components/Testimonials";
 import { JsonLd } from "@/components/JsonLd";
 import { homeJsonLd } from "@/lib/structured-data";
 
@@ -16,8 +18,10 @@ export default function HomePage() {
       <About />
       <Skills />
       <Projects />
+      <Services />
       <Experience />
       <Education />
+      <Testimonials />
       <Contact />
     </>
   );

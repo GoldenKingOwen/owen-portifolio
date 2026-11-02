@@ -10,6 +10,7 @@
 @theme inline {
   --color-background: var(--bg);
   --color-raised: var(--bg-raised);
+  --color-raised-hover: var(--bg-raised-hover);
   --color-foreground: var(--ink);
   --color-muted: var(--ink-muted);
   --color-border: var(--rule);
@@ -47,6 +48,8 @@
 [data-theme="light"] {
   --bg: oklch(0.985 0.003 250);
   --bg-raised: oklch(0.96 0.004 250);
+  /* Interactive card hover: the card surface moved 5% toward the ink. Flat, no filter. */
+  --bg-raised-hover: color-mix(in oklch, var(--bg-raised), var(--ink) 5%);
   --ink: oklch(0.2 0.015 255);
   --ink-muted: oklch(0.46 0.018 255);
   --rule: oklch(0.88 0.006 250);
@@ -62,6 +65,7 @@
 [data-theme="dark"] {
   --bg: oklch(0.17 0.012 255);
   --bg-raised: oklch(0.21 0.014 255);
+  --bg-raised-hover: color-mix(in oklch, var(--bg-raised), var(--ink) 6%);
   --ink: oklch(0.94 0.008 250);
   --ink-muted: oklch(0.72 0.014 255);
   --rule: oklch(0.32 0.014 255);
@@ -94,7 +98,11 @@ body {
   caret-color: var(--accent);
 }
 
-/* Sections anchor below the fixed header. */
+/* Sections and keyboard focus both land below the fixed header. */
+html {
+  scroll-padding-top: var(--header-h);
+}
+
 section[id] {
   scroll-margin-top: var(--header-h);
 }
@@ -137,4 +145,74 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ── Motion contract ─────────────────────────────────────────────
+   html[data-motion] is set by an inline script before paint, and only when
+   the visitor allows motion. Everything below is therefore invisible to
+   no-JS, reduced-motion and low-end visitors, who always get final states.
+   Hero blocks are pre-offset with transform only (so the LCP element is
+   always painted); below-the-fold reveals also start transparent. GSAP
+   animates to the final state, then sets data-revealed. If the motion chunk
+   never loads, the fail-safe animation shows everything after 2.5s. */
+@keyframes motion-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+}
+
+html[data-motion] [data-hero]:not([data-revealed]) {
+  transform: translateY(14px);
+}
+
+/* The portrait opens from a small clip-path inset: it is painted from the first frame
+   (so it can still be the LCP element), and paint-only, so it never causes layout. */
+html[data-motion] [data-hero="clip"]:not([data-revealed]) {
+  transform: none;
+  clip-path: inset(10% 0 0 0);
+}
+
+html[data-motion] [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* Ruled lists: hairlines start collapsed and draw in with scaleX. */
+html[data-motion] [data-rule]:not([data-revealed]) {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* Timeline: the rail starts collapsed (scrubbed scaleY); nodes start small and invisible. */
+html[data-motion] [data-timeline-rail]:not([data-revealed]) {
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+html[data-motion] [data-node]:not([data-revealed]) {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+/* Architecture diagram: boxes wipe in with a clip-path, connectors are drawn (DrawSVG). */
+html[data-motion] [data-diagram-box]:not([data-revealed]) {
+  clip-path: inset(0 100% 0 0);
+}
+
+html[data-motion] [data-draw]:not([data-revealed]) {
+  opacity: 0;
+}
+
+html[data-motion="pending"] :is([data-hero], [data-reveal], [data-rule], [data-timeline-rail], [data-node], [data-diagram-box], [data-draw]):not([data-revealed]) {
+  animation: motion-failsafe 0s linear 2.5s forwards;
+}
+
+/* Theme switch: a short cross-fade between two page snapshots (View Transitions
+   API, started in ThemeProvider). Compositor-driven; no per-element transitions. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+  animation-timing-function: ease;
 }

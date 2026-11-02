@@ -13,6 +13,8 @@ export interface SocialLink {
     title: string;
     /** Roles cycled one-at-a-time in the hero (e.g. "Web Developer") */
     roles: string[];
+    /** One-line positioning statement used in the hero. */
+    tagline: string;
     shortBio: string;
     location: string;
     email: string;
@@ -61,11 +63,20 @@ export interface SocialLink {
   export interface ProjectDetail {
     overview: string;
     problemStatement: string;
+    /** Goals and non-negotiable constraints. */
     objectives: string[];
+    constraints?: string[];
+    /** What the developer actually owned and delivered. */
+    role?: string;
     features: string[];
     architecture: string;
+    /** Key technical decisions that shaped the implementation. */
+    decisions?: string[];
     challenges: string[];
     solutions: string[];
+    /** Honest current status, known limitations and open work. */
+    limitations?: string;
+    lessons?: string[];
     results?: string;
   }
   
@@ -77,7 +88,8 @@ export interface SocialLink {
     technologies: string[];
     status: ProjectStatus;
     featured: boolean;
-    image: string; // path under /public/projects
+    image: string; // path under /public/projects; empty when the project has no real imagery
+    imageAlt?: string; // describes what the real image shows
     links: ProjectLinks;
     detail: ProjectDetail;
   }

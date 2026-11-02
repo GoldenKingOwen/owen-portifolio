@@ -8,12 +8,12 @@ A personal portfolio and résumé site for **Owen Matola**, an ICT student at Mz
 
 ## ✨ Features
 
-- **Landing sections** — Hero, About, Skills, Projects, Services, GitHub activity, Experience, Education, and Contact, all on a single scrollable page with a sticky navbar.
-- **Active-section navigation** — the current section is highlighted in the navbar as you scroll, with smooth-scroll on link click.
+- **Landing sections** — Hero, About, Skills, Projects, Services, Experience, Education, Testimonials, and Contact, all on a single scrollable page with a fixed navbar.
+- **Active-section navigation** — the current section is highlighted in the navbar as you scroll, using a scroll-spy rather than a scroll listener.
 - **Dark / light theme** — persisted preference with a no-flash inline init script; accessible via the toggle in the navbar.
-- **Project detail pages** — each project has its own route (`/projects/[slug]`) with overview, problem statement, objectives, features, architecture, challenges, and solutions.
-- **Contact form** — submits messages straight to [Formspree](https://formspree.io) from the browser (AJAX), so no email credentials are needed on the server.
-- **Polished UI** — Framer Motion animations, custom glow orbs, hover states, and a reduced-motion–friendly design.
+- **Project detail pages** — each project has its own route (`/projects/[slug]`) with a case-study structure: overview, problem statement, goals, role, technical approach, architecture, decisions, challenges, status, and related work.
+- **Contact form** — validated in the browser and submitted straight to [Formspree](https://formspree.io) (AJAX), so no email credentials are needed on the server.
+- **Polished UI** — GSAP entrance and scroll reveals (opacity and transform only), a view-transition theme fade, hover states, and a design that skips motion entirely for reduced-motion and low-end visitors. Content is server-rendered and remains accessible without JavaScript.
 
 ## 🛠 Tech Stack
 
@@ -21,9 +21,9 @@ A personal portfolio and résumé site for **Owen Matola**, an ICT student at Mz
 | ---------- | ----------------------------------------------------------------------- |
 | Framework  | [Next.js 16](https://nextjs.org) (App Router) · React 19 · TypeScript    |
 | Styling    | [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config via `@theme inline`) |
-| Animation  | [Framer Motion](https://www.framer.com/motion/)                          |
+| Animation  | [GSAP](https://gsap.com) with ScrollTrigger                              |
 | Icons      | [Lucide React](https://lucide.dev)                                       |
-| Fonts      | `next/font` (Space Grotesk, Inter, JetBrains Mono)                       |
+| Fonts      | Self-hosted Geist and Geist Mono via `next/font/local`                   |
 | Email      | [Formspree](https://formspree.io) (contact form)                                                      |
 
 ## 🚀 Getting Started
@@ -59,16 +59,19 @@ app/
   page.tsx                 # Home page (composes all sections)
   layout.tsx               # Root layout: fonts, metadata, theme, navbar, footer
   globals.css              # Tailwind v4 import + theme tokens + base styles
+  fonts/                   # Self-hosted Geist files and OFL license
   projects/[slug]/page.tsx # Individual project detail pages
 
 components/
-  Navbar.tsx               # Sticky nav with active-section scroll spy
+  Navbar.tsx               # Fixed nav with active-section scroll spy
   Hero.tsx · About.tsx · Skills.tsx · Projects.tsx · Services.tsx
-  Experience.tsx · Education.tsx · GitHubActivity.tsx · Contact.tsx · Footer.tsx
-  ui/                      # Reusable bits: Card, Badge, GlowOrb, SectionHeading, …
+  Experience.tsx · Education.tsx · Certifications.tsx · Testimonials.tsx
+  Contact.tsx · Footer.tsx
+  ui/                      # Card, Section, ExternalLink
+  motion/                  # Lazy GSAP loader, reveal hooks, cursor follower, magnetic wrapper
 data/                      # Content: projects, experience, education, skills, site config
 types/                     # Shared TypeScript interfaces
-lib/utils.ts               # cn(), getWhatsAppLink(), and other helpers
+lib/utils.ts               # cn(), getWhatsAppLink(), formatDateRange()
 ```
 
 All content lives in `data/` — edit those files to update the site without touching component code.

@@ -8,7 +8,7 @@ export const experience: Experience[] = [
     startDate: "Aug 2026",
     endDate: "Present",
     description:
-      "Three-month internship (BICT 4706, Mzuzu University) building a multi-tenant client feedback & support portal SaaS as the core assessment project — a NestJS microservices backend with two Next.js frontends.",
+      "Three-month software development internship. Built a multi-tenant client feedback & support portal as the internship assessment project: a NestJS microservices backend with two Next.js frontends.",
     technologies: [
       "NestJS",
       "Next.js",

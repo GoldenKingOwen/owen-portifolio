@@ -36,6 +36,11 @@ export function Footer() {
                 WhatsApp
               </ExternalLink>
             </li>
+            <li>
+              <ExternalLink href={`${siteConfig.githubUrl}/owen-portifolio`} className={`${linkClass} gap-1`}>
+                Website source
+              </ExternalLink>
+            </li>
           </ul>
         </nav>
       </div>

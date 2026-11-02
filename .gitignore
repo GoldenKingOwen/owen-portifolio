@@ -51,3 +51,6 @@ launch_chrome.sh
 .impeccable/review/
 .impeccable/build/
 .impeccable/mocks/
+
+# local implementation brief
+RPM.md

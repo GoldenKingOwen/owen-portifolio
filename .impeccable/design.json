@@ -1,37 +1,242 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-24T00:00:00Z",
+  "generatedAt": "2026-10-24T12:00:00Z",
   "title": "Design System: Owen Matola Portfolio",
   "extensions": {
     "colorMeta": {
-      "signal-teal": { "role": "primary", "displayName": "Signal Teal", "canonical": "oklch(0.46 0.1 195)", "tonalRamp": ["oklch(0.15 0.1 195)", "oklch(0.25 0.1 195)", "oklch(0.35 0.1 195)", "oklch(0.46 0.1 195)", "oklch(0.58 0.1 195)", "oklch(0.7 0.1 195)", "oklch(0.82 0.1 195)", "oklch(0.95 0.1 195)"] },
-      "signal-teal-night": { "role": "primary", "displayName": "Signal Teal (night)", "canonical": "oklch(0.8 0.11 190)", "tonalRamp": ["oklch(0.15 0.11 190)", "oklch(0.3 0.11 190)", "oklch(0.45 0.11 190)", "oklch(0.6 0.11 190)", "oklch(0.7 0.11 190)", "oklch(0.8 0.11 190)", "oklch(0.88 0.11 190)", "oklch(0.95 0.11 190)"] },
-      "paper": { "role": "neutral", "displayName": "Cool Paper", "canonical": "oklch(0.985 0.003 250)", "tonalRamp": ["oklch(0.15 0.003 250)", "oklch(0.3 0.003 250)", "oklch(0.45 0.003 250)", "oklch(0.6 0.003 250)", "oklch(0.75 0.003 250)", "oklch(0.88 0.003 250)", "oklch(0.95 0.003 250)", "oklch(0.985 0.003 250)"] },
-      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "oklch(0.2 0.015 255)", "tonalRamp": ["oklch(0.15 0.015 255)", "oklch(0.2 0.015 255)", "oklch(0.3 0.015 255)", "oklch(0.46 0.018 255)", "oklch(0.6 0.012 255)", "oklch(0.75 0.01 255)", "oklch(0.88 0.006 250)", "oklch(0.95 0.004 250)"] },
-      "rule": { "role": "neutral", "displayName": "Hairline", "canonical": "oklch(0.88 0.006 250)", "tonalRamp": ["oklch(0.15 0.006 250)", "oklch(0.3 0.006 250)", "oklch(0.45 0.006 250)", "oklch(0.6 0.006 250)", "oklch(0.72 0.006 250)", "oklch(0.8 0.006 250)", "oklch(0.88 0.006 250)", "oklch(0.95 0.006 250)"] },
-      "rule-strong": { "role": "neutral", "displayName": "Field Stroke", "canonical": "oklch(0.6 0.012 255)", "tonalRamp": ["oklch(0.15 0.012 255)", "oklch(0.3 0.012 255)", "oklch(0.45 0.012 255)", "oklch(0.6 0.012 255)", "oklch(0.7 0.012 255)", "oklch(0.8 0.012 255)", "oklch(0.9 0.012 255)", "oklch(0.96 0.012 255)"] }
+      "signal-teal": {
+        "role": "primary",
+        "displayName": "Signal Teal",
+        "canonical": "oklch(0.46 0.1 195)",
+        "tonalRamp": [
+          "oklch(0.15 0.1 195)",
+          "oklch(0.25 0.1 195)",
+          "oklch(0.35 0.1 195)",
+          "oklch(0.46 0.1 195)",
+          "oklch(0.58 0.1 195)",
+          "oklch(0.7 0.1 195)",
+          "oklch(0.82 0.1 195)",
+          "oklch(0.95 0.1 195)"
+        ]
+      },
+      "signal-teal-night": {
+        "role": "primary",
+        "displayName": "Signal Teal (night)",
+        "canonical": "oklch(0.8 0.11 190)",
+        "tonalRamp": [
+          "oklch(0.15 0.11 190)",
+          "oklch(0.3 0.11 190)",
+          "oklch(0.45 0.11 190)",
+          "oklch(0.6 0.11 190)",
+          "oklch(0.7 0.11 190)",
+          "oklch(0.8 0.11 190)",
+          "oklch(0.88 0.11 190)",
+          "oklch(0.95 0.11 190)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "canonical": "oklch(0.985 0.003 250)",
+        "tonalRamp": [
+          "oklch(0.15 0.003 250)",
+          "oklch(0.3 0.003 250)",
+          "oklch(0.45 0.003 250)",
+          "oklch(0.6 0.003 250)",
+          "oklch(0.75 0.003 250)",
+          "oklch(0.88 0.003 250)",
+          "oklch(0.95 0.003 250)",
+          "oklch(0.985 0.003 250)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(0.2 0.015 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.015 255)",
+          "oklch(0.2 0.015 255)",
+          "oklch(0.3 0.015 255)",
+          "oklch(0.46 0.018 255)",
+          "oklch(0.6 0.012 255)",
+          "oklch(0.75 0.01 255)",
+          "oklch(0.88 0.006 250)",
+          "oklch(0.95 0.004 250)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(0.88 0.006 250)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 250)",
+          "oklch(0.3 0.006 250)",
+          "oklch(0.45 0.006 250)",
+          "oklch(0.6 0.006 250)",
+          "oklch(0.72 0.006 250)",
+          "oklch(0.8 0.006 250)",
+          "oklch(0.88 0.006 250)",
+          "oklch(0.95 0.006 250)"
+        ]
+      },
+      "rule-strong": {
+        "role": "neutral",
+        "displayName": "Field Stroke",
+        "canonical": "oklch(0.6 0.012 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.012 255)",
+          "oklch(0.3 0.012 255)",
+          "oklch(0.45 0.012 255)",
+          "oklch(0.6 0.012 255)",
+          "oklch(0.7 0.012 255)",
+          "oklch(0.8 0.012 255)",
+          "oklch(0.9 0.012 255)",
+          "oklch(0.96 0.012 255)"
+        ]
+      },
+      "paper-raised": {
+        "role": "neutral",
+        "displayName": "Raised Paper (card surface)",
+        "canonical": "oklch(0.96 0.004 250)",
+        "tonalRamp": [
+          "oklch(0.15 0.004 250)",
+          "oklch(0.3 0.004 250)",
+          "oklch(0.45 0.004 250)",
+          "oklch(0.6 0.004 250)",
+          "oklch(0.7 0.004 250)",
+          "oklch(0.8 0.004 250)",
+          "oklch(0.9 0.004 250)",
+          "oklch(0.96 0.004 250)"
+        ]
+      },
+      "paper-raised-hover": {
+        "role": "neutral",
+        "displayName": "Raised Paper Hover",
+        "canonical": "color-mix(in oklch, oklch(0.96 0.004 250), oklch(0.2 0.015 255) 5%)",
+        "tonalRamp": [
+          "oklch(0.15 0.004 250)",
+          "oklch(0.3 0.004 250)",
+          "oklch(0.45 0.004 250)",
+          "oklch(0.6 0.004 250)",
+          "oklch(0.7 0.004 250)",
+          "oklch(0.8 0.004 250)",
+          "oklch(0.9 0.004 250)",
+          "oklch(0.96 0.004 250)"
+        ]
+      },
+      "night-raised": {
+        "role": "neutral",
+        "displayName": "Night Raised (card surface)",
+        "canonical": "oklch(0.21 0.014 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.014 255)",
+          "oklch(0.3 0.014 255)",
+          "oklch(0.45 0.014 255)",
+          "oklch(0.6 0.014 255)",
+          "oklch(0.7 0.014 255)",
+          "oklch(0.8 0.014 255)",
+          "oklch(0.9 0.014 255)",
+          "oklch(0.96 0.014 255)"
+        ]
+      },
+      "night-raised-hover": {
+        "role": "neutral",
+        "displayName": "Night Raised Hover",
+        "canonical": "color-mix(in oklch, oklch(0.21 0.014 255), oklch(0.94 0.008 250) 6%)",
+        "tonalRamp": [
+          "oklch(0.15 0.014 255)",
+          "oklch(0.3 0.014 255)",
+          "oklch(0.45 0.014 255)",
+          "oklch(0.6 0.014 255)",
+          "oklch(0.7 0.014 255)",
+          "oklch(0.8 0.014 255)",
+          "oklch(0.9 0.014 255)",
+          "oklch(0.96 0.014 255)"
+        ]
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "Hero name only." },
-      "headline-large": { "displayName": "Headline Large", "purpose": "Lead project title (2.25rem from sm) and the emphasized closing section title (3rem from sm). One of each per page." },
-      "headline": { "displayName": "Headline", "purpose": "Section titles in the margin column; current job title." },
-      "lead": { "displayName": "Lead", "purpose": "Role phrase, first About paragraph, project short description." },
-      "data": { "displayName": "Data", "purpose": "Geist Mono for dates, skill levels, project status, years." }
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero name only."
+      },
+      "headline-large": {
+        "displayName": "Headline Large",
+        "purpose": "Closing section title (2.25rem, 3rem from sm) and the project-page h1 from sm. Reserved."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles in the margin column; current job title."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Role phrase, first About paragraph, project short description."
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "Geist Mono for the card meta line, dates, skill level labels, project status, years."
+      },
+      "card-title-featured": {
+        "displayName": "Card Title Featured",
+        "purpose": "Title of a featured card (1.5rem, 1.875rem from sm). One per section."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Default card title (1.125rem); lesser card titles step to 1rem."
+      }
     },
     "shadows": [],
     "motion": [
-      { "name": "opacity-hover", "value": "transition-opacity, hover opacity 0.9", "purpose": "Primary button hover." },
-      { "name": "colors-hover", "value": "transition-colors", "purpose": "Icon control and nav hover." },
-      { "name": "reduced-motion", "value": "durations collapse to 0.01ms; smooth scroll off", "purpose": "prefers-reduced-motion override." }
+      {
+        "name": "card-hover",
+        "value": "transition-colors 150ms; border to field stroke, surface to raised-hover; no transform",
+        "purpose": "Interactive card hover. The title underline colour also eases over 150ms."
+      },
+      {
+        "name": "opacity-hover",
+        "value": "transition-opacity, hover opacity 0.9",
+        "purpose": "Primary button hover."
+      },
+      {
+        "name": "colors-hover",
+        "value": "transition-colors",
+        "purpose": "Icon control and nav hover."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "durations collapse to 0.01ms; smooth scroll off",
+        "purpose": "prefers-reduced-motion override."
+      }
     ],
     "breakpoints": [
-      { "name": "sm", "value": "640px" },
-      { "name": "md", "value": "768px" },
-      { "name": "lg", "value": "1024px" }
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
     ],
     "layout": {
       "headerHeight": "var(--header-h) = 4rem; section[id] scroll-margin-top uses the same token",
-      "sectionDensity": { "tight": "40px / 56px from sm", "default": "56px / 80px from sm", "roomy": "64px / 112px from sm" }
+      "sectionDensity": {
+        "tight": "40px / 56px from sm",
+        "default": "56px / 80px from sm",
+        "roomy": "64px / 112px from sm"
+      },
+      "cardGrids": {
+        "gap": "16px / 24px from sm",
+        "skills": "1 / 2 (sm) / 3 (lg) columns, items-start",
+        "projects": "featured card full width, then 2 columns from md",
+        "experienceEducation": "ol grid, 2 columns from md; lead (current role, or an entry with detail) spans both",
+        "cardPadding": "20px / 24px from sm; featured 24px / 32px from sm"
+      },
+      "sectionBody": "data-section-body; cards carry data-reveal and data-card, Experience and Education cards add data-entry"
     }
   },
   "components": [
@@ -49,6 +254,38 @@
       "description": "Internal link as underlined text; no arrow.",
       "html": "<a class=\"ds-link\" href=\"#\">Read the write-up</a>",
       "css": ".ds-link { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 500; color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 2px; text-underline-offset: 4px; } .ds-link:hover { text-decoration-color: var(--accent); } .ds-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }"
+    },
+    {
+      "name": "Card (default)",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The one container: flat raised-paper surface, 1px hairline, 3px radius, no shadow, no gradient. Static; no hover.",
+      "html": "<article class=\"ds-card\"><header class=\"ds-card-header\"><h3 class=\"ds-card-title\">BSc Information and Communication Technology</h3><p class=\"ds-card-meta\">2023 - In Progress</p></header><div class=\"ds-card-body\"><p>Mzuzu University</p></div></article>",
+      "css": ".ds-card { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 20px; background: var(--bg-raised, oklch(0.96 0.004 250)); color: var(--ink); border: 1px solid var(--rule); border-radius: 3px; } .ds-card-header { display: flex; flex-direction: column; gap: 4px; } .ds-card-title { margin: 0; font-size: 18px; line-height: 1.375; font-weight: 600; color: var(--ink); } .ds-card-meta { margin: 0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; color: var(--ink-muted); } .ds-card-body { flex: 1; margin-top: 16px; font-size: 16px; color: var(--ink); } .ds-card-body p { margin: 0; }"
+    },
+    {
+      "name": "Card (interactive)",
+      "kind": "card",
+      "refersTo": "card-interactive-hover",
+      "description": "The title is the card's single link, stretched with ::after. Hover shifts border to the field stroke and surface to raised-hover in 150ms, no transform; the focus ring is drawn on the card; the footer ignores the pointer except its links.",
+      "html": "<article class=\"ds-card ds-card-interactive\"><header class=\"ds-card-header\"><h3 class=\"ds-card-title\"><a class=\"ds-card-link\" href=\"#\">Chess Practice<span style=\"position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)\"> write-up</span></a></h3><p class=\"ds-card-meta\">Completed</p></header><div class=\"ds-card-body\"><p>A short description of the project.</p></div><footer class=\"ds-card-footer\"><span aria-hidden=\"true\">Read the write-up</span><a href=\"#\">Chess Practice source on GitHub</a></footer></article>",
+      "css": ".ds-card { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 20px; background: var(--bg-raised, oklch(0.96 0.004 250)); color: var(--ink); border: 1px solid var(--rule); border-radius: 3px; } .ds-card-header { display: flex; flex-direction: column; gap: 4px; } .ds-card-title { margin: 0; font-size: 18px; line-height: 1.375; font-weight: 600; color: var(--ink); } .ds-card-meta { margin: 0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; color: var(--ink-muted); } .ds-card-body { flex: 1; margin-top: 16px; font-size: 16px; color: var(--ink); } .ds-card-body p { margin: 0; } .ds-card-interactive { transition: background-color .15s, border-color .15s; } .ds-card-interactive:hover { border-color: var(--rule-strong); background: var(--bg-raised-hover, color-mix(in oklch, var(--bg-raised, oklch(0.96 0.004 250)), var(--ink) 5%)); } .ds-card-link { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-strong); text-decoration-thickness: 2px; text-underline-offset: 4px; outline: none; transition: text-decoration-color .15s; } .ds-card-link::after { content: ''; position: absolute; inset: 0; } .ds-card-link:hover { text-decoration-color: var(--accent); } .ds-card-interactive:has(.ds-card-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; } .ds-card-footer { position: relative; z-index: 10; display: flex; flex-wrap: wrap; column-gap: 24px; margin-top: 20px; pointer-events: none; } .ds-card-footer a, .ds-card-footer span { pointer-events: auto; display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 500; color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 2px; text-underline-offset: 4px; } .ds-card-footer a:hover { text-decoration-color: var(--accent); } .ds-card-footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }"
+    },
+    {
+      "name": "Card (featured, interactive)",
+      "kind": "card",
+      "refersTo": "card-featured",
+      "description": "Combinable modifier: 2px teal top border, more padding, larger title. One lead card per section; keeps its teal top border on hover.",
+      "html": "<article class=\"ds-card ds-card-interactive ds-card-featured\"><header class=\"ds-card-header\"><h3 class=\"ds-card-title\"><a class=\"ds-card-link\" href=\"#\">Tenant Feedback Portal</a></h3><p class=\"ds-card-meta\">In progress</p></header><div class=\"ds-card-body\"><p>Multi-tenant feedback and support portal.</p></div><footer class=\"ds-card-footer\"><span aria-hidden=\"true\">Read the write-up</span></footer></article>",
+      "css": ".ds-card { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 20px; background: var(--bg-raised, oklch(0.96 0.004 250)); color: var(--ink); border: 1px solid var(--rule); border-radius: 3px; } .ds-card-header { display: flex; flex-direction: column; gap: 4px; } .ds-card-title { margin: 0; font-size: 18px; line-height: 1.375; font-weight: 600; color: var(--ink); } .ds-card-meta { margin: 0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; color: var(--ink-muted); } .ds-card-body { flex: 1; margin-top: 16px; font-size: 16px; color: var(--ink); } .ds-card-body p { margin: 0; } .ds-card-interactive { transition: background-color .15s, border-color .15s; } .ds-card-interactive:hover { border-color: var(--rule-strong); background: var(--bg-raised-hover, color-mix(in oklch, var(--bg-raised, oklch(0.96 0.004 250)), var(--ink) 5%)); } .ds-card-link { color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule-strong); text-decoration-thickness: 2px; text-underline-offset: 4px; outline: none; transition: text-decoration-color .15s; } .ds-card-link::after { content: ''; position: absolute; inset: 0; } .ds-card-link:hover { text-decoration-color: var(--accent); } .ds-card-interactive:has(.ds-card-link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 4px; } .ds-card-footer { position: relative; z-index: 10; display: flex; flex-wrap: wrap; column-gap: 24px; margin-top: 20px; pointer-events: none; } .ds-card-footer a, .ds-card-footer span { pointer-events: auto; display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 500; color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule); text-decoration-thickness: 2px; text-underline-offset: 4px; } .ds-card-footer a:hover { text-decoration-color: var(--accent); } .ds-card-footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; } .ds-card-featured { padding: 24px; border-top: 2px solid var(--accent); } .ds-card-featured .ds-card-title { font-size: 24px; line-height: 1.25; letter-spacing: -0.025em; } .ds-card-featured.ds-card-interactive:hover { border-top-color: var(--accent); }"
+    },
+    {
+      "name": "Skill Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Static card per skill category. Levels stack: a mono level label over the names, a hairline between levels; confidence is carried by weight and tone, never chips.",
+      "html": "<article class=\"ds-card\"><header class=\"ds-card-header\"><h3 class=\"ds-card-title\" style=\"font-size:16px\">Backend</h3></header><div class=\"ds-card-body\"><dl class=\"ds-levels\"><div><dt>Comfortable</dt><dd class=\"ds-s-strong\">TypeScript, NestJS</dd></div><div><dt>Familiar</dt><dd class=\"ds-s-muted\">Docker</dd></div></dl></div></article>",
+      "css": ".ds-card { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 20px; background: var(--bg-raised, oklch(0.96 0.004 250)); color: var(--ink); border: 1px solid var(--rule); border-radius: 3px; } .ds-card-header { display: flex; flex-direction: column; gap: 4px; } .ds-card-title { margin: 0; font-size: 18px; line-height: 1.375; font-weight: 600; color: var(--ink); } .ds-card-meta { margin: 0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; color: var(--ink-muted); } .ds-card-body { flex: 1; margin-top: 16px; font-size: 16px; color: var(--ink); } .ds-card-body p { margin: 0; } .ds-levels { margin: 0; } .ds-levels > div { padding: 12px 0; border-top: 1px solid var(--rule); } .ds-levels > div:first-child { padding-top: 0; border-top: 0; } .ds-levels > div:last-child { padding-bottom: 0; } .ds-levels dt { font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; color: var(--ink-muted); } .ds-levels dd { margin: 4px 0 0; font-size: 14px; line-height: 24px; color: var(--ink); } .ds-s-strong { font-weight: 600; } .ds-s-muted { color: var(--ink-muted); }"
     },
     {
       "name": "External Link",
@@ -80,20 +317,6 @@
       "css": ".ds-dl { border-top: 1px solid var(--rule); font-size: 14px; margin: 0; } .ds-dl > div { display: grid; grid-template-columns: 7rem 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rule); } .ds-dl dt { color: var(--ink-muted); } .ds-dl dd { margin: 0; color: var(--ink); }"
     },
     {
-      "name": "Skill Level Group",
-      "kind": "custom",
-      "description": "Skills grouped by level; the level is printed once per group in mono, names carry confidence through weight and tone.",
-      "html": "<dl class=\"ds-skills\"><div><dt>Comfortable</dt><dd class=\"ds-s-strong\">TypeScript, NestJS</dd></div><div><dt>Familiar</dt><dd class=\"ds-s-muted\">Docker</dd></div></dl>",
-      "css": ".ds-skills { border-top: 1px solid var(--rule); margin: 0; font-size: 14px; } .ds-skills > div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--rule); } .ds-skills dt { font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; line-height: 24px; color: var(--ink-muted); } .ds-skills dd { margin: 0; line-height: 24px; color: var(--ink); } .ds-s-strong { font-weight: 600; } .ds-s-muted { color: var(--ink-muted); }"
-    },
-    {
-      "name": "Project Entry",
-      "kind": "card",
-      "description": "Not a card: title, one mono status line, description, hairline above for secondary projects.",
-      "html": "<article class=\"ds-project\"><h3>Chess Practice</h3><p class=\"ds-meta\">Completed</p><p class=\"ds-desc\">A short description of the project.</p></article>",
-      "css": ".ds-project { border-top: 1px solid var(--rule); padding-top: 24px; } .ds-project h3 { margin: 0; font-size: 18px; line-height: 1.375; font-weight: 600; color: var(--ink); } .ds-meta { margin: 4px 0 0; font-family: var(--font-mono), ui-monospace, monospace; font-size: 12px; color: var(--ink-muted); } .ds-desc { margin: 12px 0 0; max-width: 60ch; font-size: 16px; color: var(--ink); }"
-    },
-    {
       "name": "Architecture Diagram",
       "kind": "custom",
       "description": "Ruled typographic diagram: 1px field-stroke boxes, 1px rule connectors, teal 2px gateway outline.",
@@ -103,37 +326,68 @@
   ],
   "narrative": {
     "northStar": "The Ruled Record",
-    "overview": "The site is set like an engineering record: facts, architecture and repo links are the visual content, and the interface recedes. Structure comes from hairline rules and a two-column margin layout, never from cards, glow, or ornament. It reads in daylight on a phone first; a dark theme is a deep blue-black, not a navy gradient.\n\nOne accent, signal teal, appears only where something is actionable or focused (plus one structural marker in the architecture diagram). Everything else is ink on paper, with weight and tone (not chips or badges) carrying hierarchy. Geist does all the talking; Geist Mono appears only for data.\n\nRhythm varies by purpose rather than repeating one block: reference lists (Skills, Education) run tight, the work (Projects) and the close (Contact) run roomy, and only the closing section gets a larger title.",
+    "overview": "The site is set like an engineering record: facts, architecture and repo links are the visual content, and the interface recedes. Structure comes from hairline rules, a two-column margin layout, and one flat Card component for grouped content; never from glow, glass, or ornament. It reads in daylight on a phone first; a dark theme is a deep blue-black, not a navy gradient.\n\nOne accent, signal teal, appears only where something is actionable or focused (plus one structural marker in the architecture diagram and the featured card's top border). Everything else is ink on paper, with weight and tone (not chips or badges) carrying hierarchy. Geist does all the talking; Geist Mono appears only for data.\n\nRhythm varies by purpose rather than repeating one block: reference lists (Skills, Education) run tight, the work (Projects) and the close (Contact) run roomy, and only the closing section gets a larger title. Inside a section, hierarchy comes from one featured card leading and quieter default cards following.",
     "keyCharacteristics": [
-      "Hairline rules are the only container; no cards, no shadows, no gradients on page surfaces. The one boxed form is the architecture diagram.",
+      "Hairline rules and the single Card component are the only containers; no shadows, no gradients, no backdrop blur on any surface. The architecture diagram is outlined rules, never a Card.",
+      "Cards are allowed, as ONE component (`components/ui/Card.tsx`): a flat tinted surface (`--bg-raised`), a 1px border, the single 3px radius, no shadow, no gradient, no blur. Still refused: nested cards (never a Card inside a Card), identical-card grids with no hierarchy, glow, gradients, glassmorphism and backdrop blur, shadows as decoration, icon-in-rounded-tile stacks, pill-badge clouds, and eyebrow chips.",
       "Section title sits in a left margin column (13rem), content in the right.",
       "One radius (3px), one accent, two themes switched by `data-theme` on `<html>`.",
       "Hit targets are at least 44px (`min-h-11`); focus is always visible.",
       "An arrow means the link leaves the site."
     ],
     "rules": [
-      { "name": "The One Signal Rule", "body": "Teal marks links-in-waiting, focus, and the single primary action per view. The only structural use is the diagram's gateway outline, chosen during the redesign; revisit if wanted. If it is decorative, it is wrong.", "section": "colors" },
-      { "name": "The Hairline Container Rule", "body": "Grouping is a 1px rule above or below, never a box, fill, or shadow. The architecture diagram is the single deliberate exception, because boxes are its content.", "section": "colors" },
-      { "name": "The Mono Is Data Rule", "body": "Geist Mono is for dates, levels, status and years only, never headings or prose.", "section": "typography" },
-      { "name": "The Level-As-Weight Rule", "body": "Skill confidence is conveyed by weight and tone (semibold, medium, regular muted, italic muted). Skills are grouped by level within each category and the level word is printed once per group, in the left column of the group's row.", "section": "typography" },
-      { "name": "The Flat-Always Rule", "body": "No box-shadow, no blur, no glow on page surfaces; state changes use underline color, opacity, or a raised-paper fill.", "section": "elevation" }
+      {
+        "name": "The One Signal Rule",
+        "body": "Teal marks links-in-waiting, focus, and the single primary action per view. The only structural uses are the diagram's gateway outline and the featured card's top border, chosen during the redesign; revisit if wanted. If it is decorative, it is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The Hairline Container Rule",
+        "body": "Grouping is a 1px rule above or below, or one Card. Never a box, fill, or shadow of any other kind. The architecture diagram is the single deliberate exception, because boxes are its content.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Card Rule",
+        "body": "There is one card and it lives in `components/ui/Card.tsx`. A new grouped surface extends that component (slots, variant, modifier) rather than styling a second box.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Is Data Rule",
+        "body": "Geist Mono is for dates, levels, status and years only, never headings or prose.",
+        "section": "typography"
+      },
+      {
+        "name": "The Level-As-Weight Rule",
+        "body": "Skill confidence is conveyed by weight and tone (semibold, medium, regular muted, italic muted). Within each skill card, skills are grouped by level and the level word is printed once per group, as a mono label stacked above the names.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-Always Rule",
+        "body": "No box-shadow, no blur, no glow on page surfaces; state changes use underline color, opacity, a border shift, or a raised-paper fill.",
+        "section": "elevation"
+      }
     ],
     "dos": [
-      "Do put grouping in hairline rules and the left-margin title column.",
-      "Do keep teal to the primary action, focus, active nav, link-hover underline, and the diagram gateway.",
-      "Do route every outbound link through `ExternalLink`; keep internal links arrow-free.",
-      "Do use `rounded-ui` (3px) for every control and set mono type only for data.",
-      "Do use `border-field` (rule-strong) for form and diagram strokes; leave the hairline as the default.",
-      "Do set section rhythm with the density prop and reserve `emphasis` for the closing section.",
-      "Do keep 44px minimum hit targets and honor `prefers-reduced-motion`.",
-      "Do derive hero facts from `data/` so the first screen stays true."
+      "**Do** group related facts in the one `Card` (`components/ui/Card.tsx`) and everything else in hairline rules and the left-margin title column.",
+      "**Do** lead a card group with one featured card and let the rest be default cards of natural height; use `items-start` where card lengths differ.",
+      "**Do** give an interactive card exactly one link, the title, stretched with `::after`; keep other links in `CardFooter`.",
+      "**Do** keep teal to the primary action, focus, active nav, link-hover underline, the featured card's top border, and the diagram gateway.",
+      "**Do** route every outbound link through `ExternalLink`; keep internal links arrow-free.",
+      "**Do** use `rounded-ui` (3px) for every control and card, and set mono type only for data.",
+      "**Do** use `border-field` (rule-strong) for form and diagram strokes and for the interactive card's hover border; leave the hairline as the default.",
+      "**Do** set section rhythm with the density prop and reserve `emphasis` for the closing section.",
+      "**Do** keep 44px minimum hit targets and honor `prefers-reduced-motion`.",
+      "**Do** derive hero facts from `data/` so the first screen stays true."
     ],
     "donts": [
-      "Don't use shadows, gradients, glow, glass, or colored backgrounds as containers.",
-      "Don't add pills, badges, status dots, or icon tiles.",
-      "Don't introduce a second accent or a second radius.",
-      "Don't set Geist Mono on headings or prose.",
-      "Don't repeat the level word on every skill row or put an arrow on a link that stays on the site."
+      "**Don't** use shadows, gradients, glow, glass, or backdrop blur on any surface; a card is a flat tint, a border and a radius.",
+      "**Don't** nest a Card inside a Card, or lay out identical cards with no hierarchy (one featured card leads; the rest are quieter).",
+      "**Don't** put icons in rounded tiles, or fill a card with pill badges, status dots or eyebrow chips.",
+      "**Don't** transform, lift or shadow a card on hover; only border and surface color change.",
+      "**Don't** rely on the card edge or tint to mark a control: the hairline (1.37:1 light, 1.51:1 dark) is decorative; controls carry the field stroke.",
+      "**Don't** introduce a second accent, a second radius, or a second card style.",
+      "**Don't** set Geist Mono on headings or prose.",
+      "**Don't** repeat the level word on every skill name or put an arrow on a link that stays on the site."
     ]
   }
 }

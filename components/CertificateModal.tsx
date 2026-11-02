@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { renderPdfFirstPage } from "@/lib/pdf";
+import { EASE, gsap, useGSAP } from "@/lib/gsap";
 import { Certification } from "@/types";
 
 interface CertificateModalProps {
@@ -21,11 +21,42 @@ const MODAL_WIDTH_PX = 720;
  * devtools), the context menu is blocked, and text/selection is disabled.
  */
 export function CertificateModal({ certification, onClose }: CertificateModalProps) {
-  const prefersReducedMotion = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const closingRef = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+
+  // Enter: the scrim fades in and the dialog rises into place (opacity and transform only).
+  // Exit: the same, reversed, and only then is the modal unmounted. Reduced motion skips both.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(rootRef.current, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: EASE });
+        gsap.fromTo(
+          dialogRef.current,
+          { y: 24, scale: 0.97 },
+          { y: 0, scale: 1, duration: 0.25, ease: EASE }
+        );
+      });
+      return () => mm.revert();
+    },
+    { scope: rootRef }
+  );
+
+  const requestClose = useCallback(() => {
+    if (closingRef.current) return;
+    closingRef.current = true;
+    const root = rootRef.current;
+    if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      onClose();
+      return;
+    }
+    gsap.to(dialogRef.current, { y: 12, scale: 0.98, duration: 0.18, ease: "power2.in" });
+    gsap.to(root, { opacity: 0, duration: 0.18, ease: "power2.in", onComplete: onClose });
+  }, [onClose]);
 
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null;
@@ -33,7 +64,7 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
 
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        onClose();
+        requestClose();
         return;
       }
       if (e.key !== "Tab") return;
@@ -80,37 +111,23 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
       previouslyFocused?.focus();
       controller.abort();
     };
-  }, [certification.file, onClose]);
+  }, [certification.file, requestClose]);
 
   const titleId = `certificate-modal-title-${certification.file}`;
-  const motionProps = prefersReducedMotion
-    ? {}
-    : { transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const } };
-
   return (
-    <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
-      initial={prefersReducedMotion ? false : { opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={prefersReducedMotion ? undefined : { opacity: 0 }}
-      transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
-    >
+    <div ref={rootRef} className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop — plain div so it's not an extra focusable element */}
       <div
         aria-hidden="true"
-        onClick={onClose}
+        onClick={requestClose}
         className="absolute inset-0 bg-black/60"
       />
 
-      <motion.div
+      <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        initial={prefersReducedMotion ? false : { opacity: 0, y: 24, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={prefersReducedMotion ? undefined : { opacity: 0, y: 16, scale: 0.98 }}
-        {...motionProps}
         className="relative z-10 flex max-h-[90vh] w-full max-w-3xl select-none flex-col overflow-hidden rounded-ui border border-border bg-background"
       >
         <div className="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
@@ -128,7 +145,7 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
           <button
             ref={closeButtonRef}
             type="button"
-            onClick={onClose}
+            onClick={requestClose}
             aria-label="Close certificate viewer"
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-ui border border-border text-foreground transition-colors hover:bg-raised"
           >
@@ -161,7 +178,7 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
             )}
           </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
