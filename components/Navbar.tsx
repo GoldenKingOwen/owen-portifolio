@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
@@ -24,27 +24,44 @@ const NAV_ITEMS: NavItem[] = [
 const HEADER_OFFSET = 64;
 
 const controlClass =
-  "flex h-11 w-11 items-center justify-center rounded-ui border border-border text-foreground transition-colors hover:bg-raised";
+  "flex h-11 w-11 items-center justify-center rounded-ui border border-border text-foreground transition-colors hover:bg-raised active:bg-raised-hover";
 
 // The current section is marked with data-active (and aria-current) by the
 // scroll-spy in MotionEffects; the look is pure CSS, so no React state is
 // involved and no scroll listener runs here.
 const linkClass =
-  "inline-flex min-h-11 items-center px-3 text-sm text-muted underline-offset-8 transition-colors hover:text-foreground data-[active=true]:font-medium data-[active=true]:text-foreground data-[active=true]:underline data-[active=true]:decoration-accent data-[active=true]:decoration-2";
+  "relative inline-flex min-h-11 items-center px-3 text-sm text-muted transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-200 after:content-[''] hover:text-foreground data-[active=true]:font-medium data-[active=true]:text-foreground data-[active=true]:after:scale-x-100";
 
 export function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Escape closes the mobile menu, so keyboard users are never trapped in it.
+  // Escape closes the mobile menu and returns focus to its trigger, so keyboard
+  // users are never left with focus on an element that has just unmounted.
   useEffect(() => {
     if (!mobileOpen) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setMobileOpen(false);
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+        toggleRef.current?.focus();
+      }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
+  // A pointer outside the header dismisses the panel; clicks on its links are
+  // handled by handleNavClick, which closes it after the navigation starts.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    function onPointerDown(e: PointerEvent) {
+      if (!headerRef.current?.contains(e.target as Node)) setMobileOpen(false);
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [mobileOpen]);
 
   // Browser back/forward should not leave the panel open. In-app navigation
@@ -68,16 +85,19 @@ export function Navbar() {
 
   function handleNavClick(href: string) {
     setNavActive(href.slice(1)); // highlight immediately; the scroll-spy confirms as the page settles
+    const wasMobileOpen = mobileOpen;
+    setMobileOpen(false);
+
+    // The clicked link unmounts with the panel, so keep keyboard focus on the trigger.
+    if (wasMobileOpen) window.requestAnimationFrame(() => toggleRef.current?.focus());
 
     if (pathname !== "/") {
       // On a project page the section doesn't exist: go home and let the hash scroll.
-      setMobileOpen(false);
       router.push(`/${href}`);
       return;
     }
 
-    if (mobileOpen) {
-      setMobileOpen(false);
+    if (wasMobileOpen) {
       // Let the menu collapse first; a smooth scroll started mid-layout can be cancelled on phones.
       setTimeout(() => scrollToSection(href), 100);
     } else {
@@ -87,6 +107,7 @@ export function Navbar() {
 
   return (
     <header
+      ref={headerRef}
       data-site-header
       // data-scrolled is set by the header ScrollTrigger in MotionEffects.
       className={cn(
@@ -145,6 +166,7 @@ export function Navbar() {
             <ThemeToggle />
           </Magnetic>
           <button
+            ref={toggleRef}
             type="button"
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -169,7 +191,7 @@ export function Navbar() {
                   e.preventDefault();
                   handleNavClick(item.href);
                 }}
-                className="flex min-h-12 items-center text-base text-foreground data-[active=true]:font-medium data-[active=true]:underline data-[active=true]:decoration-accent data-[active=true]:decoration-2 data-[active=true]:underline-offset-8"
+                className="relative flex min-h-12 items-center text-base text-foreground after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-200 after:content-[''] data-[active=true]:font-medium data-[active=true]:after:scale-x-100"
               >
                 {item.label}
               </a>

@@ -23,7 +23,7 @@ export function ThemeToggle() {
       aria-label={
         mounted ? (isDark ? "Switch to light theme" : "Switch to dark theme") : "Toggle theme"
       }
-      className="flex h-11 w-11 items-center justify-center rounded-ui border border-border text-foreground transition-colors hover:bg-raised"
+      className="flex h-11 w-11 items-center justify-center rounded-ui border border-border text-foreground transition-colors hover:bg-raised active:bg-raised-hover"
     >
       {mounted ? (
         isDark ? (
