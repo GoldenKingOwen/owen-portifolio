@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navbar } from "@/components/Navbar";
@@ -8,14 +8,18 @@ import { MotionLoader } from "@/components/motion/MotionLoader";
 import { siteConfig } from "@/data/site-config";
 import { siteUrl } from "@/lib/site";
 
-const geist = Geist({
-  subsets: ["latin"],
+// Self-hosted so production builds never depend on reaching Google Fonts.
+// Geist is licensed under the SIL Open Font License; see app/fonts/LICENSE.txt.
+const geist = localFont({
+  src: "./fonts/Geist-Variable.woff2",
+  weight: "100 900",
   variable: "--font-sans",
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
+const geistMono = localFont({
+  src: "./fonts/GeistMono-Variable.woff2",
+  weight: "100 900",
   variable: "--font-mono",
   display: "swap",
 });
@@ -103,7 +107,7 @@ export default function RootLayout({
 }) {
   // suppressHydrationWarning: the inline script below sets data-theme on
   // <html> from localStorage before hydration, so the server-rendered value
-  // ("dark") legitimately differs from the client's saved theme.
+  // ("light") legitimately differs from the client's saved theme.
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
@@ -115,12 +119,20 @@ export default function RootLayout({
       <body
         className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}
       >
-         <ThemeProvider>
-           <Navbar />
-           <main>{children}</main>
-           <Footer />
-           <MotionLoader />
-         </ThemeProvider>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-ui focus:border focus:border-field focus:bg-background focus:px-4 focus:py-3 focus:text-sm focus:font-medium focus:text-foreground"
+        >
+          Skip to main content
+        </a>
+        <ThemeProvider>
+          <Navbar />
+          <main id="main-content" tabIndex={-1}>
+            {children}
+          </main>
+          <Footer />
+          <MotionLoader />
+        </ThemeProvider>
       </body>
     </html>
   );
