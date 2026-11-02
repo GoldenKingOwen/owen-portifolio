@@ -19,8 +19,8 @@ export function Experience() {
           className="absolute bottom-2 left-[4px] top-2 block w-px origin-top bg-field"
         />
         <ol className="space-y-4 pl-8 sm:space-y-6">
-          {experience.map((job, i) => {
-            const current = i === 0;
+          {experience.map((job) => {
+            const current = job.endDate === "Present";
             return (
               <li key={`${job.organization}-${job.position}`} className="relative">
                 <span

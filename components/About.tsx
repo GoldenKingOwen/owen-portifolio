@@ -54,7 +54,7 @@ export function About() {
         {currentProgram && (
           <div className="grid grid-cols-[11rem_1fr] gap-4 border-b border-border py-3">
             <dt className="text-muted">Current programme</dt>
-            <dd className="text-foreground">BSc ICT, in progress</dd>
+            <dd className="text-foreground">{currentProgram.program}</dd>
           </div>
         )}
       </Reveal>

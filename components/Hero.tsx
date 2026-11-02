@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { Magnetic } from "@/components/motion/Magnetic";
 import { LocalTime } from "@/components/LocalTime";
@@ -8,7 +8,7 @@ import { siteConfig } from "@/data/site-config";
 import { experience } from "@/data/experience";
 import { education } from "@/data/education";
 
-const current = experience[0];
+const current = experience.find((job) => job.endDate === "Present") ?? experience[0];
 const studying = education.find((e) => e.endYear === "In Progress");
 
 // Facts are derived from data/, so the first screen stays true as it changes.
@@ -52,8 +52,12 @@ export function Hero() {
             </span>
           </h1>
 
+          <p data-hero="" className="mt-6 max-w-[58ch] text-lead text-foreground">
+            {siteConfig.tagline}
+          </p>
+
           {/* One line, derived from data/: what I am doing now. */}
-          <p data-hero="" className="mt-6 max-w-[60ch] text-base leading-relaxed text-foreground">
+          <p data-hero="" className="mt-4 max-w-[60ch] text-base leading-relaxed text-foreground">
             <span className="font-medium">Now:</span>
             <span className="text-muted">
               {" "}
@@ -62,21 +66,24 @@ export function Hero() {
             </span>
           </p>
 
-          <p data-hero="" className="mt-4 max-w-[60ch] text-base leading-relaxed text-foreground sm:text-lg">
-            {siteConfig.shortBio}
-          </p>
-
-          <div data-hero="" className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2">
+          <div data-hero="" className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
             <Magnetic>
               <a
-                href="/cv/OwenCV.pdf"
-                download
+                href="#projects"
                 className="inline-flex min-h-11 items-center gap-2 rounded-ui bg-accent px-5 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
               >
-                <ArrowDown size={16} aria-hidden="true" />
-                Download CV
+                Explore my work
+                <ArrowRight size={16} aria-hidden="true" />
               </a>
             </Magnetic>
+            <a
+              href="/cv/OwenCV.pdf"
+              download
+              className="inline-flex min-h-11 items-center gap-2 rounded-ui border border-field px-5 text-sm font-medium text-foreground transition-colors hover:bg-raised"
+            >
+              <ArrowDown size={16} aria-hidden="true" />
+              Download CV
+            </a>
             <ExternalLink href={siteConfig.githubUrl} className={textLink}>
               GitHub profile
             </ExternalLink>
