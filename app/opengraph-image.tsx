@@ -8,6 +8,6 @@ export default function Image() {
   return renderOg({
     eyebrow: "owen-portifolio.vercel.app",
     title: "Owen Matola",
-    subtitle: "Full-Stack Software Developer · Cybersecurity · Mzuzu, Malawi",
+    subtitle: "Full-Stack Software Developer · Cybersecurity · Lilongwe, Malawi",
   });
 }

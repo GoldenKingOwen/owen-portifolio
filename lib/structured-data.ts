@@ -35,7 +35,7 @@ export function homeJsonLd() {
       alumniOf: { "@type": "CollegeOrUniversity", name: "Mzuzu University" },
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Mzuzu",
+        addressLocality: siteConfig.location.split(",")[0].trim(),
         addressCountry: "MW",
       },
       knowsAbout: skills.flatMap((c) => c.skills.map((s) => s.name)),

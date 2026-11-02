@@ -26,7 +26,7 @@ const geistMono = localFont({
 
 const homeTitle = `${siteConfig.name} | Full-Stack Software Developer in Malawi`;
 const homeDescription =
-  "Owen Matola is a full-stack software developer and cybersecurity enthusiast in Mzuzu, Malawi, building NestJS and Next.js apps. See projects, skills and CV.";
+  "Owen Matola is a full-stack software developer and cybersecurity enthusiast in Lilongwe, Malawi, building NestJS and Next.js apps. See projects, skills and CV.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     "Owen Matola",
     "Owen Matola developer",
     "Full-Stack Developer Malawi",
-    "Software Developer Mzuzu",
+    "Software Developer Lilongwe",
     "NestJS Developer Malawi",
     "Next.js Developer",
     "Cybersecurity",
