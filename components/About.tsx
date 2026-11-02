@@ -47,12 +47,12 @@ export function About() {
       </div>
 
       <Reveal as="dl" className="mt-10 max-w-[65ch] border-t border-border text-sm">
-        <div className="grid grid-cols-[11rem_1fr] gap-4 border-b border-border py-3">
+        <div className="grid grid-cols-1 gap-1 border-b border-border py-3 sm:grid-cols-[11rem_1fr] sm:gap-4">
           <dt className="text-muted">Studying computing since</dt>
           <dd className="tabular font-mono text-foreground">{earliestStartYear}</dd>
         </div>
         {currentProgram && (
-          <div className="grid grid-cols-[11rem_1fr] gap-4 border-b border-border py-3">
+          <div className="grid grid-cols-1 gap-1 border-b border-border py-3 sm:grid-cols-[11rem_1fr] sm:gap-4">
             <dt className="text-muted">Current programme</dt>
             <dd className="text-foreground">{currentProgram.program}</dd>
           </div>

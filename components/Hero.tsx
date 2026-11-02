@@ -52,12 +52,12 @@ export function Hero() {
             </span>
           </h1>
 
-          <p data-hero="" className="mt-6 max-w-[58ch] text-lead text-foreground">
+          <p data-hero="" className="mt-6 max-w-[58ch] text-lead text-foreground [overflow-wrap:anywhere]">
             {siteConfig.tagline}
           </p>
 
           {/* One line, derived from data/: what I am doing now. */}
-          <p data-hero="" className="mt-4 max-w-[60ch] text-base leading-relaxed text-foreground">
+          <p data-hero="" className="mt-4 max-w-[60ch] text-base leading-relaxed text-foreground [overflow-wrap:anywhere]">
             <span className="font-medium">Now:</span>
             <span className="text-muted">
               {" "}
@@ -70,7 +70,7 @@ export function Hero() {
             <Magnetic>
               <a
                 href="#projects"
-                className="inline-flex min-h-11 items-center gap-2 rounded-ui bg-accent px-5 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90"
+                className="inline-flex min-h-11 items-center gap-2 rounded-ui bg-accent px-5 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90 active:opacity-80"
               >
                 Explore my work
                 <ArrowRight size={16} aria-hidden="true" />
@@ -79,7 +79,7 @@ export function Hero() {
             <a
               href="/cv/OwenCV.pdf"
               download
-              className="inline-flex min-h-11 items-center gap-2 rounded-ui border border-field px-5 text-sm font-medium text-foreground transition-colors hover:bg-raised"
+              className="inline-flex min-h-11 items-center gap-2 rounded-ui border border-field px-5 text-sm font-medium text-foreground transition-colors hover:bg-raised active:bg-raised-hover"
             >
               <ArrowDown size={16} aria-hidden="true" />
               Download CV
@@ -96,10 +96,10 @@ export function Hero() {
             {facts.map((fact) => (
               <div
                 key={fact.label}
-                className="grid grid-cols-[7rem_1fr] gap-4 border-b border-border py-3"
+                className="grid grid-cols-1 gap-1 border-b border-border py-3 sm:grid-cols-[7rem_1fr] sm:gap-4"
               >
                 <dt className="text-muted">{fact.label}</dt>
-                <dd className="text-foreground">{fact.value}</dd>
+                <dd className="text-foreground [overflow-wrap:anywhere]">{fact.value}</dd>
               </div>
             ))}
           </dl>
@@ -112,7 +112,7 @@ export function Hero() {
           >
             <Image
               src="/images/owen.jpeg"
-              alt="Portrait of Owen Matola, full-stack software developer from Mzuzu, Malawi"
+              alt="Portrait of Owen Matola, full-stack software developer based in Malawi"
               fill
               priority
               quality={75}

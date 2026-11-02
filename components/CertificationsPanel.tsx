@@ -60,6 +60,7 @@ function CertificateThumbnail({
               className="h-4 w-4 animate-spin rounded-full border-2 border-muted border-t-transparent"
               aria-hidden="true"
             />
+            <span className="sr-only">Loading certificate preview…</span>
           </div>
         )}
         {status === "error" && (

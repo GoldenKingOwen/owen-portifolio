@@ -160,6 +160,8 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
           <div className="relative w-full max-w-2xl">
             <canvas
               ref={canvasRef}
+              role="img"
+              aria-label={`Preview of ${certification.title}`}
               draggable={false}
               className="block w-full select-none rounded-ui border border-border"
             />
@@ -169,6 +171,7 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
                   className="h-6 w-6 animate-spin rounded-full border-2 border-muted border-t-transparent"
                   aria-hidden="true"
                 />
+                <span className="sr-only">Loading certificate preview…</span>
               </div>
             )}
             {status === "error" && (
