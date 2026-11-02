@@ -37,6 +37,7 @@ export interface SocialLink {
     | "Backend"
     | "Mobile Development"
     | "Database"
+    | "Messaging & Infrastructure"
     | "Tools & Technologies";
   
   export interface Skill {

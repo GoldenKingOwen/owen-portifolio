@@ -37,6 +37,7 @@ export const skills: SkillCategory[] = [
       { name: "Laravel", level: "Intermediate" },
       { name: "PHP", level: "Comfortable" },
       { name: "REST APIs", level: "Comfortable" },
+      { name: "Prisma", level: "Intermediate" },
     ],
   },
   {
@@ -55,12 +56,19 @@ export const skills: SkillCategory[] = [
     ],
   },
   {
+    category: "Messaging & Infrastructure",
+    skills: [
+      { name: "RabbitMQ", level: "Intermediate" },
+      { name: "Redis", level: "Intermediate" },
+      { name: "Docker", level: "Intermediate" },
+      { name: "Linux", level: "Intermediate" },
+    ],
+  },
+  {
     category: "Tools & Technologies",
     skills: [
       { name: "Git", level: "Comfortable" },
       { name: "GitHub", level: "Comfortable" },
-      { name: "Docker", level: "Intermediate" },
-      { name: "Linux", level: "Intermediate" },
     ],
   },
 ];
