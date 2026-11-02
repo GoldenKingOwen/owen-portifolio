@@ -104,10 +104,33 @@ export default async function ProjectPage({
         </Link>
 
         <header className="mt-4 max-w-3xl">
-          <h1 className="text-h2 font-semibold text-foreground sm:text-4xl sm:leading-tight">
+          <p className="font-mono text-xs text-muted">Status: {project.status}</p>
+          <h1 className="mt-2 text-h2 font-semibold text-foreground sm:text-4xl sm:leading-tight">
             {project.name}
           </h1>
           <p className="mt-4 max-w-[60ch] text-lead text-muted">{project.shortDescription}</p>
+          {(project.links.github || project.links.live) && (
+            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+              {project.links.github && (
+                <ExternalLink
+                  href={project.links.github}
+                  aria-label={`${project.name} source on GitHub, opens in a new tab`}
+                  className={linkClass}
+                >
+                  Source on GitHub
+                </ExternalLink>
+              )}
+              {project.links.live && (
+                <ExternalLink
+                  href={project.links.live}
+                  aria-label={`Open ${project.name} live, opens in a new tab`}
+                  className={linkClass}
+                >
+                  Live demo
+                </ExternalLink>
+              )}
+            </div>
+          )}
         </header>
 
         {project.image && (

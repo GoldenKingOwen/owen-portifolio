@@ -8,7 +8,7 @@
 // (data-diagram-box). Without JavaScript or with reduced motion it is all simply there.
 const SERVICES = ["identity", "tenant", "ticket", "feedback", "notification"];
 
-const box = "rounded-ui border border-field px-3 py-2";
+const box = "min-w-0 rounded-ui border border-field px-3 py-2 [overflow-wrap:anywhere]";
 
 function Connector() {
   return (
@@ -49,7 +49,7 @@ export function ArchitectureDiagram() {
 
         <Connector />
 
-        <ul className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+        <ul className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-2 sm:grid-cols-5">
           {SERVICES.map((name) => (
             <li key={name} data-diagram-box="" className={`${box} text-foreground`}>
               <span className="block font-medium">{name}-service</span>
@@ -60,7 +60,7 @@ export function ArchitectureDiagram() {
 
         <Connector />
 
-        <div data-diagram-box="" className={`${box} text-muted`}>
+        <div data-diagram-box="" className={`${box} break-words text-muted`}>
           <span className="font-medium text-foreground">RabbitMQ</span> — transactional outbox
           relays publish with confirms; consumers dedupe by inbox event ID.
         </div>

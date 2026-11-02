@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { Card, CardBody, CardFooter, CardHeader, CardMeta, CardTitle } from "@/components/ui/Card";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import type { Project } from "@/types";
@@ -70,6 +71,10 @@ export function ProjectCard({
             aria-hidden, and it ignores the pointer so the stretched title link takes the click. */}
         <span aria-hidden="true" className={`${linkClass} cursor-pointer`}>
           Read the write-up
+          <ArrowRight
+            size={14}
+            className="transition-transform duration-200 group-hover:translate-x-0.5"
+          />
         </span>
         {project.links.github && (
           <ExternalLink href={project.links.github} className={linkClass}>
