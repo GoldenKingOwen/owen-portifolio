@@ -45,7 +45,7 @@ export function ProjectCard({
           <span className="sr-only"> write-up</span>
         </CardTitle>
         {/* One meta line under every title, so status never depends on wrapping. */}
-        <CardMeta>{project.status}</CardMeta>
+        <CardMeta>Status: {project.status}</CardMeta>
       </CardHeader>
 
       <CardBody>
