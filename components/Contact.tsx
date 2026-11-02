@@ -193,6 +193,12 @@ export function Contact() {
             />
           </div>
 
+          {Object.keys(errors).length > 0 && (
+            <p role="alert" className="text-sm font-medium text-danger">
+              Please check the highlighted fields and try again.
+            </p>
+          )}
+
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <div>
               <label htmlFor="name" className={labelClass}>
@@ -292,7 +298,7 @@ export function Contact() {
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="inline-flex min-h-11 items-center rounded-ui bg-accent px-6 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
+                className="inline-flex min-h-11 items-center rounded-ui bg-accent px-6 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-wait disabled:opacity-60"
               >
                 {status === "loading" ? "Sending…" : "Send message"}
               </button>
