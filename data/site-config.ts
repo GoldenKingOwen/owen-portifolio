@@ -10,9 +10,11 @@ export const siteConfig: SiteConfig = {
     "Cybersecurity Enthusiast",
     "Network Enthusiast",
   ],
+  tagline:
+    "I build reliable software, from intuitive interfaces to secure backend systems.",
   shortBio:
     "ICT student at Mzuzu University building full-stack web applications and exploring cybersecurity. Currently a software development intern at Infi-Tech, working across NestJS microservices and Next.js.",
-  location: "Mzuzu, Malawi",
+  location: "Lilongwe, Malawi",
   email: "matolaowen1@gmail.com",
   whatsapp: "+265885450302",
   githubUsername: "GoldenKingOwen",

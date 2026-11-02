@@ -8,22 +8,27 @@ export interface Service {
 export const services: Service[] = [
   {
     title: "Web Development",
-    description: "Building modern, responsive websites and web applications.",
+    description:
+      "Responsive websites and web applications built with React, Next.js and Tailwind, from layout through deployment.",
   },
   {
     title: "Full-Stack Development",
-    description: "Developing frontend and backend systems with APIs and databases.",
+    description:
+      "APIs, relational databases and frontends designed together, with typed contracts and clear service boundaries.",
   },
   {
     title: "System Development",
-    description: "Designing and implementing information management systems.",
+    description:
+      "Information management systems for real workflows: requirements, data models, and a maintainable implementation.",
   },
   {
     title: "Database Development",
-    description: "Designing relational databases and integrating them with applications.",
+    description:
+      "Relational schemas, queries and migrations designed for data integrity and straightforward reporting.",
   },
   {
     title: "Technical Consulting",
-    description: "Helping organizations identify and implement appropriate technology solutions.",
+    description:
+      "Practical guidance on choosing tooling and shaping architecture, with security trade-offs made explicit.",
   },
 ];
