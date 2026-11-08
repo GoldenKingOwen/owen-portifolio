@@ -68,7 +68,7 @@ components/
   Experience.tsx · Education.tsx · Certifications.tsx · Testimonials.tsx
   Contact.tsx · Footer.tsx
   ui/                      # Card, Section, ExternalLink
-  motion/                  # Lazy GSAP loader, reveal hooks, cursor follower, magnetic wrapper
+  motion/                  # Lazy GSAP loader, reveals, magnetic wrapper
 data/                      # Content: projects, experience, education, skills, site config
 types/                     # Shared TypeScript interfaces
 lib/utils.ts               # cn(), getWhatsAppLink(), formatDateRange()

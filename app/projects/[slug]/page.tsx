@@ -97,13 +97,14 @@ export default async function ProjectPage({
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <Link
           href="/#projects"
+          data-page-head=""
           className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted hover:text-foreground"
         >
           <ArrowLeft size={14} aria-hidden="true" />
           All projects
         </Link>
 
-        <header className="mt-4 max-w-3xl">
+        <header data-page-head="" className="mt-4 max-w-3xl">
           <p className="font-mono text-xs text-muted">Status: {project.status}</p>
           <h1 className="mt-2 text-h2 font-semibold text-foreground sm:text-4xl sm:leading-tight">
             {project.name}

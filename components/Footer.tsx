@@ -11,12 +11,12 @@ export function Footer() {
   return (
     <footer data-section="footer" className="border-t border-border py-8">
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 sm:px-6 md:flex-row md:items-center md:justify-between">
-        <p className="text-sm text-muted">
+        <p data-footer-item="" className="text-sm text-muted">
           <span className="font-semibold text-foreground">{siteConfig.name}</span>
           <span aria-hidden="true"> · </span>© <span className="tabular">{year}</span>. Built with Next.js.
         </p>
 
-        <nav aria-label="Elsewhere">
+        <nav data-footer-item="" aria-label="Elsewhere">
           <ul className="flex flex-wrap gap-x-5">
             <li>
               <ExternalLink href={siteConfig.githubUrl} className={`${linkClass} gap-1`}>

@@ -21,6 +21,10 @@ type CardProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
   variant?: "default" | "interactive";
   featured?: boolean;
   children: ReactNode;
+  // Stable hooks for the motion layer (see app/globals.css).
+  "data-project-lead"?: string;
+  "data-skill-group"?: string;
+  "data-contact-form"?: string;
 };
 
 export function Card({
@@ -37,13 +41,15 @@ export function Card({
       // Stable hooks for the motion pass.
       data-card={featured ? `${variant}-featured` : variant}
       data-reveal=""
-      data-cursor={interactive ? "view" : undefined}
       className={cn(
         "group relative flex min-w-0 flex-col rounded-ui border border-border bg-raised",
         featured ? "border-t-2 border-t-accent p-6 sm:p-8" : "p-5 sm:p-6",
         interactive &&
           cn(
-            "transition-colors duration-150",
+            // A controlled 4px lift, border shift and surface tint. Transform,
+            // background and border only; reduced motion switches the lift off.
+            "transition-[transform,background-color,border-color] duration-300 ease-out",
+            "hover:-translate-y-1 has-[.card-link:focus-visible]:-translate-y-1",
             // A featured card keeps its teal top border on hover.
             featured ? "hover:border-x-field hover:border-b-field" : "hover:border-field",
             "hover:bg-raised-hover",
@@ -84,7 +90,7 @@ export function CardTitle({
         <Link
           href={href}
           // Outline is drawn on the card (see Card); the ::after stretches the target.
-          className="card-link underline decoration-field decoration-2 underline-offset-4 outline-none transition-[text-decoration-color] duration-150 after:absolute after:inset-0 after:content-[''] hover:decoration-accent"
+          className="card-link underline decoration-field decoration-2 underline-offset-4 outline-none transition-[text-decoration-color,text-underline-offset] duration-300 after:absolute after:inset-0 after:content-[''] group-hover:decoration-accent group-hover:underline-offset-[6px] focus-visible:decoration-accent focus-visible:underline-offset-[6px]"
         >
           {children}
         </Link>

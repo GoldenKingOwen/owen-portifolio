@@ -12,7 +12,7 @@ import { EASE, gsap, useGSAP } from "@/lib/gsap";
 export function useGsapReveal(
   scope: RefObject<HTMLElement | null>,
   selector: string,
-  { when = true, stagger = 0.04, y = 8 }: { when?: boolean; stagger?: number; y?: number } = {}
+  { when = true, stagger = 0.05, y = 10 }: { when?: boolean; stagger?: number; y?: number } = {}
 ) {
   useGSAP(
     () => {
@@ -22,7 +22,7 @@ export function useGsapReveal(
         gsap.from(selector, {
           opacity: 0,
           y,
-          duration: 0.3,
+          duration: 0.45,
           ease: EASE,
           stagger,
           clearProps: "opacity,transform",

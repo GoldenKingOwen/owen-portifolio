@@ -154,7 +154,16 @@ html {
    Hero blocks are pre-offset with transform only (so the LCP element is
    always painted); below-the-fold reveals also start transparent. GSAP
    animates to the final state, then sets data-revealed. If the motion chunk
-   never loads, the fail-safe animation shows everything after 2.5s. */
+   never loads, the fail-safe animation shows everything after 2.5s.
+
+   Hooks in the contract: data-hero, data-hero="clip", data-hero-split,
+   data-hero-cta, data-hero-accent, data-hero-portrait-inner,
+   data-hero-ambient, data-section-head, data-section-rule, data-reveal,
+   data-reveal-soft, data-about-portrait, data-about-lead, data-skill-group,
+   data-skill-rule, data-project-lead, data-rule, data-timeline,
+   data-timeline-rail, data-node, data-node-ring, data-diagram,
+   data-diagram-box, data-draw, data-contact-form, data-footer-item,
+   data-page-head, data-magnetic. */
 @keyframes motion-failsafe {
   to {
     opacity: 1;
@@ -167,16 +176,70 @@ html[data-motion] [data-hero]:not([data-revealed]) {
   transform: translateY(14px);
 }
 
-/* The portrait opens from a small clip-path inset: it is painted from the first frame
+/* The portrait opens from a bottom wipe: it is painted from the first frame
    (so it can still be the LCP element), and paint-only, so it never causes layout. */
 html[data-motion] [data-hero="clip"]:not([data-revealed]) {
   transform: none;
-  clip-path: inset(10% 0 0 0);
+  clip-path: inset(0 0 100% 0);
+}
+
+html[data-motion] [data-hero-cta]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+/* The teal accent rule under the hero introduction draws left to right. */
+html[data-motion] [data-hero-accent]:not([data-revealed]) {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* Section headings move in from a section-specific direction (set by GSAP). */
+html[data-motion] [data-section-head]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+/* The top rule of every section draws across the layout. */
+html[data-motion] [data-section-rule]:not([data-revealed]) {
+  transform: scaleX(0);
+  transform-origin: left;
 }
 
 html[data-motion] [data-reveal]:not([data-revealed]) {
   opacity: 0;
   transform: translateY(24px);
+}
+
+/* Soft reveals (About): transform only, never opacity. Text is readable from the
+   first frame, including while it is still waiting to enter the viewport. */
+html[data-motion] [data-reveal-soft]:not([data-revealed]) {
+  transform: translateX(-18px);
+}
+
+html[data-motion] [data-about-lead]:not([data-revealed]) {
+  transform: translateX(-14px);
+}
+
+html[data-motion] [data-about-portrait]:not([data-revealed]) {
+  clip-path: inset(0 0 100% 0);
+}
+
+/* Skills: groups rise together, category rules draw after their group. */
+html[data-motion] [data-skill-group]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(26px);
+}
+
+html[data-motion] [data-skill-rule]:not([data-revealed]) {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* The featured project arrives first, slightly larger than the rest. */
+html[data-motion] [data-project-lead]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(30px) scale(0.985);
 }
 
 /* Ruled lists: hairlines start collapsed and draw in with scaleX. */
@@ -196,6 +259,10 @@ html[data-motion] [data-node]:not([data-revealed]) {
   transform: scale(0.4);
 }
 
+html[data-motion] [data-node-ring] {
+  opacity: 0;
+}
+
 /* Architecture diagram: boxes wipe in with a clip-path, connectors are drawn (DrawSVG). */
 html[data-motion] [data-diagram-box]:not([data-revealed]) {
   clip-path: inset(0 100% 0 0);
@@ -205,14 +272,134 @@ html[data-motion] [data-draw]:not([data-revealed]) {
   opacity: 0;
 }
 
-html[data-motion="pending"] :is([data-hero], [data-reveal], [data-rule], [data-timeline-rail], [data-node], [data-diagram-box], [data-draw]):not([data-revealed]) {
+/* Contact form and footer arrive as their own beats. */
+html[data-motion] [data-contact-form]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+html[data-motion] [data-footer-item]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+html[data-motion] [data-page-head]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+html[data-motion="pending"] :is([data-hero], [data-hero-cta], [data-hero-accent], [data-section-head], [data-section-rule], [data-reveal], [data-reveal-soft], [data-about-lead], [data-about-portrait], [data-skill-group], [data-skill-rule], [data-project-lead], [data-rule], [data-timeline-rail], [data-node], [data-diagram-box], [data-draw], [data-contact-form], [data-footer-item], [data-page-head]):not([data-revealed]) {
   animation: motion-failsafe 0s linear 2.5s forwards;
+}
+
+/* ── Ambient motion ────────────────────────────────────────────────────────
+   Deliberately low-contrast and slow. Decorative only: aria-hidden, no
+   pointer events, and suspended by GSAP when the hero leaves the viewport. */
+@keyframes ambient-drift {
+  0%,
+  100% {
+    transform: translate3d(-1.5%, -1%, 0) scale(1.02);
+  }
+  50% {
+    transform: translate3d(1.5%, 1%, 0) scale(1.04);
+  }
+}
+
+.hero-ambient-grid {
+  background-image:
+    linear-gradient(to right, var(--rule) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--rule) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.35;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 70% 20%, #000 0%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 70% at 70% 20%, #000 0%, transparent 75%);
+  animation: ambient-drift 26s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes ambient-node-pulse {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.hero-node {
+  animation: ambient-node-pulse 6s ease-in-out infinite;
+}
+
+.hero-node:nth-of-type(2) {
+  animation-delay: -2s;
+}
+
+.hero-node:nth-of-type(3) {
+  animation-delay: -4s;
+}
+
+/* Availability: a small signal-teal dot with a slow halo. */
+@keyframes availability-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  75%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.availability-ping {
+  animation: availability-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Form feedback: a short, calm entrance; never a shake. */
+@keyframes feedback-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.feedback-in {
+  animation: feedback-in 280ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
 /* Theme switch: a short cross-fade between two page snapshots (View Transitions
    API, started in ThemeProvider). Compositor-driven; no per-element transitions. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 180ms;
-  animation-timing-function: ease;
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Pointer-specific transforms are switched off entirely for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  [data-card="interactive"]:hover,
+  [data-card="interactive-featured"]:hover,
+  [data-thumb]:hover,
+  [data-card="interactive"]:has(.card-link:focus-visible),
+  [data-card="interactive-featured"]:has(.card-link:focus-visible) {
+    transform: none;
+  }
+
+  [data-project] img,
+  [data-thumb] canvas,
+  [data-thumb-image] {
+    transform: none !important;
+  }
+
+  .hero-ambient-grid,
+  .hero-node,
+  .availability-ping,
+  .feedback-in {
+    animation: none !important;
+  }
 }

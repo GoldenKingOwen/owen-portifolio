@@ -146,8 +146,9 @@ export const projects: Project[] = [
         "JWT handling must not expose tokens in WebSocket URLs",
       ],
       role:
-        "I designed and built the platform as my Infi-Tech internship assessment project: the five domain services, the edge-only API gateway, the two Next.js frontends, and the RabbitMQ outbox/inbox event flows.",
+        "I designed and built the platform as my Infi-Tech internship assessment project: the five domain services, the edge-only API gateway, the two Next.js frontends (tenant workspace and platform admin console), and the RabbitMQ outbox/inbox event flows.",
       features: [
+        "Two Next.js applications: a tenant workspace for portal, tickets, feedback, and billing, plus a platform-admin console for tenants, plans, users, and logs",
         "Subdomain-based tenant routing",
         "JWT-verified, tenant-scoped API gateway with rate limiting and correlation IDs",
         "Ticket lifecycle management with attachments and member projections",
@@ -155,7 +156,7 @@ export const projects: Project[] = [
         "Event-driven notifications across services",
       ],
       architecture:
-        "Six services: api-gateway (edge-only, no database), identity-service, tenant-service, ticket-service, feedback-service, and notification-service — each owning its own Prisma schema. Domain mutations write transactional outbox records; RabbitMQ relays publish with confirms; consumers use unique inbox event IDs before acknowledging. Cross-service reads are served from local, eventually-consistent projections rather than cross-service SQL joins. Refresh tokens are issued as secure HttpOnly cookies; browser auth state is memory-only.",
+        "Two Next.js applications sit at the edge: the tenant workspace (portal, tickets, feedback, billing) and the platform-admin console (tenants, plans, users, logs). Behind them are six services: api-gateway (edge-only, no database), identity-service, tenant-service, ticket-service, feedback-service, and notification-service — each owning its own Prisma schema. Domain mutations write transactional outbox records; RabbitMQ relays publish with confirms; consumers use unique inbox event IDs before acknowledging. Cross-service reads are served from local, eventually-consistent projections rather than cross-service SQL joins. Refresh tokens are issued as secure HttpOnly cookies; browser auth state is memory-only.",
       decisions: [
         "Derive tenant context only from verified JWT claims and reject conflicting client-supplied tenant headers",
         "Keep the API gateway edge-only with no database of its own",

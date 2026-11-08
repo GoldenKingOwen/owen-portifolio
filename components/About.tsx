@@ -1,52 +1,68 @@
+import Image from "next/image";
 import { Section } from "@/components/ui/Section";
-import { Reveal } from "@/components/motion/Reveal";
 import { education } from "@/data/education";
 
 const earliestStartYear = Math.min(...education.map((e) => Number(e.startYear)));
 const currentProgram = education.find((e) => e.endYear === "In Progress");
 
 /**
- * Prose, deliberately not cards: one large lead paragraph (its words scrub from
- * 25% to full opacity as it scrolls through, motion layer only), then three
- * paragraphs at body size that fade up together in one batch.
+ * Prose, deliberately not cards. The lead stays at full opacity; the whole block
+ * gets a small transform-only entrance so every word is readable before, during
+ * and after the animation. Without JavaScript or with reduced motion it is simply
+ * static text.
  */
 export function About() {
   return (
     <Section id="about" title="About">
-      <div className="max-w-[65ch] space-y-6 text-base leading-relaxed text-foreground">
-        <p
-          data-split="words-scrub"
-          className="text-2xl font-medium leading-snug tracking-tight sm:text-3xl"
+      <div className="grid gap-8 md:grid-cols-[13rem_minmax(0,1fr)] md:items-start md:gap-10">
+        <div
+          data-about-portrait=""
+          className="relative aspect-[4/5] w-40 overflow-hidden rounded-ui border border-border bg-raised md:w-full"
         >
+          <Image
+            src="/images/owen.jpeg"
+            alt="Owen Matola, full-stack software developer"
+            fill
+            quality={75}
+            sizes="(min-width: 768px) 208px, 160px"
+            className="object-cover"
+          />
+        </div>
+        <div
+          data-reveal-soft=""
+          className="max-w-[65ch] space-y-6 text-base leading-relaxed text-foreground"
+        >
+        <p data-about-lead="" className="text-2xl font-medium leading-snug tracking-tight sm:text-3xl">
           I&apos;m currently interning as a software developer at Infi-Tech. My assessment
           project there is a multi-tenant feedback and support portal — a NestJS microservices
           backend behind an authenticated API gateway, paired with Next.js frontends. It&apos;s
           given me hands-on experience with the kind of architecture decisions (tenant isolation,
           event-driven services, secure auth) that don&apos;t come up in coursework alone.
         </p>
-        <Reveal as="p">
+        <p>
           My academic and project work spans full-stack web development — building with React,
           Next.js, NestJS, and Laravel — alongside a growing interest in{" "}
           <strong className="font-semibold">cybersecurity</strong>, where I work through CTF
           challenges across cryptography and forensics to sharpen how I think about security at
           the system level, not just the application layer.
-        </Reveal>
-        <Reveal as="p">
+        </p>
+        <p>
           I&apos;m an ICT student at <strong className="font-semibold">Mzuzu University</strong>,
           currently pursuing a Bachelor of Science in Information and Communication Technology.
           Before that, I completed diplomas in Computing and Information Systems (Levels 4 and 5)
           through the University of Malawi under ABMA.
-        </Reveal>
-        <Reveal as="p">
+        </p>
+        <p>
           I care about building software that&apos;s secure and maintainable by default, not as an
           afterthought — clear boundaries between services, data that&apos;s scoped correctly from
           the start, and code that the next person (often future me) can actually follow. Longer
           term, I want to keep deepening both sides of that: shipping full-stack products and
           understanding how to break and defend them.
-        </Reveal>
+        </p>
+        </div>
       </div>
 
-      <Reveal as="dl" className="mt-10 max-w-[65ch] border-t border-border text-sm">
+      <dl data-reveal-soft="" className="mt-10 max-w-[65ch] border-t border-border text-sm">
         <div className="grid grid-cols-1 gap-1 border-b border-border py-3 sm:grid-cols-[11rem_1fr] sm:gap-4">
           <dt className="text-muted">Studying computing since</dt>
           <dd className="tabular font-mono text-foreground">{earliestStartYear}</dd>
@@ -57,7 +73,7 @@ export function About() {
             <dd className="text-foreground">{currentProgram.program}</dd>
           </div>
         )}
-      </Reveal>
+      </dl>
     </Section>
   );
 }

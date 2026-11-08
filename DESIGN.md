@@ -258,30 +258,32 @@ Fixed opaque header, 64px (`--header-h`). Name at left, six anchor links, GitHub
 The recurring signature outside cards: label in muted, value in ink, rows separated by hairlines. Used for hero facts, About facts and project-page facts. Inside a skill card the same pattern runs vertically (mono level label stacked over the names).
 
 ### Certificate Thumbnail
-A button in the Education disclosure that borrows the card tokens (raised surface, hairline border, 3px radius, border to field stroke and surface to raised-hover over 150ms on hover) at 8px padding, holding a rasterized first page and a two-line title. It is not the Card component and not a Card slot; see the not-canonized note.
+A button in the Education disclosure that borrows the card tokens (raised surface, hairline border, 3px radius, border to field stroke and surface to raised-hover over 150ms on hover) at 8px padding, holding a rasterized first page and a two-line title. On hover the thumbnail lifts 2px and its image scales to 1.03. It is not the Card component and not a Card slot; see the not-canonized note.
 
 ### Architecture Diagram
-A ruled, typographic diagram of the multi-tenant portal, shown inside the lead project card and on the tenant project page. Labels come from the project copy: frontends, an edge-only gateway, five services, and RabbitMQ. Boxes are 1px field-stroke rectangles (3px radius, 8px by 12px padding); the gateway box is 2px teal. Connectors are 1px vertical rules in field-stroke, 16px tall. Services sit in a 2-column grid, 5 from sm. A small muted caption states the diagram is drawn from project notes. Its boxes are outlined rules, not Cards, so it does not break the no-nesting rule when placed in the lead card.
+A ruled, typographic diagram of the multi-tenant portal, shown inside the lead project card and on the tenant project page. Labels come from the project copy and repository: the tenant workspace and platform-admin Next.js applications, an edge-only gateway, five services, and RabbitMQ. Boxes are 1px field-stroke rectangles (3px radius, 8px by 12px padding); the gateway box is 2px teal. Connectors are 5px-wide SVG rules in field-stroke, 16px tall, with a small teal signal dot that travels them while the diagram is on screen. Services sit in a 2-column grid, 5 from sm. A small muted caption states the diagram is drawn from project notes. Its boxes are outlined rules, not Cards, so it does not break the no-nesting rule when placed in the lead card.
 
 ### Motion
 
-Motion shows order and arrival. Everything is transform or opacity (plus paint-only `clip-path` and stroke drawing), eased with `power3.out` (scrubbed rules use `none`), and lasts 0.4 to 0.9s; hover and page-enter may be shorter (150 to 300ms). Nothing loops, nothing parallaxes, there is no preloader and no smooth-scroll library (native `scroll-behavior: smooth` stays, and anchors land at `--header-h`). Reduced-motion and low-end visitors get final states and never download GSAP. All content is in the server HTML first; GSAP only enhances it. Hooks: `data-hero`, `data-split`, `data-reveal`, `data-rule`, `data-timeline`, `data-draw`, `data-magnetic`, `data-cursor`.
+Motion shows order and arrival, then gets out of the way. Every entrance is transform or opacity, plus paint-only `clip-path` and stroke drawing, eased with `power3.out` (scrubbed rules use `none`). Entrances last 0.45 to 0.9s; the hero is one coordinated timeline of about 1.3s; hover and page-enter are 150 to 300ms. The only loops are the hero's faint ambient grid and nodes, a 4px portrait breath, the availability dot, and the diagram signal; each is subtle, decorative, `aria-hidden`, and paused when off-screen. There is no parallax, no preloader and no smooth-scroll library (native `scroll-behavior: smooth` stays, and anchors land at `--header-h`). Reduced-motion and low-end visitors get final states and never download GSAP. All content is in the server HTML first; GSAP only enhances it. Hooks: `data-hero`, `data-hero-cta`, `data-hero-accent`, `data-hero-portrait-inner`, `data-split`, `data-section-head`, `data-section-rule`, `data-reveal`, `data-reveal-soft`, `data-about-portrait`, `data-about-lead`, `data-skill-group`, `data-skill-rule`, `data-project-lead`, `data-rule`, `data-timeline`, `data-node`, `data-node-ring`, `data-draw`, `data-diagram-box`, `data-diagram-order`, `data-diagram-signal`, `data-contact-form`, `data-footer-item`, `data-page-head`, `data-magnetic`.
 
-- **Hero:** the name and subtitle rise line by line out of a mask (SplitText), the portrait opens with a `clip-path` inset, all in one timeline of at most 900ms. The portrait and heading are painted before JavaScript runs; the animation starts from a small offset.
-- **About lead:** the lead paragraph's words scrub from 25% to full opacity across the scroll range (opacity only, at most 120 words); the other paragraphs fade up together in one batch.
-- **Reveals:** one batched ScrollTrigger group per list, `once: true`, stagger 0.06.
-- **Ruled lists and timeline:** rules draw with `scaleX` (list rows) or a scrubbed `scaleY` (the timeline rail); each timeline card reveals as its node is reached.
-- **Architecture diagram:** connectors are SVG lines drawn with DrawSVG once when the diagram enters view; box outlines wipe in with a `clip-path`.
+- **Hero:** the name's words and the subtitle's lines rise out of masks (SplitText), the portrait opens from a bottom `clip-path` wipe and settles from a 1.05 scale, the teal rule draws, then the facts and CTAs follow. One timeline, about 1.3s. The portrait and heading are painted before JavaScript runs.
+- **Section chrome:** each section's top rule draws across, then its heading arrives from an alternating side; related blocks follow from the same direction, with a 0.08 to 0.1 stagger.
+- **About:** the portrait wipes in from the right while the prose slides from the left. Prose never drops below full opacity; the lead paragraph moves a little further.
+- **Skills and projects:** categories rise with a short stagger and their rules draw; the featured project leads with a slightly larger entrance and the supporting cards follow.
+- **Architecture diagram:** boxes and connectors draw from the top down; a teal signal then travels the connectors while the diagram is on screen, paused off-screen.
+- **Timeline:** the rail draws with a scrubbed `scaleY`; nodes pop in and the current role gets one expanding ring.
+- **Contact and footer:** the form is its own beat; the footer gets a quiet upward entrance.
 - **Route change:** enter only, a short fade and rise (at most 300ms); no exit animation.
 - **Theme switch:** a View Transitions cross-fade, not GSAP.
 
-#### Cursor follower and magnetic elements (a documented exception)
+#### Magnetic elements
 
-A 36px ring (accent border, no blend mode, no blur, no glow) follows the pointer with `gsap.quickTo`. The native cursor is never hidden. It exists only when the device has `(hover: hover)` and `(pointer: fine)` and motion is allowed, is `aria-hidden`, never focusable, and ignores the pointer. States come from the element under it: links scale it to 1.5, project cards grow it, fill it with the page colour so the "View" label reads over text, and show "View", text fields shrink and fade it; it hides when the pointer leaves the window. At most six elements (Download CV, the nav GitHub button, the theme toggle, the contact email, the send button) are magnetic: the inner span follows 25% of the pointer offset within about 80px and springs back with `elastic.out(1, 0.4)`; the hit target and focus ring do not move, and keyboard focus is unaffected. This is a deliberate decorative exception to "no decoration that carries no information": it is a cursor affordance, it is off for touch, reduced-motion and low-end visitors, and the design detector may flag it. Keep it if it does; the rationale is this paragraph.
+The custom cursor follower has been removed; the native pointer is used everywhere. Two primary calls to action (the hero primary button and the contact email) remain magnetic on fine-pointer devices: the inner span follows 20% of the pointer offset within about 80px and eases back with `power3.out` over 0.5s. The outer hit target, layout and focus ring do not move, and keyboard focus is unaffected. The effect is off for touch, reduced-motion and low-end visitors.
 
 #### Timeline, ruled list and prose
 
-*Detector note:* `impeccable detect` returned no findings for the cursor ring, the ruled list or the timeline rail (it returns none on these Tailwind files, so this is not evidence of correctness); the rules here come from the review, not the detector. The About lead rests at 40% opacity before it is scrolled into range, which is a deliberate, transient state; it is fully opaque at rest in reduced-motion, low-end and no-JS modes.
+*Detector note:* `impeccable detect` returned no findings for the ruled list or the timeline rail (it returns none on these Tailwind files, so this is not evidence of correctness); the rules here come from the review, not the detector.
 
 The Experience and Education cards hang off a 1px vertical rail with small square nodes and dates in Geist Mono (the Card rules still apply: current role featured, older roles quieter). "What I can help with" is a ruled list: a title and one honest line per row, no icons, five rows at most; a row hover slides a short rule in and shifts the text 4px. The About section is prose with one large lead paragraph, never cards.
 
@@ -294,7 +296,7 @@ The Experience and Education cards hang off a 1px vertical rail with small squar
 - **Do** group related facts in the one `Card` (`components/ui/Card.tsx`) and everything else in hairline rules and the left-margin title column.
 - **Do** lead a card group with one featured card and let the rest be default cards of natural height; use `items-start` where card lengths differ.
 - **Do** give an interactive card exactly one link, the title, stretched with `::after`; keep other links in `CardFooter`.
-- **Do** keep teal to the primary action, focus, active nav, link-hover underline, the featured card's top border, and the diagram gateway.
+- **Do** keep teal to the primary action, focus, active nav, link-hover underline, the featured card's top border, the diagram gateway and signal, the availability dot, and the hero's faint ambient motif.
 - **Do** route every outbound link through `ExternalLink`; keep internal links arrow-free.
 - **Do** use `rounded-ui` (3px) for every control and card, and set mono type only for data.
 - **Do** use `border-field` (rule-strong) for form and diagram strokes and for the interactive card's hover border; leave the hairline as the default.
@@ -303,12 +305,12 @@ The Experience and Education cards hang off a 1px vertical rail with small squar
 - **Do** derive hero facts from `data/` so the first screen stays true.
 
 ### Don't:
-- **Don't** animate layout properties, blur, shadows or filters; don't loop anything; don't add a preloader or a smooth-scroll library; don't hide server-rendered content until JavaScript runs.
+- **Don't** animate layout properties, blur, shadows or filters; don't loop anything beyond the hero's faint ambient motif, the portrait breath, the availability dot and the diagram signal, and pause those off-screen; don't add a preloader or a smooth-scroll library; don't hide server-rendered content until JavaScript runs.
 - **Don't** repeat one component down the whole page: vary the form of each section (cards, ruled list, prose, timeline).
 - **Don't** use shadows, gradients, glow, glass, or backdrop blur on any surface; a card is a flat tint, a border and a radius.
 - **Don't** nest a Card inside a Card, or lay out identical cards with no hierarchy (one featured card leads; the rest are quieter).
 - **Don't** put icons in rounded tiles, or fill a card with pill badges, status dots or eyebrow chips.
-- **Don't** transform, lift or shadow a card on hover; only border and surface color change.
+- **Don't** lift a card more than 4px or add a shadow; the interactive card may rise 4px while its border and surface change.
 - **Don't** rely on the card edge or tint to mark a control: the hairline (1.37:1 light, 1.51:1 dark) is decorative; controls carry the field stroke.
 - **Don't** introduce a second accent, a second radius, or a second card style.
 - **Don't** set Geist Mono on headings or prose.

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
  * leave. The OUTER span never moves, so the hit target and the layout stay put,
  * and keyboard focus is unaffected. Server component: it only renders the
  * markup; the behaviour lives in the lazy motion module (data-magnetic). Use it
- * on six elements at most.
+ * on two primary calls to action at most; never on navigation controls.
  */
 export function Magnetic({ children, className }: { children: ReactNode; className?: string }) {
   return (

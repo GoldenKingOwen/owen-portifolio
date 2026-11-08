@@ -42,10 +42,11 @@ function CertificateThumbnail({
       type="button"
       onClick={onOpen}
       data-thumb=""
-      className="group flex flex-col gap-2 rounded-ui border border-border bg-raised p-2 text-left transition-colors duration-150 hover:border-field hover:bg-raised-hover"
+      className="group flex flex-col gap-2 rounded-ui border border-border bg-raised p-2 text-left transition-[transform,border-color,background-color] duration-300 ease-out hover:-translate-y-0.5 hover:border-field hover:bg-raised-hover focus-visible:-translate-y-0.5"
     >
       <div
-        className="relative aspect-[4/3] w-full select-none overflow-hidden rounded-ui border border-border bg-raised"
+        data-thumb-image=""
+        className="relative aspect-[4/3] w-full select-none overflow-hidden rounded-ui border border-border bg-raised transition-transform duration-500 ease-out group-hover:scale-[1.03]"
         onContextMenu={(e) => e.preventDefault()}
       >
         <canvas

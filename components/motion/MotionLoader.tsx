@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
-import { CursorFollower } from "@/components/motion/CursorFollower";
 
 // GSAP lives in its own async chunk. It is not requested until the page has
 // hydrated and the browser is idle, so it never competes with first paint.
@@ -27,15 +26,16 @@ export function MotionLoader() {
     () => "pending"
   );
 
-  // Motion visitors: load the GSAP chunk once the browser is idle.
+  // Motion visitors: load the GSAP chunk after hydration, as soon as the browser
+  // is idle. The timeout keeps the hero from waiting on a busy main thread.
   useEffect(() => {
     if (mode !== "motion") return;
     const start = () => setReady(true);
     if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(start, { timeout: 700 });
+      const id = window.requestIdleCallback(start, { timeout: 300 });
       return () => window.cancelIdleCallback(id);
     }
-    const timer = window.setTimeout(start, 200);
+    const timer = window.setTimeout(start, 150);
     return () => window.clearTimeout(timer);
   }, [mode]);
 
@@ -54,10 +54,5 @@ export function MotionLoader() {
   }, [mode, pathname]);
 
   if (mode !== "motion") return null;
-  return (
-    <>
-      <CursorFollower />
-      {ready && <MotionEffects pathname={pathname} />}
-    </>
-  );
+  return ready ? <MotionEffects pathname={pathname} /> : null;
 }
