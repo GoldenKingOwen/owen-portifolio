@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { setNavActive, syncNavLink } from "@/lib/nav-active";
 import { siteConfig } from "@/data/site-config";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Magnetic } from "@/components/motion/Magnetic";
 import { NavItem } from "@/types";
 
 const NAV_ITEMS: NavItem[] = [
@@ -21,10 +20,11 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 // Matches --header-h (4rem) in globals.css, which is also the section[id] scroll-margin-top.
+// Matches --header-h (4rem) in globals.css, which is also the section[id] scroll-margin-top.
 const HEADER_OFFSET = 64;
 
 const controlClass =
-  "flex h-11 w-11 items-center justify-center rounded-ui border border-border text-foreground transition-colors hover:bg-raised active:bg-raised-hover";
+  "flex h-11 w-11 items-center justify-center rounded-ui border border-border text-foreground transition-[color,background-color,transform] duration-200 hover:bg-raised active:scale-[0.98] active:bg-raised-hover";
 
 // The current section is marked with data-active (and aria-current) by the
 // scroll-spy in MotionEffects; the look is pure CSS, so no React state is
@@ -99,7 +99,7 @@ export function Navbar() {
 
     if (wasMobileOpen) {
       // Let the menu collapse first; a smooth scroll started mid-layout can be cancelled on phones.
-      setTimeout(() => scrollToSection(href), 100);
+      setTimeout(() => scrollToSection(href), 320);
     } else {
       scrollToSection(href);
     }
@@ -151,20 +151,16 @@ export function Navbar() {
         </ul>
 
         <div className="flex items-center gap-2">
-          <Magnetic className="max-md:hidden">
-            <a
-              href={siteConfig.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub profile, opens in a new tab"
-              className={controlClass}
-            >
-              <GithubIcon size={16} aria-hidden="true" />
-            </a>
-          </Magnetic>
-          <Magnetic>
-            <ThemeToggle />
-          </Magnetic>
+          <a
+            href={siteConfig.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub profile, opens in a new tab"
+            className={`${controlClass} max-md:hidden`}
+          >
+            <GithubIcon size={16} aria-hidden="true" />
+          </a>
+          <ThemeToggle />
           <button
             ref={toggleRef}
             type="button"
@@ -179,26 +175,38 @@ export function Navbar() {
         </div>
       </nav>
 
-      {mobileOpen && (
-        <ul id="mobile-menu" className="border-b border-border bg-background px-4 pb-3 md:hidden">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.href} className="border-t border-border first:border-t-0">
-              <a
-                href={`/${item.href}`}
-                data-nav-link={item.href.slice(1)}
-                ref={syncNavLink}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(item.href);
-                }}
-                className="relative flex min-h-12 items-center text-base text-foreground after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-200 after:content-[''] data-[active=true]:font-medium data-[active=true]:after:scale-x-100"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
+      {/* Always mounted so the panel can animate open and closed. The collapsed
+          panel is inert, so its links leave the tab order. */}
+      <div
+        id="mobile-menu"
+        className={cn(
+          "grid bg-background transition-[grid-template-rows,opacity] duration-300 ease-out md:hidden",
+          mobileOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        )}
+        inert={!mobileOpen}
+        aria-hidden={!mobileOpen}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <ul className="px-4 pb-3">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.href} className="border-t border-border first:border-t-0">
+                <a
+                  href={`/${item.href}`}
+                  data-nav-link={item.href.slice(1)}
+                  ref={syncNavLink}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.href);
+                  }}
+                  className="relative flex min-h-12 items-center text-base text-foreground after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-200 after:content-[''] data-[active=true]:font-medium data-[active=true]:after:scale-x-100"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </header>
   );
 }

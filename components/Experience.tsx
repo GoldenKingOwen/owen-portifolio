@@ -24,13 +24,26 @@ export function Experience() {
             return (
               <li key={`${job.organization}-${job.position}`} className="relative">
                 <span
-                  data-node=""
                   aria-hidden="true"
                   className={cn(
-                    "absolute -left-8 block h-[9px] w-[9px] border",
-                    current ? "top-9 border-accent bg-accent" : "top-7 border-field bg-background"
+                    "absolute -left-8 block h-[9px] w-[9px]",
+                    current ? "top-9" : "top-7"
                   )}
-                />
+                >
+                  {current && (
+                    <span
+                      data-node-ring=""
+                      className="absolute -inset-1 block border border-accent"
+                    />
+                  )}
+                  <span
+                    data-node=""
+                    className={cn(
+                      "block h-full w-full border",
+                      current ? "border-accent bg-accent" : "border-field bg-background"
+                    )}
+                  />
+                </span>
                 <Card featured={current} data-entry>
                   <CardHeader>
                     <CardTitle featured={current} className={cn(!current && "text-base")}>
