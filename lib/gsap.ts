@@ -5,8 +5,8 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { useGSAP } from "@gsap/react";
 
 // Plugins are registered once, in the browser only. Only what is used is imported:
-// core, ScrollTrigger, SplitText (hero, lead paragraph, closing headline) and
-// DrawSVG (the architecture diagram connectors).
+// core, ScrollTrigger, SplitText (hero and closing headline) and DrawSVG
+// (the architecture diagram connectors).
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, useGSAP);
   ScrollTrigger.config({
