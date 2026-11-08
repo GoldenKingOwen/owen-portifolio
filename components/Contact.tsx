@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/ui/Section";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { Card } from "@/components/ui/Card";
@@ -41,7 +42,7 @@ function validate(values: Record<FieldName, string>): FieldErrors {
 }
 
 const fieldClass =
-  "block w-full rounded-ui border border-field bg-background px-3 py-3 text-base text-foreground focus-visible:outline-offset-1 aria-[invalid=true]:border-danger";
+  "block w-full rounded-ui border border-field bg-background px-3 py-3 text-base text-foreground transition-[border-color,background-color] duration-200 focus-visible:border-accent focus-visible:outline-offset-1 aria-[invalid=true]:border-danger";
 const labelClass = "mb-1.5 block text-sm font-medium text-foreground";
 const errorClass = "mt-1.5 text-sm font-medium text-danger";
 const channelLink =
@@ -134,11 +135,11 @@ export function Contact() {
       >
         Have a project in mind or want to collaborate?
       </p>
-      <p className="mt-4 max-w-[60ch] text-base text-muted sm:text-lg">
+      <p data-reveal="" className="mt-4 max-w-[60ch] text-base text-muted sm:text-lg">
         Write to me directly, or use the form.
       </p>
 
-      <div className="mt-8">
+      <div data-reveal="" className="mt-8">
         <Magnetic>
           <a
             href={`mailto:${siteConfig.email}`}
@@ -150,7 +151,7 @@ export function Contact() {
       </div>
 
       {/* A plain list of channels. */}
-      <ul className="mt-10 max-w-[34rem] border-t border-border text-sm">
+      <ul data-reveal="" className="mt-10 max-w-[34rem] border-t border-border text-sm">
         <li className="grid grid-cols-[7rem_1fr] items-center gap-4 border-b border-border">
           <span className="text-muted">Email</span>
           <a href={`mailto:${siteConfig.email}`} className={channelLink}>
@@ -177,7 +178,7 @@ export function Contact() {
         </li>
       </ul>
 
-      <Card as="div" className="mt-12 max-w-xl">
+      <Card as="div" data-contact-form="" className="mt-12 max-w-xl">
         <form onSubmit={handleSubmit} noValidate aria-busy={status === "loading"} className="space-y-5">
           {/* Honeypot: hidden from people, filled by basic spam bots. Formspree drops it. */}
           <div className="hidden" aria-hidden="true">
@@ -294,23 +295,44 @@ export function Contact() {
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            <Magnetic>
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="inline-flex min-h-11 items-center rounded-ui bg-accent px-6 text-sm font-medium text-accent-ink transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-wait disabled:opacity-60"
-              >
-                {status === "loading" ? "Sending…" : "Send message"}
-              </button>
-            </Magnetic>
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="group inline-flex min-h-11 items-center gap-2 rounded-ui bg-accent px-6 text-sm font-medium text-accent-ink transition-[opacity,transform] duration-200 hover:opacity-90 active:scale-[0.98] active:opacity-80 disabled:cursor-wait disabled:opacity-60"
+            >
+              {status === "loading" ? (
+                <>
+                  <span
+                    className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent"
+                    aria-hidden="true"
+                  />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  Send message
+                  <ArrowRight
+                    size={16}
+                    aria-hidden="true"
+                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                  />
+                </>
+              )}
+            </button>
 
             {/* Live region stays mounted so screen readers announce the result. */}
             <p role="status" aria-live="polite" className="text-sm font-medium text-success">
-              {status === "success" ? "Message sent. I will reply to the email you gave." : ""}
+              {status === "success" ? (
+                <span className="feedback-in inline-block">
+                  Message sent. I will reply to the email you gave.
+                </span>
+              ) : (
+                ""
+              )}
             </p>
           </div>
           {status === "error" && errorMessage && (
-            <p role="alert" className="text-sm font-medium text-danger">
+            <p key={errorMessage} role="alert" className="feedback-in text-sm font-medium text-danger">
               {errorMessage}
             </p>
           )}

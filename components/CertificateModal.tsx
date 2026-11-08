@@ -34,11 +34,11 @@ export function CertificateModal({ certification, onClose }: CertificateModalPro
     () => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.fromTo(rootRef.current, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: EASE });
+        gsap.fromTo(rootRef.current, { opacity: 0 }, { opacity: 1, duration: 0.24, ease: EASE });
         gsap.fromTo(
           dialogRef.current,
           { y: 24, scale: 0.97 },
-          { y: 0, scale: 1, duration: 0.25, ease: EASE }
+          { y: 0, scale: 1, duration: 0.3, ease: EASE }
         );
       });
       return () => mm.revert();
