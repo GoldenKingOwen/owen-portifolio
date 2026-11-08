@@ -40,9 +40,18 @@ export function Skills() {
           height (items-start): short groups never stretch into empty boxes. */}
       <div className="mt-6 grid items-start gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {skills.map((group) => (
-          <Card key={group.category}>
+          <Card
+            key={group.category}
+            data-skill-group=""
+            className="transition-colors duration-300 hover:border-field hover:bg-raised-hover"
+          >
             <CardHeader>
               <CardTitle className="text-base">{group.category}</CardTitle>
+              <span
+                data-skill-rule=""
+                aria-hidden="true"
+                className="mt-3 block h-px bg-border"
+              />
             </CardHeader>
             <CardBody>
               <dl className="divide-y divide-border">

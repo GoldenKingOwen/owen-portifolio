@@ -13,8 +13,8 @@ const linkClass =
  * and live links sit in the footer as separate, named links. `lead` makes it the
  * featured card; `children` render inside the body (the lead carries the
  * architecture diagram). Real imagery only: a project without a real image shows
- * none, never a placeholder. On hover the image scales to 1.04 inside its frame
- * (transform only; the card itself does not move).
+ * none, never a placeholder. On hover the image scales to 1.05 inside its frame
+ * while the interactive card lifts 4px (transform and colour only).
  */
 export function ProjectCard({
   project,
@@ -26,7 +26,12 @@ export function ProjectCard({
   children?: ReactNode;
 }) {
   return (
-    <Card variant="interactive" featured={lead} data-project={project.slug}>
+    <Card
+      variant="interactive"
+      featured={lead}
+      data-project={project.slug}
+      data-project-lead={lead ? "" : undefined}
+    >
       {project.image && (
         <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-ui border border-border bg-background">
           <Image
@@ -35,7 +40,7 @@ export function ProjectCard({
             fill
             sizes="(min-width: 1024px) 340px, (min-width: 768px) 45vw, 100vw"
             quality={75}
-            className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+            className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.05] motion-reduce:transform-none"
           />
         </div>
       )}
@@ -46,7 +51,9 @@ export function ProjectCard({
           <span className="sr-only"> write-up</span>
         </CardTitle>
         {/* One meta line under every title, so status never depends on wrapping. */}
-        <CardMeta>Status: {project.status}</CardMeta>
+        <CardMeta>
+                <span className="font-medium text-foreground">{project.status}</span>
+              </CardMeta>
       </CardHeader>
 
       <CardBody>
@@ -73,7 +80,7 @@ export function ProjectCard({
           Read the write-up
           <ArrowRight
             size={14}
-            className="transition-transform duration-200 group-hover:translate-x-0.5"
+            className="transition-transform duration-200 group-hover:translate-x-1"
           />
         </span>
         {project.links.github && (
