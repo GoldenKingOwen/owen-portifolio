@@ -28,11 +28,19 @@ export function Section({ id, title, children, density = "default", emphasis = f
       id={id}
       aria-labelledby={`${id}-heading`}
       data-section={id}
-      className={cn("border-t border-border", DENSITY[density])}
+      className={cn("relative", DENSITY[density])}
     >
+      {/* The top rule is a real element so the motion layer can draw it across
+          the layout. Without JavaScript it is simply a visible hairline. */}
+      <span
+        data-section-rule=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 block h-px bg-border"
+      />
       <div className="mx-auto grid max-w-5xl gap-6 px-4 sm:px-6 lg:grid-cols-[13rem_minmax(0,1fr)] lg:gap-12">
         <h2
           id={`${id}-heading`}
+          data-section-head=""
           className={cn(
             "font-semibold text-foreground lg:sticky lg:top-24 lg:self-start",
             emphasis ? "text-4xl leading-none tracking-tight sm:text-5xl" : "text-h2"
