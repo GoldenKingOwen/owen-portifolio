@@ -183,6 +183,60 @@ export const projects: Project[] = [
       ],
     },
   },
+  {
+    slug: "world-scope",
+    name: "World Scope",
+    shortDescription:
+      "A real-time collaborative platform for building and sharing code snippets, with live preview and version control.",
+    problemSolved:
+      "Reduces context-switching for developers by enabling instant code sharing and collaboration directly in the browser, without setting up local environments.",
+    technologies: ["React", "TypeScript", "LiveKit", "WebSockets", "Node.js"],
+    status: "In Development",
+    featured: false,
+    image: "/projects/world-scope.jpg",
+    imageAlt:
+      "Screenshot of the World Scope demo: a collaborative code editor with live preview and user cursors.",
+    links: {
+      github: "https://github.com/GoldenKingOwen/world-scope",
+      live: "https://world-scope-umber.vercel.app/",
+    },
+    detail: {
+      overview:
+        "World Scope is a real-time collaborative platform that allows developers to share and edit code together live in the browser.",
+      problemStatement:
+        "Developers often waste time setting up local environments and syncing code versions when collaborating. Existing tools either require installations or lack true real-time reactivity.",
+      objectives: [
+        "Implement real-time code collaboration using WebSockets or a dedicated service",
+        "Provide a lightweight, no-install way to share and edit code",
+        "Support live preview of execution results when applicable",
+      ],
+      constraints: [
+        "Keep the app dependency-light for easy deployment",
+        "Focus on core collaboration features without over-engineering",
+      ],
+      role:
+        "In progress. I am building the real-time infrastructure and polishing the collaborative editing experience.",
+      features: [
+        "Live cursor tracking for multiple users",
+        "Syntax highlighting for common languages",
+        "Version snapshot/export capability",
+      ],
+      architecture:
+        "Client-side React app with WebSocket-based real-time synchronization. Server provides signaling and room management.",
+      decisions: [
+        "Used a dedicated real-time service for low-latency sync",
+        "Kept the editing component framework-agnostic where possible",
+      ],
+      challenges: [
+        "Optimizing conflict resolution for simultaneous edits",
+        "Balancing real-time performance with network constraints",
+      ],
+      solutions: [
+        "Implemented operational transformation patterns for conflict-free editing",
+      ],
+      limitations:
+        "In development. Real-time conflict resolution mechanics are still being refined. No live demo is available yet beyond the deployed preview.",
+    },
+  }
 ];
-
 export const featuredProjects = projects.filter((p) => p.featured);
