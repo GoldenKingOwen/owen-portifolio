@@ -177,8 +177,10 @@ export function Hero() {
                 priority
                 quality={75}
                 sizes="(min-width: 1024px) 256px, (min-width: 640px) 224px, 160px"
-                className="object-cover"
+                className="object-cover group-hover:after:opacity-100 group-hover:after:transition-opacity duration-300"
               />
+              {/* Subtle glitch effect on hover: RGB channel offset using pseudo-element */}
+              <div className="absolute inset-0 pointer-events-none after:content-[''] after:absolute after:inset-0 after:blur-x after:after:filter-[hue-rotate(18deg)] after:after:transform-[translateX(2px)] after:after:transition-all after:duration-300 after:group-hover:transform-[translateX(-2px)] after:after:transition-transform duration-300" />
             </div>
           </div>
         </div>
