@@ -20,6 +20,12 @@ type CardProps = Omit<HTMLAttributes<HTMLElement>, "title"> & {
   as?: "article" | "div" | "li";
   variant?: "default" | "interactive";
   featured?: boolean;
+  /**
+   * Edge-to-edge media modifier: removes the padding and clips the first child
+   * to the card's corners, so a preview can run to the card's own edge. The
+   * padded body is then supplied by the consumer. Combine with `featured`.
+   */
+  flush?: boolean;
   children: ReactNode;
   // Stable hooks for the motion layer (see app/globals.css).
   "data-project-lead"?: string;
@@ -31,6 +37,7 @@ export function Card({
   as: Tag = "article",
   variant = "default",
   featured = false,
+  flush = false,
   className,
   children,
   ...props
@@ -43,7 +50,8 @@ export function Card({
       data-reveal=""
       className={cn(
         "group relative flex min-w-0 flex-col rounded-ui border border-border bg-raised",
-        featured ? "border-t-2 border-t-accent p-6 sm:p-8" : "p-5 sm:p-6",
+        featured && "border-t-2 border-t-accent",
+        flush ? "overflow-hidden p-0" : featured ? "p-6 sm:p-8" : "p-5 sm:p-6",
         interactive &&
           cn(
             // A controlled 4px lift, border shift and surface tint. Transform,
@@ -74,16 +82,21 @@ export function CardTitle({
   as: Heading = "h3",
   href,
   featured = false,
+  size: sizeOverride,
   className,
   children,
 }: {
   as?: ElementType;
   href?: string;
   featured?: boolean;
+  /** Replaces the default type step (not merged), for cards that set their own scale. */
+  size?: string;
   className?: string;
   children: ReactNode;
 }) {
-  const size = featured ? "text-2xl leading-tight tracking-tight sm:text-3xl" : "text-lg leading-snug";
+  const size =
+    sizeOverride ??
+    (featured ? "text-2xl leading-tight tracking-tight sm:text-3xl" : "text-lg leading-snug");
   return (
     <Heading className={cn("font-semibold text-foreground", size, className)}>
       {href ? (

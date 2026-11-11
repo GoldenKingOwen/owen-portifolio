@@ -1,0 +1,6 @@
+
+C:\Users\King Owen\OneDrive\Documents\Project_personal\portfolio\components\ThemeToggle.tsx
+  0:0  warning  File ignored because no matching configuration was supplied
+
+✖ 1 problem (0 errors, 1 warning)
+

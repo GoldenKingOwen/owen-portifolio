@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { Magnetic } from "@/components/motion/Magnetic";
+import { GlitchImage } from "@/components/motion/GlitchImage";
 import { LocalTime } from "@/components/LocalTime";
 import { siteConfig } from "@/data/site-config";
 import { experience } from "@/data/experience";
@@ -82,107 +82,130 @@ export function Hero() {
         </svg>
       </div>
 
-      <div className="relative z-10 mx-auto grid max-w-5xl gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-16">
-        <div>
-          {/* The name is split into words and lines by the motion layer (and
-              restored afterwards). The mask keeps the reveal clean at any width. */}
-          <h1 id="hero-heading" aria-label={`${siteConfig.name}, Full-Stack Software Developer in Malawi`} className="font-semibold text-foreground">
-            <span data-hero-split="words" className="block text-display">
-              {siteConfig.name}
-            </span>
-            <span data-hero-split="lines" className="mt-4 block text-lead font-normal text-muted">
-              Full-Stack Software Developer in Malawi
-            </span>
-          </h1>
+      {/* A single pool of light behind the portrait, so the photograph reads as
+          lit from the page rather than pasted onto it. */}
+      <div aria-hidden="true" className="hero-pool pointer-events-none absolute inset-0 -z-10" />
 
-          <p data-hero="" className="mt-6 max-w-[58ch] text-lead text-foreground [overflow-wrap:anywhere]">
-            {siteConfig.tagline}
-          </p>
-
-          {/* The one decorative teal rule in the hero, drawn after the name. */}
-          <span
-            data-hero-accent=""
-            aria-hidden="true"
-            className="mt-6 block h-px w-24 bg-accent"
-          />
-
-          {/* One line, derived from data/: what I am doing now. */}
-          <p data-hero="" className="mt-4 max-w-[60ch] text-base leading-relaxed text-foreground [overflow-wrap:anywhere]">
-            <span className="font-medium">Now:</span>
-            <span className="text-muted">
-              {" "}
-              {current.position} at <span className="whitespace-nowrap">{current.organization}</span>
-              {studying ? ", studying for a BSc ICT at " + studying.institution : ""}.
-            </span>
-          </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
-            <span data-hero-cta="" className="inline-flex">
-              <Magnetic>
-                <a
-                  href="#projects"
-                  className="group inline-flex min-h-11 items-center gap-2 rounded-ui bg-accent px-5 text-sm font-medium text-accent-ink transition-[opacity,transform] duration-200 hover:opacity-90 active:scale-[0.98] active:opacity-80"
-                >
-                  Explore my work
-                  <ArrowRight
-                    size={16}
-                    aria-hidden="true"
-                    className="transition-transform duration-200 group-hover:translate-x-0.5"
-                  />
-                </a>
-              </Magnetic>
-            </span>
-            <a
-              data-hero-cta=""
-              href="/cv/OwenCV.pdf"
-              download
-              className="inline-flex min-h-11 items-center gap-2 rounded-ui border border-field px-5 text-sm font-medium text-foreground transition-[color,background-color,transform] duration-200 hover:bg-raised active:scale-[0.98] active:bg-raised-hover"
+      <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+          {/* The text column sits above the portrait's faded margin, so the type
+              and the photograph share the same space instead of neighbouring it. */}
+          <div className="relative z-10">
+            {/* The name is split into words and lines by the motion layer (and
+                restored afterwards). The mask keeps the reveal clean at any width. */}
+            <h1
+              id="hero-heading"
+              aria-label={`${siteConfig.name}, Full-Stack Software Developer in Malawi`}
+              className="font-semibold text-foreground"
             >
-              <ArrowDown size={16} aria-hidden="true" />
-              Download CV
-            </a>
-            <span data-hero-cta="" className="inline-flex">
-              <ExternalLink href={siteConfig.githubUrl} className={textLink}>
-                GitHub profile
-              </ExternalLink>
-            </span>
-            <a data-hero-cta="" href="#contact" className={textLink}>
-              Contact
-            </a>
-          </div>
+              <span data-hero-split="words" className="block text-display">
+                {siteConfig.name}
+              </span>
+              <span data-hero-split="lines" className="mt-4 block text-lead font-normal text-muted">
+                Full-Stack Software Developer in Malawi
+              </span>
+            </h1>
 
-          <dl data-hero="" className="mt-12 max-w-[60ch] border-t border-border text-sm">
-            {facts.map((fact) => (
-              <div
-                key={fact.label}
-                className="grid grid-cols-1 gap-1 border-b border-border py-3 sm:grid-cols-[7rem_1fr] sm:gap-4"
+            <p data-hero="" className="mt-6 max-w-[52ch] text-lead text-foreground [overflow-wrap:anywhere]">
+              {siteConfig.tagline}
+            </p>
+
+            {/* The one decorative teal rule in the hero, drawn after the name. */}
+            <span
+              data-hero-accent=""
+              aria-hidden="true"
+              className="mt-6 block h-px w-24 bg-accent"
+            />
+
+            {/* One line, derived from data/: what I am doing now. */}
+            <p
+              data-hero=""
+              className="mt-4 max-w-[56ch] text-base leading-relaxed text-foreground [overflow-wrap:anywhere]"
+            >
+              <span className="font-medium">Now:</span>
+              <span className="text-muted">
+                {" "}
+                {current.position} at <span className="whitespace-nowrap">{current.organization}</span>
+                {studying ? ", studying for a BSc ICT at " + studying.institution : ""}.
+              </span>
+            </p>
+
+            <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <span data-hero-cta="" className="inline-flex">
+                <Magnetic>
+                  <a
+                    href="#projects"
+                    className="group inline-flex min-h-11 items-center gap-2 rounded-ui bg-accent px-5 text-sm font-medium text-accent-ink transition-[opacity,transform] duration-200 hover:opacity-90 active:scale-[0.98] active:opacity-80"
+                  >
+                    Explore my work
+                    <ArrowRight
+                      size={16}
+                      aria-hidden="true"
+                      className="transition-transform duration-200 group-hover:translate-x-0.5"
+                    />
+                  </a>
+                </Magnetic>
+              </span>
+              <a
+                data-hero-cta=""
+                href="/cv/OwenCV.pdf"
+                download
+                className="inline-flex min-h-11 items-center gap-2 rounded-ui border border-field px-5 text-sm font-medium text-foreground transition-[color,background-color,transform] duration-200 hover:bg-raised active:scale-[0.98] active:bg-raised-hover"
               >
-                <dt className="text-muted">{fact.label}</dt>
-                <dd className="text-foreground [overflow-wrap:anywhere]">{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        <div className="order-first lg:order-none">
-          <div
-            data-hero="clip"
-            className="relative aspect-[4/5] w-40 overflow-hidden rounded-ui border border-border bg-raised sm:w-56 lg:w-full"
-          >
-            <div data-hero-portrait-inner="" className="absolute inset-0">
-              <Image
-                src="/images/owen.jpeg"
-                alt="Portrait of Owen Matola, full-stack software developer based in Malawi"
-                fill
-                priority
-                quality={75}
-                sizes="(min-width: 1024px) 256px, (min-width: 640px) 224px, 160px"
-                className="object-cover group-hover:after:opacity-100 group-hover:after:transition-opacity duration-300"
-              />
-              {/* Subtle glitch effect on hover: RGB channel offset using pseudo-element */}
-              <div className="absolute inset-0 pointer-events-none after:content-[''] after:absolute after:inset-0 after:blur-x after:after:filter-[hue-rotate(18deg)] after:after:transform-[translateX(2px)] after:after:transition-all after:duration-300 after:group-hover:transform-[translateX(-2px)] after:after:transition-transform duration-300" />
+                <ArrowDown size={16} aria-hidden="true" />
+                Download CV
+              </a>
+              <span data-hero-cta="" className="inline-flex">
+                <ExternalLink href={siteConfig.githubUrl} className={textLink}>
+                  GitHub profile
+                </ExternalLink>
+              </span>
+              <a data-hero-cta="" href="#contact" className={textLink}>
+                Contact
+              </a>
             </div>
+
+            <dl data-hero="" className="mt-12 max-w-[56ch] border-t border-border text-sm lg:max-w-[38rem]">
+              {facts.map((fact) => (
+                <div
+                  key={fact.label}
+                  className="grid grid-cols-1 gap-1 border-b border-border py-3 sm:grid-cols-[7rem_1fr] sm:gap-4"
+                >
+                  <dt className="text-muted">{fact.label}</dt>
+                  <dd className="text-foreground [overflow-wrap:anywhere]">{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
+
+          {/* Portrait: large, bled slightly left into the text column, its left
+              and bottom edges dissolving into the page. The offset hairline
+              frame and the corner tick give it depth without a second box. */}
+          <figure className="order-first m-0 lg:order-none lg:-ml-32 lg:w-[24rem]">
+            <div data-hero="clip" className="relative">
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 hidden translate-x-3 translate-y-3 rounded-ui border border-border lg:block"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute -left-1 -top-1 hidden h-3 w-3 border-l-2 border-t-2 border-accent lg:block"
+              />
+              <div data-hero-portrait-inner="" className="relative">
+                <GlitchImage
+                  src="/images/owen.jpeg"
+                  alt="Portrait of Owen Matola, full-stack software developer based in Malawi"
+                  sizes="(min-width: 1024px) 384px, (min-width: 640px) 224px, 176px"
+                  priority
+                  className="hero-plate plate-fade aspect-[4/5] w-44 border border-border sm:w-56 lg:w-full"
+                />
+              </div>
+            </div>
+            <figcaption className="mt-4 hidden items-center justify-between gap-4 border-t border-border pt-3 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-muted lg:flex">
+              <span>Owen Matola</span>
+              <span className="tabular">13.97°S / 33.79°E</span>
+            </figcaption>
+          </figure>
         </div>
       </div>
     </section>

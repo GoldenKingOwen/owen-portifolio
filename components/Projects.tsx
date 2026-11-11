@@ -1,6 +1,5 @@
 import { Section } from "@/components/ui/Section";
 import { ProjectCard } from "@/components/ProjectCard";
-import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { projects } from "@/data/projects";
 
 export function Projects() {
@@ -11,10 +10,9 @@ export function Projects() {
   return (
     <Section id="projects" title="Projects" density="roomy">
       <div className="space-y-4 sm:space-y-6">
-        <ProjectCard project={lead} lead>
-          {lead.slug === "tenant-feedback-portal" && <ArchitectureDiagram />}
-        </ProjectCard>
-        {/* items-start: cards keep their natural height, so a card without an image is never padded to match one with it. */}
+        <ProjectCard project={lead} lead />
+        {/* items-start: cards keep their natural height, so a card without a
+            screenshot is never padded to match one with it. */}
         <div className="grid items-start gap-4 sm:gap-6 md:grid-cols-2">
           {others.map((project) => (
             <ProjectCard key={project.slug} project={project} />
