@@ -1,0 +1,42 @@
+▲ Next.js 16.4.4 (Turbopack)
+- Local:         http://localhost:3100
+- Network:       http://192.168.1.95:3100
+✓ Ready in 16.9s
+✓ Running next.config.ts took 1384ms
+⚠ Slow filesystem detected. The benchmark took 1041ms. If \\?\C:\Users\King Owen\OneDrive\Documents\Project_personal\portfolio\.next\dev is a network drive, consider moving it to a local folder.
+See more: https://nextjs.org/docs/app/guides/local-development
+
+○ Compiling / ...
+Image with src "/images/owen.jpeg" is using quality "78" which is not configured in images.qualities [75]. Please update your config to [75, 78].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+Image with src "/projects/chess-practice.jpg" is using quality "82" which is not configured in images.qualities [75]. Please update your config to [75, 82].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+Image with src "/projects/world-scope.png" is using quality "82" which is not configured in images.qualities [75]. Please update your config to [75, 82].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+ GET / 200 in 11.9s (next.js: 6.0s, application-code: 5.9s)
+ GET / 200 in 2.6s (next.js: 61ms, application-code: 2.5s)
+✓ Compiled in 12.3s
+✓ Compiled in 1250ms
+○ Compiling / ...
+Image with src "/images/owen.jpeg" is using quality "80" which is not configured in images.qualities [75]. Please update your config to [75, 80].
+Read more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities
+ GET / 200 in 2.2s (next.js: 33ms, application-code: 2.1s)
+⚠ Blocked cross-origin request to Next.js dev resource /_next/hmr from "127.0.0.1".
+Cross-origin access to Next.js dev resources is blocked by default for safety.
+
+To allow this host in development, add it to "allowedDevOrigins" in next.config.js and restart the dev server:
+
+// next.config.js
+module.exports = {
+  allowedDevOrigins: ['127.0.0.1'],
+}
+
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+○ Compiling /icon ...
+ GET /icon?891da8c78693ef64 200 in 16.8s (next.js: 4.7s, application-code: 12.1s)
+ GET / 200 in 1861ms (next.js: 120ms, application-code: 1742ms)
+ GET / 200 in 1824ms (next.js: 12ms, application-code: 1812ms)
+ GET / 200 in 1606ms (next.js: 8ms, application-code: 1598ms)
+ GET / 200 in 1523ms (next.js: 11ms, application-code: 1512ms)
+ GET / 200 in 1612ms (next.js: 8ms, application-code: 1605ms)
+[?25h
