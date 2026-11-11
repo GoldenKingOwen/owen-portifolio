@@ -1,4 +1,5 @@
 import { Hero } from "@/components/Hero";
+import { IntroOverlay } from "@/components/IntroOverlay";
 import { Intro } from "@/components/Intro";
 import { About } from "@/components/About";
 import { Skills } from "@/components/Skills";
@@ -15,6 +16,8 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={homeJsonLd()} />
+      {/* Server-rendered opening screen + the client sequence that animates it. */}
+      <IntroOverlay />
       <Intro />
       <Hero />
       <About />

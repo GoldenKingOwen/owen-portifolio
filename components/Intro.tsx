@@ -1,117 +1,110 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { SplitText } from "gsap/SplitText";
-import { EASE } from "@/lib/gsap";
-import { MOTION } from "@/lib/motion-timing";
+import { useEffect, useRef } from "react";
+import { isIntroPending, markIntroDone } from "@/lib/intro";
 
 /**
- * Animated name introduction that plays once on initial page load.
- * Then transitions to the main portfolio content.
- * 
- * Features:
- - Letter-by-letter/staggered reveal of the developer's name
- - Controlled timing that doesn't keep visitors waiting
- - Seamless transition to main content
- - Respects prefers-reduced-motion
- - Only plays once per session (tracked via localStorage)
+ * Animates the server-rendered introduction overlay (components/IntroOverlay).
+ *
+ * Sequence, roughly 2s in total:
+ *   0.00  the name's letters rise out of their masks, one after another
+ *   0.35  the accent rule draws across, the role line follows
+ *   1.50  the overlay wipes upward off the screen as one deliberate move
+ *   1.95  done: html[data-intro] is removed, the hero timeline starts
+ *
+ * GSAP is loaded dynamically so it stays out of the first chunk; MotionLoader
+ * then shares the same cached chunk. If it never loads, the CSS fail-safe in
+ * globals.css uncovers the page regardless.
  */
 export function Intro() {
-  const [hasPlayed, setHasPlayed] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
-
-  // Only run once per session
-  useEffect(() => {
-    const previouslyPlayed = localStorage.getItem("portfolioIntroPlayed");
-    if (previouslyPlayed === "1") {
-      setHasPlayed(true);
-      return;
-    }
-  }, []);
+  const started = useRef(false);
 
   useEffect(() => {
-    if (hasPlayed) {
-      setIsComplete(true);
-      return;
-    }
+    if (started.current) return;
+    started.current = true;
 
-    // Check for reduced motion preference
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      // Skip animation, just show the name instantly
-      setHasPlayed(true);
-      localStorage.setItem("portfolioIntroPlayed", "1");
-      setIsComplete(true);
-      return;
-    }
+    let cancelled = false;
+    let tl: { kill: () => void } | null = null;
 
-    // Find the name element
-    const nameEl = document.querySelector<HTMLElement>('[data-hero-split="words"]');
-    if (!nameEl) {
-      setHasPlayed(true);
-      localStorage.setItem("portfolioIntroPlayed", "1");
-      setIsComplete(true);
-      return;
-    }
+    async function play() {
+      if (!isIntroPending()) return;
 
-    // Split the name into words and lines for animation
-    const nameSplit = SplitText.create(nameEl, {
-      type: "words,lines",
-      mask: "lines",
-    });
+      let gsap: typeof import("@/lib/gsap").gsap;
+      let EASE: string;
+      try {
+        const mod = await import("@/lib/gsap");
+        gsap = mod.gsap;
+        EASE = mod.EASE;
+      } catch {
+        markIntroDone();
+        return;
+      }
+      if (cancelled) {
+        markIntroDone();
+        return;
+      }
 
-    // Create the intro timeline
-    const tl = gsap.timeline({
-      onComplete: () => {
-        setHasPlayed(true);
-        localStorage.setItem("portfolioIntroPlayed", "1");
-        nameSplit.revert();
-        setIsComplete(true);
-      },
-    });
+      const root = document.querySelector<HTMLElement>("[data-intro-root]");
+      if (!root) {
+        markIntroDone();
+        return;
+      }
 
-    // Animate words with staggered reveal
-    tl.from(
-      nameSplit.words,
-      {
-        yPercent: 110,
-        duration: MOTION.hero.name,
-        ease: EASE,
-        stagger: MOTION.stagger.heroWords,
-      },
-      0
-    );
+      const letters = Array.from(root.querySelectorAll<HTMLElement>("[data-intro-letter]"));
+      const sub = root.querySelector<HTMLElement>("[data-intro-sub]");
+      const meta = root.querySelector<HTMLElement>("[data-intro-meta]");
+      const rule = root.querySelector<HTMLElement>("[data-intro-rule]");
 
-    // Animate the subtitle lines
-    const subEl = document.querySelector<HTMLElement>('[data-hero-split="lines"]');
-    if (subEl) {
-      const subSplit = SplitText.create(subEl, {
-        type: "lines",
-        mask: "lines",
-      });
+      gsap.set(letters, { yPercent: 112 });
+      gsap.set([sub, meta].filter(Boolean), { opacity: 0 });
+      gsap.set(rule, { scaleX: 0, transformOrigin: "left center" });
 
-      tl.from(
-        subSplit.lines,
-        {
-          yPercent: 110,
-          duration: MOTION.hero.headline,
-          ease: EASE,
-          stagger: MOTION.stagger.heroHeadline,
+      const timeline = gsap.timeline({
+        defaults: { ease: EASE },
+        onComplete: () => {
+          markIntroDone();
         },
-        0.16
-      );
+      });
+      tl = timeline;
+
+      timeline
+        .to(meta, { opacity: 1, duration: 0.45 }, 0)
+        .to(
+          letters,
+          {
+            yPercent: 0,
+            duration: 0.85,
+            stagger: 0.042,
+          },
+          0.08
+        )
+        .to(rule, { scaleX: 1, duration: 0.65 }, 0.42)
+        .to(sub, { opacity: 1, y: 0, duration: 0.5 }, 0.5)
+        // The whole screen becomes the transition: one upward wipe, no spinner.
+        .to(
+          root,
+          {
+            clipPath: "inset(0 0 100% 0)",
+            duration: 0.5,
+            ease: "power2.inOut",
+          },
+          1.5
+        )
+        .to(letters, { yPercent: -40, duration: 0.5, stagger: 0.012 }, 1.5)
+        .to(sub, { opacity: 0, duration: 0.3 }, 1.52)
+        .to(rule, { opacity: 0, duration: 0.3 }, 1.52)
+        .to(meta, { opacity: 0, duration: 0.3 }, 1.52);
     }
 
-    // Wait a moment then mark as complete so the main content can show
-    const waitComplete = setTimeout(() => {
-      setIsComplete(true);
-    }, MOTION.hero.name + MOTION.hero.headline + 0.3);
+    play();
 
     return () => {
-      clearTimeout(waitComplete);
+      cancelled = true;
+      tl?.kill();
+      // A route change mid-sequence must never leave the page covered.
+      if (isIntroPending()) markIntroDone();
     };
-  }, [hasPlayed]);
+  }, []);
 
-  return null; // This component doesn't render anything visible;
-  // it just runs the animation and sets states
+  return null;
 }

@@ -185,58 +185,91 @@ export const projects: Project[] = [
   },
   {
     slug: "world-scope",
-    name: "World Scope",
+    name: "WorldScope",
     shortDescription:
-      "A real-time collaborative platform for building and sharing code snippets, with live preview and version control.",
+      "An ambitious development-data intelligence platform designed to make World Bank data easier to discover, understand, compare, and share — with Malawi, SADC, and Sub-Saharan Africa in focus.",
     problemSolved:
-      "Reduces context-switching for developers by enabling instant code sharing and collaboration directly in the browser, without setting up local environments.",
-    technologies: ["React", "TypeScript", "LiveKit", "WebSockets", "Node.js"],
-    status: "In Development",
+      "Official development data is authoritative but hard to approach: indicators are named in technical codes, context lives in separate metadata, and a number rarely travels with its source. WorldScope is being designed around that gap instead of around another API viewer.",
+    // Verified in the deployed preview build only. Everything else the README
+    // documents lives in plannedStack, clearly separated.
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "next-intl"],
+    status: "Planning",
+    statusNote: "Currently in the planning and foundation-design stage.",
     featured: false,
-    image: "/projects/world-scope.jpg",
+    image: "/projects/world-scope.png",
     imageAlt:
-      "Screenshot of the World Scope demo: a collaborative code editor with live preview and user cursors.",
+      "Screenshot of the WorldScope preview build: a dark indicator search screen with popular indicators and a browse-by-topic catalogue.",
+    previewTitle: "Development-data intelligence",
+    previewNote: "Preview build — early foundation",
     links: {
-      github: "https://github.com/GoldenKingOwen/world-scope",
+      github: "https://github.com/GoldenKingOwen/WorldScope",
       live: "https://world-scope-umber.vercel.app/",
     },
     detail: {
       overview:
-        "World Scope is a real-time collaborative platform that allows developers to share and edit code together live in the browser.",
+        "WorldScope is a planned development-data intelligence platform built on World Bank open data, with a focus on Malawi, SADC, and Sub-Saharan Africa. Its intended purpose is to make development data easier to discover, understand, compare, and share. It is not intended to be merely an API viewer: the broader concept adds discovery, context, trust, and sharing capabilities on top of official development data.",
       problemStatement:
-        "Developers often waste time setting up local environments and syncing code versions when collaborating. Existing tools either require installations or lack true real-time reactivity.",
+        "Development data is published, but it is not approachable. A World Bank indicator is found by its technical code, explanations sit apart from the numbers, and figures are shared without their source or data year. The project is being designed around discovery, context, trust, and sharing rather than around raw API access.",
       objectives: [
-        "Implement real-time code collaboration using WebSockets or a dedicated service",
-        "Provide a lightweight, no-install way to share and edit code",
-        "Support live preview of execution results when applicable",
+        "Discovery: be searchable by plain-language indicator name instead of technical indicator codes",
+        "Context: explain indicators in plain language derived from official metadata, and benchmark peers between countries, regions, income groups, and SADC",
+        "Trust: every number should carry its source, indicator code, data year, coverage, and retrieval time",
+        "Sharing: make views shareable, charts embeddable, and data exportable with citation text",
+        "Focus: curate indicator sets and peer groups for Malawi, SADC, and Sub-Saharan Africa",
       ],
       constraints: [
-        "Keep the app dependency-light for easy deployment",
-        "Focus on core collaboration features without over-engineering",
+        "Planned capabilities must never be presented as shipped behaviour",
+        "Every figure has to remain traceable to official metadata",
+        "Malawi, SADC, and Sub-Saharan Africa are the starting scope, not an afterthought",
       ],
       role:
-        "In progress. I am building the real-time infrastructure and polishing the collaborative editing experience.",
+        "Solo project, currently in planning and foundation design. I am defining the product model — the indicator catalogue, the provenance record every number must carry, and the accessible chart layer later phases build on. No implementation phase has started.",
       features: [
-        "Live cursor tracking for multiple users",
-        "Syntax highlighting for common languages",
-        "Version snapshot/export capability",
+        "Search 16,000+ indicators by plain-language name instead of technical indicator codes",
+        "Plain-language explanations derived from official metadata",
+        "Peer benchmarking between countries, regions, income groups, and SADC",
+        "Every number carrying its source, indicator code, data year, coverage, and retrieval time",
+        "Shareable views, embeddable charts, and exportable data with citation text",
+        "Curated indicator sets and peer groups for Malawi, SADC, and Sub-Saharan Africa",
       ],
       architecture:
-        "Client-side React app with WebSocket-based real-time synchronization. Server provides signaling and room management.",
+        "The platform is being designed around a cataloguing and query layer over World Bank open data, with provenance recorded alongside every figure and one accessible chart wrapper shared by later views. The deployed preview is an early application shell: the indicator catalogue, popular indicators, and topic browsing render, while data retrieval is not yet working.",
       decisions: [
-        "Used a dedicated real-time service for low-latency sync",
-        "Kept the editing component framework-agnostic where possible",
+        "Treat provenance as part of the data model rather than a footnote in the interface",
+        "Keep chart rendering behind one accessible wrapper so every view shares keyboard and screen-reader behaviour",
+        "Start from a curated indicator set and peer groups instead of exposing the full catalogue unfiltered",
       ],
       challenges: [
-        "Optimizing conflict resolution for simultaneous edits",
-        "Balancing real-time performance with network constraints",
+        "Making 16,000+ technical indicators navigable by plain language",
+        "Keeping every figure traceable through ingestion, caching, and display",
+        "Designing charts and maps that stay readable and accessible across very different data shapes",
       ],
-      solutions: [
-        "Implemented operational transformation patterns for conflict-free editing",
-      ],
+      solutions: [],
       limitations:
-        "In development. Real-time conflict resolution mechanics are still being refined. No live demo is available yet beyond the deployed preview.",
+        "Planning only: the README records Phase 0 as not started. The deployed preview is an early application shell — the catalogue and topic lists render, but indicator data retrieval is not working yet. Nothing described on this page should be read as a shipped feature.",
     },
+    // Documented architecture. Not presented as a stack in use.
+    plannedStack: [
+      { layer: "Language", technology: "TypeScript (strict)" },
+      { layer: "Web", technology: "Next.js App Router, Tailwind CSS, shadcn/ui" },
+      { layer: "Charts", technology: "Apache ECharts" },
+      { layer: "Maps", technology: "MapLibre GL" },
+      { layer: "Internationalisation", technology: "next-intl" },
+      { layer: "API", technology: "NestJS" },
+      { layer: "Validation and API documentation", technology: "zod, OpenAPI via @nestjs/swagger" },
+      { layer: "Jobs", technology: "pg-boss" },
+      { layer: "Database", technology: "PostgreSQL 16" },
+      { layer: "ORM", technology: "Prisma with hand-written SQL migrations" },
+      { layer: "Tooling", technology: "pnpm workspaces, Turborepo, Vitest, Playwright, axe-core" },
+    ],
+    // Documented roadmap. Not a list of completed work.
+    roadmap: [
+      "Phase 0 — Foundation: catalog ingestion, provider client, query engine, cache, provenance, design system, and accessible chart wrapper",
+      "Phase 1 — Students and researchers: search, country profiles, peer benchmarking, indicator pages, comparison studio, correlation explorer, and cited CSV export",
+      "Phase 2 — Journalists: embeds, chart image export, notable changes, and world map",
+      "Phase 3 — Developers: public API v1, keys, rate limits, documentation, and SDK",
+      "Phase 4 — Everyone: accounts, watchlists, research workspaces, projects explorer, publications, Ask Data, and national data sources",
+    ],
   }
 ];
 export const featuredProjects = projects.filter((p) => p.featured);

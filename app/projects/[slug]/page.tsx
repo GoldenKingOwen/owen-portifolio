@@ -89,6 +89,9 @@ export default async function ProjectPage({
   }
 
   const { detail } = project;
+  const isPlanning = project.status === "Planning";
+  // A deployed preview is not a shipped product: label the link honestly.
+  const liveLabel = isPlanning ? "Preview" : "Live demo";
   const related = projects.filter((p) => p.slug !== project.slug).slice(0, 2);
 
   return (
@@ -110,6 +113,9 @@ export default async function ProjectPage({
             {project.name}
           </h1>
           <p className="mt-4 max-w-[60ch] text-lead text-muted">{project.shortDescription}</p>
+          {project.statusNote && (
+            <p className="mt-2 text-sm text-muted">{project.statusNote}</p>
+          )}
           {(project.links.github || project.links.live) && (
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
               {project.links.github && (
@@ -124,10 +130,10 @@ export default async function ProjectPage({
               {project.links.live && (
                 <ExternalLink
                   href={project.links.live}
-                  aria-label={`Open ${project.name} live, opens in a new tab`}
+                  aria-label={`${liveLabel} of ${project.name}, opens in a new tab`}
                   className={linkClass}
                 >
-                  Live demo
+                  {liveLabel}
                 </ExternalLink>
               )}
             </div>
@@ -171,19 +177,51 @@ export default async function ProjectPage({
                 <p>{detail.role}</p>
               </Prose>
             )}
-            <Prose title="Technical approach">
+            <Prose title={isPlanning ? "Planned capabilities" : "Technical approach"}>
+              {isPlanning && (
+                <p className="mb-3 text-sm text-muted">
+                  Designed capabilities, not implemented features.
+                </p>
+              )}
               <List items={detail.features} />
             </Prose>
-            <Prose title="Architecture">
+            <Prose title={isPlanning ? "Planned architecture" : "Architecture"}>
               {project.slug === "tenant-feedback-portal" && <ArchitectureDiagram />}
               <p>{detail.architecture}</p>
+              {project.plannedStack && (
+                <>
+                  <p className="mt-6 font-medium text-foreground">Planned technology stack</p>
+                  <p className="mt-1 text-sm text-muted">
+                    Documented architecture choices for the build; not all of this is in use yet.
+                  </p>
+                  <dl className="mt-4 border-t border-border text-sm">
+                    {project.plannedStack.map((row) => (
+                      <div
+                        key={row.layer}
+                        className="grid grid-cols-1 gap-1 border-b border-border py-2.5 sm:grid-cols-[11rem_1fr] sm:gap-4"
+                      >
+                        <dt className="text-muted">{row.layer}</dt>
+                        <dd className="text-foreground">{row.technology}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </>
+              )}
             </Prose>
+            {project.roadmap && (
+              <Prose title="Planned roadmap">
+                <p className="mb-3 text-sm text-muted">
+                  The documented phase plan. Nothing in it is completed work.
+                </p>
+                <List items={project.roadmap} />
+              </Prose>
+            )}
             {detail.decisions && detail.decisions.length > 0 && (
               <Prose title="Implementation decisions">
                 <List items={detail.decisions} />
               </Prose>
             )}
-            <Prose title="Challenges">
+            <Prose title={isPlanning ? "Open design questions" : "Challenges"}>
               <List items={detail.challenges} />
             </Prose>
             {detail.solutions.length > 0 && (
@@ -211,7 +249,7 @@ export default async function ProjectPage({
                 <dd className="mt-1 text-foreground">{project.status}</dd>
               </div>
               <div className="border-b border-border py-3">
-                <dt className="text-muted">Built with</dt>
+                <dt className="text-muted">{isPlanning ? "Seen in the preview" : "Built with"}</dt>
                 <dd className="mt-1 text-sm leading-relaxed text-foreground">
                   {project.technologies.join(", ")}
                 </dd>
@@ -231,10 +269,10 @@ export default async function ProjectPage({
                   {project.links.live && (
                     <ExternalLink
                       href={project.links.live}
-                      aria-label={`Open ${project.name} live, opens in a new tab`}
+                      aria-label={`${liveLabel} of ${project.name}, opens in a new tab`}
                       className={linkClass}
                     >
-                      Live demo
+                      {liveLabel}
                     </ExternalLink>
                   )}
                 </dd>

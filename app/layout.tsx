@@ -95,6 +95,12 @@ const themeInitScript = `
     var low = (n.deviceMemory && n.deviceMemory <= 2) || (n.hardwareConcurrency && n.hardwareConcurrency <= 2);
     if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches && !low) {
       document.documentElement.setAttribute('data-motion', 'pending');
+      // The opening sequence plays once per session. Its markup is already in the
+      // server HTML; this attribute is what makes it visible before first paint,
+      // so the homepage never flashes behind it.
+      var played = false;
+      try { played = sessionStorage.getItem('portfolioIntroPlayed') === '1'; } catch (e) {}
+      if (!played) document.documentElement.setAttribute('data-intro', 'pending');
     }
   } catch (e) {}
 })();
@@ -115,57 +121,6 @@ export default function RootLayout({
             the theme and the motion flag are set on first paint. (next/script's
             beforeInteractive queue runs only after the framework chunk loads.) */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-
-  {/* Intro animation: plays once on initial page load, then transitions to main content */}
-  <script
-    dangerouslySetInnerHTML={{
-      __html: `
-(function() {
-  // Only run intro on initial page load, not on navigations
-  var alreadyPlayed = localStorage.getItem('portfolioIntroPlayed');
-  if (alreadyPlayed === '1') return;
-  
-  // Check for reduced motion
-  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReduced) {
-    localStorage.setItem('portfolioIntroPlayed', '1');
-    return;
-  }
-  
-  // Find the name element and trigger the split text animation
-  var nameEl = document.querySelector('[data-hero-split="words"]');
-  if (!nameEl) return;
-  
-  // Split and animate the name
-  var nameSplit = SplitText.create(nameEl, { type: 'words,lines', mask: 'lines' });
-  
-  var tl = gsap.timeline({
-    onComplete: function() {
-      localStorage.setItem('portfolioIntroPlayed', '1');
-    }
-  });
-  
-  tl.from(nameSplit.words, {
-    yPercent: 110,
-    duration: 0.7,
-    ease: 'power3.out',
-    stagger: 0.07
-  });
-  
-  var subEl = document.querySelector('[data-hero-split="lines"]');
-  if (subEl) {
-    var subSplit = SplitText.create(subEl, { type: 'lines', mask: 'lines' });
-    tl.from(subSplit.lines, {
-      yPercent: 110,
-      duration: 0.6,
-      ease: 'power3.out',
-      stagger: 0.08
-    }, 0.16);
-  }
-})();
-`
-    }}
-  />
       </head>
       <body
         className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}

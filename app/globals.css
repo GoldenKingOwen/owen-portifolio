@@ -17,6 +17,9 @@
   --color-field: var(--rule-strong);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
+  --color-panel: var(--panel);
+  --color-panel-ink: var(--panel-ink);
+  --color-panel-accent: var(--panel-accent);
   --color-danger: var(--danger);
   --color-success: var(--success);
 
@@ -56,6 +59,13 @@
   --rule-strong: oklch(0.6 0.012 255);
   --accent: oklch(0.46 0.1 195);
   --accent-ink: oklch(0.985 0.003 250);
+  /* Media plate: the deep cool ground a photograph or preview is graded into.
+     Same hue family as ink, one full step darker, so it reads as the page's
+     own shadow rather than a second palette. */
+  --panel: oklch(0.27 0.021 252);
+  --panel-ink: oklch(0.96 0.004 250);
+  /* Accent on a dark plate: the signal teal lifted so it stays legible on panel. */
+  --panel-accent: oklch(0.78 0.11 192);
   --danger: oklch(0.5 0.17 27);
   --success: oklch(0.45 0.11 155);
   color-scheme: light;
@@ -72,6 +82,9 @@
   --rule-strong: oklch(0.6 0.014 255);
   --accent: oklch(0.8 0.11 190);
   --accent-ink: oklch(0.17 0.012 255);
+  --panel: oklch(0.23 0.017 255);
+  --panel-ink: oklch(0.94 0.008 250);
+  --panel-accent: oklch(0.8 0.11 190);
   --danger: oklch(0.76 0.14 25);
   --success: oklch(0.8 0.13 155);
   color-scheme: dark;
@@ -380,6 +393,252 @@ html[data-motion="pending"] :is([data-hero], [data-hero-cta], [data-hero-accent]
   animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 
+/* ── Introduction overlay ─────────────────────────────────────────────────
+   The overlay markup is in the server HTML, so the name is on screen from the
+   first paint with no flash of the homepage. An inline script in layout.tsx
+   sets html[data-intro] before paint and only for visitors who get motion;
+   the client Intro animates the letters out of their masks and then removes
+   the attribute. Without that script the overlay never displays, and if the
+   motion chunk never arrives a visibility-only fail-safe uncovers the page. */
+html[data-intro] [data-intro-root] {
+  display: grid;
+}
+
+[data-intro-root] {
+  display: none;
+}
+
+html[data-intro] [data-intro-letter] {
+  display: inline-block;
+  transform: translateY(112%);
+  will-change: transform;
+}
+
+html[data-intro] [data-intro-sub],
+html[data-intro] [data-intro-meta] {
+  opacity: 0;
+}
+
+html[data-intro] [data-intro-rule] {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* Never leave the page permanently covered: visibility only (never opacity or
+   transform), so it cannot fight the GSAP timeline while it is running. */
+html[data-intro] [data-intro-root] {
+  animation: intro-failsafe 0.4s linear 2.8s forwards;
+}
+
+@keyframes intro-failsafe {
+  to {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/* ── Media plates: the hero portrait and project previews ─────────────────
+   Photography is graded into the page rather than framed beside it: a deep
+   cool panel tone, an accent tint at low strength, and masks that dissolve
+   the image edge into the paper. */
+.hero-pool {
+  background:
+    radial-gradient(36rem 28rem at 78% 22%, color-mix(in oklch, var(--accent) 13%, transparent), transparent 70%),
+    radial-gradient(28rem 24rem at 58% 68%, color-mix(in oklch, var(--panel) 14%, transparent), transparent 72%);
+}
+
+.hero-plate {
+  box-shadow:
+    0 1px 2px color-mix(in oklch, var(--panel) 20%, transparent),
+    0 18px 40px -20px color-mix(in oklch, var(--panel) 60%, transparent),
+    0 44px 90px -48px color-mix(in oklch, var(--panel) 45%, transparent);
+}
+
+/* The plate's edges dissolve: bottom into the page, and from lg also left,
+   so the heading can cross its faded margin instead of sitting beside a box. */
+.plate-fade {
+  -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+}
+
+@media (min-width: 1024px) {
+  .plate-fade {
+    -webkit-mask-image:
+      linear-gradient(to left, #000 0%, #000 72%, transparent 100%),
+      linear-gradient(to bottom, #000 82%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to left, #000 0%, #000 72%, transparent 100%),
+      linear-gradient(to bottom, #000 82%, transparent 100%);
+    mask-composite: intersect;
+  }
+}
+
+/* Tonal grade: warm-neutral shadow at the edges plus a low-strength accent
+   tint, so the photograph sits in the same colour world as the page. */
+.plate-grade {
+  background:
+    linear-gradient(to top, color-mix(in oklch, var(--panel) 46%, transparent) 0%, transparent 34%),
+    linear-gradient(to right, color-mix(in oklch, var(--panel) 26%, transparent) 0%, transparent 46%);
+  pointer-events: none;
+}
+
+.plate-tint {
+  background: color-mix(in oklch, var(--accent) 12%, transparent);
+  mix-blend-mode: multiply;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* ── Glitch treatment (hero portrait) ─────────────────────────────────────
+   A short burst, never a loop. Two channel copies (red and cyan) plus two
+   clipped bands are laid over the clean image and only animate while
+   [data-glitch="burst"]; the rest of the time they are invisible. */
+.glitch-layer,
+.glitch-band {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
+}
+
+.glitch-layer--red {
+  filter: grayscale(1) contrast(1.15) brightness(1.05) sepia(1) saturate(9) hue-rotate(-38deg);
+  mix-blend-mode: screen;
+}
+
+.glitch-layer--cyan {
+  filter: grayscale(1) contrast(1.15) brightness(1.05) sepia(1) saturate(9) hue-rotate(132deg);
+  mix-blend-mode: screen;
+}
+
+.glitch-band {
+  mix-blend-mode: normal;
+}
+
+.glitch-band--a {
+  clip-path: inset(17% 0 71% 0);
+}
+
+.glitch-band--b {
+  clip-path: inset(57% 0 27% 0);
+}
+
+.glitch[data-glitch="burst"] .glitch-layer--red {
+  animation: glitch-channel-red 0.42s steps(1, end) both;
+}
+
+.glitch[data-glitch="burst"] .glitch-layer--cyan {
+  animation: glitch-channel-cyan 0.42s steps(1, end) both;
+}
+
+.glitch[data-glitch="burst"] .glitch-band--a {
+  animation: glitch-band-a 0.42s steps(1, end) both;
+}
+
+.glitch[data-glitch="burst"] .glitch-band--b {
+  animation: glitch-band-b 0.42s steps(1, end) both;
+}
+
+/* A single scan-line highlight that only exists inside the burst. */
+.glitch[data-glitch="burst"] .glitch-scan {
+  animation: glitch-scan 0.42s steps(2, end) both;
+}
+
+.glitch-scan {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 48%,
+    color-mix(in oklch, var(--accent) 55%, transparent) 49%,
+    transparent 51%,
+    transparent 100%
+  );
+}
+
+@keyframes glitch-channel-red {
+  0% { opacity: 0; transform: translate3d(-2px, 0, 0); }
+  12% { opacity: 0.4; transform: translate3d(-6px, 1px, 0); }
+  28% { opacity: 0.26; transform: translate3d(4px, -1px, 0); }
+  46% { opacity: 0.34; transform: translate3d(-3px, 0, 0); }
+  70% { opacity: 0.22; transform: translate3d(5px, 1px, 0); }
+  100% { opacity: 0; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes glitch-channel-cyan {
+  0% { opacity: 0; transform: translate3d(2px, 0, 0); }
+  12% { opacity: 0.34; transform: translate3d(6px, -1px, 0); }
+  28% { opacity: 0.22; transform: translate3d(-4px, 1px, 0); }
+  46% { opacity: 0.3; transform: translate3d(3px, 0, 0); }
+  70% { opacity: 0.2; transform: translate3d(-5px, -1px, 0); }
+  100% { opacity: 0; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes glitch-band-a {
+  0% { opacity: 0; transform: translate3d(0, 0, 0); }
+  14% { opacity: 1; transform: translate3d(-14px, 0, 0); }
+  38% { opacity: 1; transform: translate3d(10px, 0, 0); }
+  62% { opacity: 1; transform: translate3d(-6px, 0, 0); }
+  100% { opacity: 0; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes glitch-band-b {
+  0% { opacity: 0; transform: translate3d(0, 0, 0); }
+  18% { opacity: 1; transform: translate3d(12px, 0, 0); }
+  44% { opacity: 1; transform: translate3d(-9px, 0, 0); }
+  72% { opacity: 1; transform: translate3d(5px, 0, 0); }
+  100% { opacity: 0; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes glitch-scan {
+  0% { opacity: 0; }
+  20% { opacity: 0.9; }
+  40% { opacity: 0; }
+  60% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+
+/* ── Project media: a large, consistently cropped preview ────────────────── */
+.media-plate {
+  background-color: var(--panel);
+}
+
+.media-shot {
+  transition: transform 420ms cubic-bezier(0.2, 0, 0, 1);
+  will-change: transform;
+}
+
+[data-card]:hover .media-shot,
+[data-card]:focus-within .media-shot {
+  transform: scale(1.045);
+}
+
+/* A restrained light sweep across the preview on hover: one band, one pass. */
+.media-sheen {
+  background: linear-gradient(
+    105deg,
+    transparent 42%,
+    color-mix(in oklch, white 22%, transparent) 50%,
+    transparent 58%
+  );
+  opacity: 0;
+  transform: translateX(-30%);
+  transition: opacity 200ms linear, transform 620ms cubic-bezier(0.2, 0, 0, 1);
+  pointer-events: none;
+}
+
+[data-card]:hover .media-sheen {
+  opacity: 0.5;
+  transform: translateX(30%);
+}
+
 /* Pointer-specific transforms are switched off entirely for reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   [data-card="interactive"]:hover,
@@ -391,6 +650,7 @@ html[data-motion="pending"] :is([data-hero], [data-hero-cta], [data-hero-accent]
   }
 
   [data-project] img,
+  [data-project] .media-shot,
   [data-thumb] canvas,
   [data-thumb-image] {
     transform: none !important;
@@ -399,7 +659,12 @@ html[data-motion="pending"] :is([data-hero], [data-hero-cta], [data-hero-accent]
   .hero-ambient-grid,
   .hero-node,
   .availability-ping,
-  .feedback-in {
+  .feedback-in,
+  .glitch-layer,
+  .glitch-band,
+  .glitch-scan,
+  .media-sheen {
     animation: none !important;
+    opacity: 0 !important;
   }
 }

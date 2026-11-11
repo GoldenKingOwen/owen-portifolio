@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { EASE, gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
 import { setNavActive } from "@/lib/nav-active";
 import { MOTION } from "@/lib/motion-timing";
+import { whenIntroDone } from "@/lib/intro";
 
 const NAV_IDS = ["about", "skills", "projects", "experience", "education", "contact"];
 
@@ -715,8 +716,10 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
           // Start immediately: the hero is the first thing seen, and a split with
           // fallback metrics is better than a visible name that jumps into masks.
           // On a late load the hero is already on screen, so only the breath runs.
+          // On a fresh visit the opening overlay covers the page, so the hero
+          // entrance waits for it to clear (fail-safe after 2.8s via whenIntroDone).
           if (late) startBreath();
-          else runHero();
+          else cleanups.push(whenIntroDone(runHero));
 
           // The hero's ambient grid, nodes and availability halo are CSS loops;
           // pause them when the hero is off-screen.

@@ -54,7 +54,7 @@ export interface SocialLink {
   // Projects
   // ─────────────────────────────────────────────────────────────
   
-  export type ProjectStatus = "Live" | "In Development" | "Completed" | "Academic";
+  export type ProjectStatus = "Live" | "In Development" | "Completed" | "Academic" | "Planning";
   
   export interface ProjectLinks {
     github?: string;
@@ -81,18 +81,36 @@ export interface SocialLink {
     results?: string;
   }
   
+  export interface PlannedStackRow {
+    layer: string;
+    technology: string;
+  }
+
   export interface Project {
     slug: string;
     name: string;
     shortDescription: string;
     problemSolved: string;
+    /** Only technologies that can be verified as actually in use. Planned
+        technology belongs in detail.plannedStack. */
     technologies: string[];
     status: ProjectStatus;
     featured: boolean;
     image: string; // path under /public/projects; empty when the project has no real imagery
     imageAlt?: string; // describes what the real image shows
+    /** A short display name for the preview plate (defaults to name). */
+    previewTitle?: string;
+    /** One honest line about where the project currently stands. */
+    statusNote?: string;
+    /** A mono caption over the preview, for an early or partial deployment. */
+    previewNote?: string;
     links: ProjectLinks;
     detail: ProjectDetail;
+    /** Documented (not yet built) architecture, rendered separately from
+        implemented technology. */
+    plannedStack?: PlannedStackRow[];
+    /** Documented roadmap, always presented as planned. */
+    roadmap?: string[];
   }
   
   // ─────────────────────────────────────────────────────────────
