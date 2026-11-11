@@ -1,0 +1,537 @@
+[
+ {
+  "width": 320,
+  "vw": 320,
+  "scrollWidth": 320,
+  "overflowPx": 0,
+  "offenders": [],
+  "hero": {
+   "h1": null,
+   "nameFontSize": null,
+   "nameOpacity": null,
+   "nameLines": null,
+   "portrait": null,
+   "taglineOpacity": null
+  },
+  "nav": {
+   "desktopLinksVisible": false,
+   "burgerVisible": false,
+   "headerH": 65
+  },
+  "about": [],
+  "diagram": null,
+  "projectGridCols": null,
+  "leadCard": null,
+  "timelineRailW": null,
+  "contactMsg": null,
+  "footer": null,
+  "sectionHeading": null,
+  "smallTargets": [
+   {
+    "tag": "A",
+    "text": "Skip to main content",
+    "h": 1,
+    "w": 1
+   }
+  ],
+  "fadedText": [],
+  "errors": {
+   "console": [],
+   "exceptions": [],
+   "failedRequests": [],
+   "log": []
+  }
+ },
+ {
+  "width": 360,
+  "vw": 360,
+  "scrollWidth": 360,
+  "overflowPx": 0,
+  "offenders": [],
+  "hero": {
+   "h1": {
+    "w": 328,
+    "h": 114
+   },
+   "nameFontSize": "44px",
+   "nameOpacity": "1",
+   "nameLines": 1,
+   "portrait": {
+    "w": 160,
+    "h": 200
+   },
+   "taglineOpacity": "1"
+  },
+  "nav": {
+   "desktopLinksVisible": false,
+   "burgerVisible": true,
+   "headerH": 65
+  },
+  "about": [
+   "1",
+   "1",
+   "1",
+   "1"
+  ],
+  "diagram": {
+   "w": 278,
+   "scrollW": 278,
+   "over": 0
+  },
+  "projectGridCols": "328px",
+  "leadCard": {
+   "w": 328,
+   "h": 1295
+  },
+  "timelineRailW": 1,
+  "contactMsg": {
+   "w": 286,
+   "h": 170
+  },
+  "footer": {
+   "w": 278,
+   "h": 88
+  },
+  "sectionHeading": {
+   "w": 328,
+   "top": 1215
+  },
+  "smallTargets": [
+   {
+    "tag": "A",
+    "text": "Skip to main content",
+    "h": 1,
+    "w": 1
+   },
+   {
+    "tag": "A",
+    "text": "Chess Practice write-up",
+    "h": 23,
+    "w": 130
+   },
+   {
+    "tag": "A",
+    "text": "Cyber Awareness Platform write-up",
+    "h": 23,
+    "w": 229
+   }
+  ],
+  "fadedText": [],
+  "errors": {
+   "console": [],
+   "exceptions": [],
+   "failedRequests": [],
+   "log": []
+  }
+ },
+ {
+  "width": 390,
+  "vw": 390,
+  "scrollWidth": 390,
+  "overflowPx": 0,
+  "offenders": [],
+  "hero": {
+   "h1": {
+    "w": 358,
+    "h": 88
+   },
+   "nameFontSize": "45.06px",
+   "nameOpacity": "1",
+   "nameLines": 1,
+   "portrait": {
+    "w": 160,
+    "h": 200
+   },
+   "taglineOpacity": "1"
+  },
+  "nav": {
+   "desktopLinksVisible": false,
+   "burgerVisible": true,
+   "headerH": 65
+  },
+  "about": [
+   "1",
+   "1",
+   "1",
+   "1"
+  ],
+  "diagram": {
+   "w": 308,
+   "scrollW": 308,
+   "over": 0
+  },
+  "projectGridCols": "358px",
+  "leadCard": {
+   "w": 358,
+   "h": 1162
+  },
+  "timelineRailW": 1,
+  "contactMsg": {
+   "w": 316,
+   "h": 170
+  },
+  "footer": {
+   "w": 308,
+   "h": 88
+  },
+  "sectionHeading": {
+   "w": 358,
+   "top": 1108
+  },
+  "smallTargets": [
+   {
+    "tag": "A",
+    "text": "Skip to main content",
+    "h": 1,
+    "w": 1
+   },
+   {
+    "tag": "A",
+    "text": "Chess Practice write-up",
+    "h": 23,
+    "w": 130
+   },
+   {
+    "tag": "A",
+    "text": "Cyber Awareness Platform write-up",
+    "h": 23,
+    "w": 229
+   }
+  ],
+  "fadedText": [],
+  "errors": {
+   "console": [],
+   "exceptions": [],
+   "failedRequests": [],
+   "log": []
+  }
+ },
+ {
+  "width": 768,
+  "vw": 768,
+  "scrollWidth": 768,
+  "overflowPx": 0,
+  "offenders": [],
+  "hero": {
+   "h1": {
+    "w": 720,
+    "h": 111
+   },
+   "nameFontSize": "65.472px",
+   "nameOpacity": "1",
+   "nameLines": 1,
+   "portrait": {
+    "w": 224,
+    "h": 280
+   },
+   "taglineOpacity": "1"
+  },
+  "nav": {
+   "desktopLinksVisible": true,
+   "burgerVisible": false,
+   "headerH": 65
+  },
+  "about": [
+   "1",
+   "1",
+   "1",
+   "1"
+  ],
+  "diagram": {
+   "w": 654,
+   "scrollW": 654,
+   "over": 0
+  },
+  "projectGridCols": "720px",
+  "leadCard": {
+   "w": 720,
+   "h": 749
+  },
+  "timelineRailW": 1,
+  "contactMsg": {
+   "w": 526,
+   "h": 170
+  },
+  "footer": {
+   "w": 654,
+   "h": 44
+  },
+  "sectionHeading": {
+   "w": 720,
+   "top": 1117
+  },
+  "smallTargets": [
+   {
+    "tag": "A",
+    "text": "Skip to main content",
+    "h": 1,
+    "w": 1
+   },
+   {
+    "tag": "A",
+    "text": "Chess Practice write-up",
+    "h": 23,
+    "w": 130
+   },
+   {
+    "tag": "A",
+    "text": "Cyber Awareness Platform write-up",
+    "h": 23,
+    "w": 229
+   }
+  ],
+  "fadedText": [],
+  "errors": {
+   "console": [],
+   "exceptions": [],
+   "failedRequests": [],
+   "log": []
+  }
+ },
+ {
+  "width": 1024,
+  "vw": 1024,
+  "scrollWidth": 1024,
+  "overflowPx": 0,
+  "offenders": [],
+  "hero": {
+   "h1": {
+    "w": 656,
+    "h": 126
+   },
+   "nameFontSize": "79.296px",
+   "nameOpacity": "1",
+   "nameLines": 1,
+   "portrait": {
+    "w": 256,
+    "h": 320
+   },
+   "taglineOpacity": "1"
+  },
+  "nav": {
+   "desktopLinksVisible": true,
+   "burgerVisible": false,
+   "headerH": 65
+  },
+  "about": [
+   "1",
+   "1",
+   "1",
+   "1"
+  ],
+  "diagram": {
+   "w": 654,
+   "scrollW": 654,
+   "over": 0
+  },
+  "projectGridCols": "208px 720px",
+  "leadCard": {
+   "w": 720,
+   "h": 752
+  },
+  "timelineRailW": 1,
+  "contactMsg": {
+   "w": 526,
+   "h": 170
+  },
+  "footer": {
+   "w": 654,
+   "h": 44
+  },
+  "sectionHeading": {
+   "w": 208,
+   "top": 844
+  },
+  "smallTargets": [
+   {
+    "tag": "A",
+    "text": "Skip to main content",
+    "h": 1,
+    "w": 1
+   },
+   {
+    "tag": "A",
+    "text": "Chess Practice write-up",
+    "h": 23,
+    "w": 130
+   },
+   {
+    "tag": "A",
+    "text": "Cyber Awareness Platform write-up",
+    "h": 23,
+    "w": 229
+   }
+  ],
+  "fadedText": [],
+  "errors": {
+   "console": [],
+   "exceptions": [],
+   "failedRequests": [],
+   "log": []
+  }
+ },
+ {
+  "width": 1280,
+  "vw": 1280,
+  "scrollWidth": 1280,
+  "overflowPx": 0,
+  "offenders": [],
+  "hero": {
+   "h1": {
+    "w": 656,
+    "h": 132
+   },
+   "nameFontSize": "84px",
+   "nameOpacity": "1",
+   "nameLines": 1,
+   "portrait": {
+    "w": 256,
+    "h": 320
+   },
+   "taglineOpacity": "1"
+  },
+  "nav": {
+   "desktopLinksVisible": true,
+   "burgerVisible": false,
+   "headerH": 65
+  },
+  "about": [
+   "1",
+   "1",
+   "1",
+   "1"
+  ],
+  "diagram": {
+   "w": 654,
+   "scrollW": 654,
+   "over": 0
+  },
+  "projectGridCols": "208px 720px",
+  "leadCard": {
+   "w": 720,
+   "h": 787
+  },
+  "timelineRailW": 1,
+  "contactMsg": {
+   "w": 526,
+   "h": 170
+  },
+  "footer": {
+   "w": 654,
+   "h": 44
+  },
+  "sectionHeading": {
+   "w": 208,
+   "top": 853
+  },
+  "smallTargets": [
+   {
+    "tag": "A",
+    "text": "Skip to main content",
+    "h": 1,
+    "w": 1
+   },
+   {
+    "tag": "A",
+    "text": "Chess Practice write-up",
+    "h": 23,
+    "w": 130
+   },
+   {
+    "tag": "A",
+    "text": "Cyber Awareness Platform write-up",
+    "h": 23,
+    "w": 229
+   }
+  ],
+  "fadedText": [],
+  "errors": {
+   "console": [],
+   "exceptions": [],
+   "failedRequests": [],
+   "log": []
+  }
+ },
+ {
+  "width": 1440,
+  "vw": 1440,
+  "scrollWidth": 1440,
+  "overflowPx": 0,
+  "offenders": [],
+  "hero": {
+   "h1": {
+    "w": 656,
+    "h": 133
+   },
+   "nameFontSize": "84px",
+   "nameOpacity": "1",
+   "nameLines": 1,
+   "portrait": {
+    "w": 256,
+    "h": 320
+   },
+   "taglineOpacity": "1"
+  },
+  "nav": {
+   "desktopLinksVisible": true,
+   "burgerVisible": false,
+   "headerH": 65
+  },
+  "about": [
+   "1",
+   "1",
+   "1",
+   "1"
+  ],
+  "diagram": {
+   "w": 654,
+   "scrollW": 654,
+   "over": 0
+  },
+  "projectGridCols": "208px 720px",
+  "leadCard": {
+   "w": 720,
+   "h": 789
+  },
+  "timelineRailW": 1,
+  "contactMsg": {
+   "w": 526,
+   "h": 170
+  },
+  "footer": {
+   "w": 654,
+   "h": 44
+  },
+  "sectionHeading": {
+   "w": 208,
+   "top": 855
+  },
+  "smallTargets": [
+   {
+    "tag": "A",
+    "text": "Skip to main content",
+    "h": 1,
+    "w": 1
+   },
+   {
+    "tag": "A",
+    "text": "Chess Practice write-up",
+    "h": 23,
+    "w": 130
+   },
+   {
+    "tag": "A",
+    "text": "Cyber Awareness Platform write-up",
+    "h": 23,
+    "w": 229
+   }
+  ],
+  "fadedText": [],
+  "errors": {
+   "console": [],
+   "exceptions": [],
+   "failedRequests": [],
+   "log": []
+  }
+ }
+]
