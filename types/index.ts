@@ -15,6 +15,7 @@ export interface SocialLink {
     roles: string[];
     /** One-line positioning statement used in the hero. */
     tagline: string;
+    objective: string;
     shortBio: string;
     location: string;
     email: string;
