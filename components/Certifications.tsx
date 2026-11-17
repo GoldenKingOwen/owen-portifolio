@@ -37,6 +37,8 @@ export function Certifications() {
     setExpanded((value) => !value);
   }
 
+  if (certifications.length === 0) return null;
+
   return (
     <div className="mt-12 border-t border-border pt-4">
       <button

@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { MotionLoader } from "@/components/motion/MotionLoader";
 import { siteConfig } from "@/data/site-config";
 import { siteUrl } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
 
 // Self-hosted so production builds never depend on reaching Google Fonts.
 // Geist is licensed under the SIL Open Font License; see app/fonts/LICENSE.txt.
@@ -125,6 +126,15 @@ export default function RootLayout({
       <body
         className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}
       >
+        <JsonLd data={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: siteConfig.name,
+          jobTitle: "Full-Stack Software Developer",
+          address: { "@type": "PostalAddress", addressLocality: "Lilongwe", addressCountry: "MW" },
+          url: siteUrl,
+          sameAs: [siteConfig.githubUrl],
+        }} />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-ui focus:border focus:border-field focus:bg-background focus:px-4 focus:py-3 focus:text-sm focus:font-medium focus:text-foreground"
