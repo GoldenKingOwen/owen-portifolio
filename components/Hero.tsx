@@ -33,7 +33,7 @@ const facts: { label: string; value: ReactNode }[] = [
                 <span className="availability-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
               </span>
-              Open to full-stack or backend roles
+              {siteConfig.availabilityLabel}
             </span>
           ),
         },

@@ -14,6 +14,7 @@ export const siteConfig: SiteConfig = {
     "I build reliable software, from intuitive interfaces to secure backend systems.",
   objective:
     "Final-year BSc ICT student, about to graduate in January 2027 and software development intern at Infi-Tech, building secure multi-tenant systems with NestJS, Next.js and PostgreSQL. Seeking a full-stack or backend role where I can ship production features and deepen my security skills.",
+  availabilityLabel: "Open to full-stack or backend roles",
   shortBio:
     "ICT student at Mzuzu University building full-stack web applications and exploring cybersecurity. Currently a software development intern at Infi-Tech, working across NestJS microservices and Next.js.",
   location: "Lilongwe, Malawi",
