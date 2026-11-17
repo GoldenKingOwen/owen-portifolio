@@ -92,6 +92,18 @@ export function ArchitectureDiagram() {
           <span className="font-medium text-foreground">RabbitMQ</span> — transactional outbox
           relays publish with confirms; consumers dedupe by inbox event ID.
         </div>
+
+        {/* TODO(owen): confirm which services connect to PostgreSQL and Redis before drawing those edges. */}
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" aria-label="Data stores; service connections to confirm">
+          <div data-diagram-box="" data-diagram-order="8" className={box}>
+            <span className="block font-medium text-foreground">PostgreSQL</span>
+            <span className="block text-xs text-muted">Data store</span>
+          </div>
+          <div data-diagram-box="" data-diagram-order="8" className={box}>
+            <span className="block font-medium text-foreground">Redis</span>
+            <span className="block text-xs text-muted">Data store</span>
+          </div>
+        </div>
       </div>
       <figcaption className="mt-3 text-xs text-muted">
         The two Next.js applications and service boundaries, taken from the project

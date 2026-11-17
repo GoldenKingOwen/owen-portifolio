@@ -172,7 +172,7 @@ export function Contact() {
         </li>
         <li className="grid grid-cols-[7rem_1fr] items-center gap-4 border-b border-border">
           <span className="text-muted">CV</span>
-          <a href="/cv/OwenCV.pdf" download className={channelLink}>
+          <a href="/cv/Owen-Matola-CV.pdf" download className={channelLink}>
             Download CV (PDF)
           </a>
         </li>

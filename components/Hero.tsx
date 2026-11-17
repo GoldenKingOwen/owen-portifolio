@@ -8,8 +8,8 @@ import { siteConfig } from "@/data/site-config";
 import { experience } from "@/data/experience";
 import { education } from "@/data/education";
 
-const current = experience.find((job) => job.endDate === "Present") ?? experience[0];
-const studying = education.find((e) => e.endYear === "In Progress");
+const current = experience[0];
+const studying = education.find((e) => e.endYear === "Jan 2027");
 
 // Facts are derived from data/, so the first screen stays true as it changes.
 const facts: { label: string; value: ReactNode }[] = [
@@ -33,7 +33,7 @@ const facts: { label: string; value: ReactNode }[] = [
                 <span className="availability-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
               </span>
-              Open to opportunities
+              Open to full-stack or backend roles
             </span>
           ),
         },
@@ -109,6 +109,9 @@ export function Hero() {
             <p data-hero="" className="mt-6 max-w-[52ch] text-lead text-foreground [overflow-wrap:anywhere]">
               {siteConfig.tagline}
             </p>
+            <p className="mt-4 max-w-[65ch] text-base leading-relaxed text-muted [overflow-wrap:anywhere]">
+              {siteConfig.objective}
+            </p>
 
             {/* The one decorative teal rule in the hero, drawn after the name. */}
             <span
@@ -122,7 +125,7 @@ export function Hero() {
               data-hero=""
               className="mt-4 max-w-[56ch] text-base leading-relaxed text-foreground [overflow-wrap:anywhere]"
             >
-              <span className="font-medium">Now:</span>
+              <span className="font-medium">Recent:</span>
               <span className="text-muted">
                 {" "}
                 {current.position} at <span className="whitespace-nowrap">{current.organization}</span>
@@ -148,7 +151,7 @@ export function Hero() {
               </span>
               <a
                 data-hero-cta=""
-                href="/cv/OwenCV.pdf"
+                href="/cv/Owen-Matola-CV.pdf"
                 download
                 className="inline-flex min-h-11 items-center gap-2 rounded-ui border border-field px-5 text-sm font-medium text-foreground transition-[color,background-color,transform] duration-200 hover:bg-raised active:scale-[0.98] active:bg-raised-hover"
               >
