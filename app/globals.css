@@ -1,19 +1,13 @@
 @import "tailwindcss";
 
-/*
-  Design tokens. Colours are OKLCH. One accent (signal teal) carries links,
-  focus, and the primary action; everything else is neutral ink on paper.
-  Two themes flip via the `data-theme` attribute on <html>.
-  `@theme inline` keeps utilities bound to the live variables so theme
-  switching works at runtime.
-*/
+/* Signal from Lilongwe: a field instrument against a rising sun. */
 @theme inline {
   --color-background: var(--bg);
   --color-raised: var(--bg-raised);
   --color-raised-hover: var(--bg-raised-hover);
   --color-foreground: var(--ink);
   --color-muted: var(--ink-muted);
-  --color-border: var(--rule);
+  --color-border: var(--rule-ui);
   --color-field: var(--rule-strong);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
@@ -22,71 +16,85 @@
   --color-panel-accent: var(--panel-accent);
   --color-danger: var(--danger);
   --color-success: var(--success);
+  --color-sun: var(--sun);
+  --color-coral: var(--coral);
+  --color-lake: var(--lake);
 
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono), ui-monospace, monospace;
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), Georgia, serif;
+  --font-mono: var(--font-label), ui-monospace, monospace;
 
   /* Type scale: fluid display, steady text steps. */
-  --text-display: clamp(2.75rem, 1.5rem + 5.4vw, 5.25rem);
-  --text-display--line-height: 1;
-  --text-display--letter-spacing: -0.035em;
-  --text-h2: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem);
-  --text-h2--line-height: 1.2;
-  --text-h2--letter-spacing: -0.02em;
-  --text-lead: clamp(1.125rem, 1.05rem + 0.35vw, 1.375rem);
-  --text-lead--line-height: 1.5;
+  --text-display: clamp(3.5rem, 12vw, 11rem);
+  --text-display--line-height: 0.88;
+  --text-display--letter-spacing: -0.055em;
+  --text-h2: clamp(2.25rem, 6vw, 5rem);
+  --text-h2--line-height: 1.02;
+  --text-h2--letter-spacing: -0.04em;
+  --text-lead: clamp(1.125rem, 1.4vw, 1.375rem);
+  --text-lead--line-height: 1.65;
 
   /* One radius for every control. */
   --radius-ui: 3px;
 }
 
-/* ── Light theme (default): daylight reading on a phone ───────── */
-/* Fixed header height. Sections anchor exactly this far down, so a section's
-   top rule sits under the header's own border instead of showing a second line. */
+/* Fixed header height; used for anchor offsets. */
 :root {
   --header-h: 4rem;
 }
 
 :root,
 [data-theme="light"] {
-  --bg: oklch(0.985 0.003 250);
-  --bg-raised: oklch(0.96 0.004 250);
-  /* Interactive card hover: the card surface moved 5% toward the ink. Flat, no filter. */
-  --bg-raised-hover: color-mix(in oklch, var(--bg-raised), var(--ink) 5%);
-  --ink: oklch(0.2 0.015 255);
-  --ink-muted: oklch(0.46 0.018 255);
-  --rule: oklch(0.88 0.006 250);
-  --rule-strong: oklch(0.6 0.012 255);
-  --accent: oklch(0.46 0.1 195);
-  --accent-ink: oklch(0.985 0.003 250);
-  /* Media plate: the deep cool ground a photograph or preview is graded into.
-     Same hue family as ink, one full step darker, so it reads as the page's
-     own shadow rather than a second palette. */
-  --panel: oklch(0.27 0.021 252);
-  --panel-ink: oklch(0.96 0.004 250);
-  /* Accent on a dark plate: the signal teal lifted so it stays legible on panel. */
-  --panel-accent: oklch(0.78 0.11 192);
-  --danger: oklch(0.5 0.17 27);
-  --success: oklch(0.45 0.11 155);
+  --bg: #f6f1e7;
+  --bg-raised: #fffdf8;
+  --bg-raised-hover: #eee8dc;
+  --ink: #14201f;
+  --ink-muted: #5b6b68;
+  --rule: rgba(20, 32, 31, .12);
+  --rule-strong: #65726f;
+  --sun: #d9730d;
+  --coral: #c2410c;
+  --lake: #0f766e;
+  --accent: var(--lake);
+  --accent-ink: #ffffff;
+  --panel: #14201f;
+  --panel-ink: #fffdf8;
+  --panel-accent: #65d7c7;
+  --danger: #b42318;
+  --success: #16713c;
+  --surface: #fffdf8;
+  --surface-2: #eee8dc;
+  --rule-ui: #8d9691;
+  --sky-dawn: rgba(217, 115, 13, .075);
+  --sky-midday: rgba(15, 118, 110, .055);
+  --sky-dusk: rgba(109, 88, 160, .045);
   color-scheme: light;
 }
 
-/* ── Dark theme: deep blue-black, not navy ─────────────────── */
 [data-theme="dark"] {
-  --bg: oklch(0.17 0.012 255);
-  --bg-raised: oklch(0.21 0.014 255);
-  --bg-raised-hover: color-mix(in oklch, var(--bg-raised), var(--ink) 6%);
-  --ink: oklch(0.94 0.008 250);
-  --ink-muted: oklch(0.72 0.014 255);
-  --rule: oklch(0.32 0.014 255);
-  --rule-strong: oklch(0.6 0.014 255);
-  --accent: oklch(0.8 0.11 190);
-  --accent-ink: oklch(0.17 0.012 255);
-  --panel: oklch(0.23 0.017 255);
-  --panel-ink: oklch(0.94 0.008 250);
-  --panel-accent: oklch(0.8 0.11 190);
-  --danger: oklch(0.76 0.14 25);
-  --success: oklch(0.8 0.13 155);
+  --bg: #0b1215;
+  --bg-raised: #111c20;
+  --bg-raised-hover: #172429;
+  --ink: #e8efea;
+  --ink-muted: #8fa3a0;
+  --rule: rgba(255, 255, 255, .08);
+  --rule-strong: #829591;
+  --sun: #ffb547;
+  --coral: #ff6b3d;
+  --lake: #3cc8b4;
+  --accent: var(--lake);
+  --accent-ink: #0b1215;
+  --panel: #172429;
+  --panel-ink: #e8efea;
+  --panel-accent: #3cc8b4;
+  --danger: #ff887d;
+  --success: #69d99a;
+  --surface: #111c20;
+  --surface-2: #172429;
+  --rule-ui: #59666a;
+  --sky-dawn: rgba(255, 181, 71, .09);
+  --sky-midday: rgba(60, 200, 180, .065);
+  --sky-dusk: rgba(120, 118, 200, .055);
   color-scheme: dark;
 }
 
@@ -104,16 +112,151 @@ html {
 }
 
 body {
-  background-color: var(--bg);
+  background-color: transparent;
   color: var(--ink);
   font-feature-settings: "ss01", "cv11";
   text-rendering: optimizeLegibility;
   caret-color: var(--accent);
 }
 
+/* Global layers sit between the page colour and the semantic content. */
+body > *:not(.global-atmosphere) {
+  position: relative;
+  z-index: 1;
+}
+
+.global-atmosphere {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 78% 7%, var(--sky-wash, var(--sky-dawn)), transparent 38%),
+    radial-gradient(ellipse at 7% 48%, var(--sky-dusk), transparent 45%),
+    var(--bg);
+  transition: background-color .9s ease;
+}
+
+html[data-sky="dawn"] { --sky-wash: var(--sky-dawn); }
+html[data-sky="midday"] { --sky-wash: var(--sky-midday); }
+html[data-sky="dusk"] { --sky-wash: var(--sky-dusk); }
+
+.global-atmosphere-grid {
+  position: absolute;
+  inset: -10%;
+  opacity: .03;
+  background-image: linear-gradient(var(--ink) 1px, transparent 1px), linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.scroll-progress {
+  position: fixed;
+  z-index: 70;
+  inset: 0 0 auto;
+  height: 2px;
+  pointer-events: none;
+}
+
+.scroll-progress span {
+  display: block;
+  width: var(--scroll-progress, 0%);
+  height: 100%;
+  background: linear-gradient(90deg, var(--sun), var(--coral));
+}
+
+.section-dots {
+  position: fixed;
+  z-index: 35;
+  top: 50%;
+  right: max(1rem, calc((100vw - 1440px) / 2));
+  display: grid;
+  gap: .7rem;
+  transform: translateY(-50%);
+}
+
+.section-dots a {
+  display: grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+}
+
+.section-dots a span {
+  width: .4rem;
+  height: .4rem;
+  border: 1px solid var(--ink-muted);
+  border-radius: 50%;
+  transition: background-color .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.section-dots a:hover span,
+.section-dots a:focus-visible span,
+.section-dots a[aria-current="location"] span {
+  border-color: var(--sun);
+  background: var(--sun);
+  transform: scale(1.25);
+}
+
+.signal-cursor { display: none; }
+
+@media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html:not([data-save-data]) .signal-cursor {
+    position: fixed;
+    z-index: 80;
+    top: 0;
+    left: 0;
+    display: block;
+    pointer-events: none;
+    transform: translate3d(var(--cursor-x, -100px), var(--cursor-y, -100px), 0);
+  }
+  .signal-cursor i,
+  .signal-cursor b {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    display: block;
+    width: 6px;
+    height: 6px;
+    border: 1px solid var(--sun);
+    border-radius: 50%;
+  }
+  .signal-cursor b {
+    top: -15px;
+    left: -15px;
+    width: 30px;
+    height: 30px;
+    border-color: color-mix(in srgb, var(--sun) 60%, transparent);
+    transition: transform .18s ease;
+  }
+  .signal-cursor[data-state="link"] b { transform: scale(1.55); }
+  .signal-cursor[data-state="external"] b { border-color: var(--coral); transform: scale(1.55); }
+  .signal-cursor[data-state="text"] { opacity: 0; }
+}
+
+.signal-divider {
+  height: clamp(3.5rem, 8vw, 7rem);
+  overflow: hidden;
+  color: var(--sun);
+  opacity: .075;
+}
+
+.signal-divider svg { display: block; width: 100%; height: 100%; }
+.signal-divider path { vector-effect: non-scaling-stroke; }
+
+.flag-rule {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 3px;
+}
+.flag-rule span:nth-child(1) { background: #000; }
+.flag-rule span:nth-child(2) { background: #ce1126; }
+.flag-rule span:nth-child(3) { background: #339e35; }
+
 /* Sections and keyboard focus both land below the fixed header. */
 html {
   scroll-padding-top: var(--header-h);
+  background: var(--bg);
 }
 
 section[id] {
