@@ -9,7 +9,11 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer data-section="footer" className="border-t border-border py-8">
+    <footer data-section="footer" className="border-t border-border">
+      <div className="flag-rule" aria-hidden="true">
+        <span /><span /><span />
+      </div>
+      <div className="py-8">
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 sm:px-6 md:flex-row md:items-center md:justify-between">
         <p data-footer-item="" className="text-sm text-muted">
           <span className="font-semibold text-foreground">{siteConfig.name}</span>
@@ -43,6 +47,7 @@ export function Footer() {
             </li>
           </ul>
         </nav>
+      </div>
       </div>
     </footer>
   );

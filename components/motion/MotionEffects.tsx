@@ -92,10 +92,29 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
       });
 
       let hasSections = false;
+      const skyStops: Record<string, string> = {
+        home: "dawn",
+        about: "dawn",
+        skills: "midday",
+        projects: "midday",
+        services: "midday",
+        experience: "midday",
+        education: "dusk",
+        testimonials: "dusk",
+        contact: "dusk",
+      };
       NAV_IDS.forEach((id, i) => {
         const section = document.getElementById(id);
         if (!section) return;
         hasSections = true;
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top 55%",
+          end: "bottom 55%",
+          onToggle: (self) => {
+            if (self.isActive) document.documentElement.setAttribute("data-sky", skyStops[id] ?? "midday");
+          },
+        });
         ScrollTrigger.create({
           trigger: section,
           start: "top 35%",
@@ -107,6 +126,17 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
         });
       });
       if (!hasSections) setNavActive("");
+
+      document.querySelectorAll<HTMLElement>(".signal-divider").forEach((divider) => {
+        const paths = divider.querySelectorAll<SVGPathElement>("path");
+        gsap.fromTo(paths, { drawSVG: "0%" }, {
+          drawSVG: "100%",
+          duration: 0.8,
+          ease: EASE,
+          stagger: 0.06,
+          scrollTrigger: { trigger: divider, start: "top 88%", once: true },
+        });
+      });
 
       // Fonts can change line breaks and so section positions; refresh once they settle.
       if (document.fonts?.status === "loading") document.fonts.ready.then(() => ScrollTrigger.refresh());

@@ -11,6 +11,7 @@ import { Services } from "@/components/Services";
 import { Testimonials } from "@/components/Testimonials";
 import { JsonLd } from "@/components/JsonLd";
 import { homeJsonLd } from "@/lib/structured-data";
+import { SignalDivider } from "@/components/SignalDivider";
 
 export default function HomePage() {
   return (
@@ -21,8 +22,10 @@ export default function HomePage() {
       <Intro />
       <Hero />
       <About />
+      <SignalDivider />
       <Skills />
       <Projects />
+      <SignalDivider />
       <Services />
       <Experience />
       <Education />
