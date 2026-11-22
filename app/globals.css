@@ -839,6 +839,13 @@ html[data-save-data] .signal-cursor { display: none !important; }
   background-color: var(--panel);
 }
 
+.knight-hop { display: inline-block; transition: transform 220ms ease-out; }
+.group:hover .knight-hop, .group:focus-visible .knight-hop { transform: translate(3px, -4px); }
+
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
+::view-transition-old(root) { animation-timing-function: ease-in; }
+::view-transition-new(root) { animation-timing-function: ease-out; }
+
 .media-shot {
   transition: transform 420ms cubic-bezier(0.2, 0, 0, 1);
   will-change: transform;
@@ -894,4 +901,6 @@ html[data-save-data] .signal-cursor { display: none !important; }
     animation: none !important;
     opacity: 0 !important;
   }
+  .knight-hop { transition: none; transform: none !important; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0s; }
 }
