@@ -12,6 +12,7 @@ import { Testimonials } from "@/components/Testimonials";
 import { JsonLd } from "@/components/JsonLd";
 import { homeJsonLd } from "@/lib/structured-data";
 import { SignalDivider } from "@/components/SignalDivider";
+import { TechMarquee } from "@/components/TechMarquee";
 
 export default function HomePage() {
   return (
@@ -22,7 +23,7 @@ export default function HomePage() {
       <Intro />
       <Hero />
       <About />
-      <SignalDivider />
+      <TechMarquee />
       <Skills />
       <Projects />
       <SignalDivider />
