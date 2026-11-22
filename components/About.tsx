@@ -26,7 +26,7 @@ export function About() {
         </div>
         <div
           data-reveal-soft=""
-          className="max-w-[65ch] space-y-6 text-base leading-relaxed text-foreground"
+          className="about-prose max-w-[65ch] space-y-6 text-base leading-relaxed text-foreground"
         >
         <p data-about-lead="" className="text-2xl font-medium leading-snug tracking-tight sm:text-3xl">
           I&apos;m currently interning as a software developer at Infi-Tech. My assessment

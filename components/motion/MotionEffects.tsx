@@ -198,6 +198,44 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
             });
           }
 
+          // About prose progressively resolves from muted ink to full text as
+          // each paragraph crosses the reading line. Plain prose remains intact
+          // in the server HTML and SplitText is reverted with the GSAP context.
+          qa<HTMLElement>(".about-prose > p").forEach((paragraph) => {
+            const split = SplitText.create(paragraph, { type: "words" });
+            gsap.fromTo(split.words, { color: "var(--ink-muted)" }, {
+              color: "var(--ink)",
+              stagger: 0.025,
+              ease: "none",
+              scrollTrigger: { trigger: paragraph, start: "top 78%", end: "bottom 48%", scrub: 0.35 },
+            });
+            cleanups.push(() => split.revert());
+          });
+
+          const footerWordmark = qa<HTMLElement>("[data-footer-wordmark]");
+          if (footerWordmark.length) {
+            gsap.to(footerWordmark, {
+              backgroundSize: "100% 100%",
+              ease: "none",
+              scrollTrigger: { trigger: footerWordmark[0], start: "top bottom", end: "bottom 55%", scrub: 0.4 },
+            });
+          }
+
+          // Desktop project panels overlap softly as the next one approaches;
+          // the mobile path stays a normal vertical document flow.
+          if (desktop && !small && !navigator.connection?.saveData) {
+            const panels = qa<HTMLElement>("#projects [data-project-panel]");
+            panels.slice(0, -1).forEach((panel, index) => {
+              gsap.to(panel, {
+                scale: 0.94,
+                opacity: 0.6,
+                transformOrigin: "top center",
+                ease: "none",
+                scrollTrigger: { trigger: panels[index + 1], start: "top 82%", end: "top 48%", scrub: 0.5 },
+              });
+            });
+          }
+
           // Every element that already has a trigger, so the fallback pass at the
           // bottom only picks up content with no section (project pages).
           const handled = new Set<Element>();
