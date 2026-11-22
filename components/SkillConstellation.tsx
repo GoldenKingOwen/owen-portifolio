@@ -21,7 +21,8 @@ const nodeData = (skills: SkillCategory[], projects: Project[]) => {
     nodes.push({ id, label: project.name, kind: "project", tech: project.technologies, x: index % 2 ? 720 : 40, y: 100 + index * 95 });
     project.technologies.forEach((tech) => { const skill = nodes.find((node) => node.kind === "skill" && node.label.toLowerCase() === tech.toLowerCase()); if (skill) edges.push({ source: id, target: skill.id }); });
   });
-  const simulation = forceSimulation(nodes).force("charge", forceManyBody().strength(-32)).force("link", forceLink(edges).id((node) => (node as Node).id).distance((edge) => (edge as unknown as Edge).source.toString().startsWith("project:") ? 55 : 42).strength(0.65)).force("x", forceX(380).strength(0.03)).force("y", forceY(260).strength(0.04)).force("collision", forceCollide(26)).stop();
+  const simulationLinks = edges.map((edge) => ({ ...edge }));
+  const simulation = forceSimulation(nodes).force("charge", forceManyBody().strength(-32)).force("link", forceLink(simulationLinks).id((node) => (node as Node).id).distance(52).strength(0.65)).force("x", forceX(380).strength(0.03)).force("y", forceY(260).strength(0.04)).force("collision", forceCollide(26)).stop();
   simulation.tick(160);
   return { nodes, edges };
 };
