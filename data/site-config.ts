@@ -4,11 +4,14 @@ export const siteConfig: SiteConfig = {
   name: "Owen Matola",
   title: "Software Developer | Full-Stack Developer",
   roles: [
-    "Software Developer",
-    "Full-Stack Developer",
-    "Web Developer",
-    "Cybersecurity Enthusiast",
-    "Network Enthusiast",
+    "builds secure backends",
+    "ships clean interfaces",
+    "breaks things in CTFs",
+  ],
+  introLines: [
+    "> resolving owen.matola ... ok",
+    "> mounting projects ... 4",
+    "> status: open",
   ],
   tagline:
     "I build reliable software, from intuitive interfaces to secure backend systems.",

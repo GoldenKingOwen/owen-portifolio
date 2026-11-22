@@ -13,6 +13,7 @@ export interface SocialLink {
     title: string;
     /** Roles cycled one-at-a-time in the hero (e.g. "Web Developer") */
     roles: string[];
+    introLines: string[];
     /** One-line positioning statement used in the hero. */
     tagline: string;
     objective: string;
