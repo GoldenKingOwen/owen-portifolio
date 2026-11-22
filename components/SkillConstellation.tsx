@@ -35,7 +35,8 @@ export function SkillConstellation({ skills, projects }: { skills: SkillCategory
   useEffect(() => {
     const wide = window.matchMedia("(min-width: 768px)");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const choose = () => setMode(wide.matches && !reduce.matches && !navigator.connection?.saveData ? "graph" : "list");
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+    const choose = () => setMode(wide.matches && !reduce.matches && !saveData ? "graph" : "list");
     choose(); wide.addEventListener("change", choose); reduce.addEventListener("change", choose);
     return () => { wide.removeEventListener("change", choose); reduce.removeEventListener("change", choose); };
   }, []);

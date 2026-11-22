@@ -223,7 +223,8 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
 
           // Desktop project panels overlap softly as the next one approaches;
           // the mobile path stays a normal vertical document flow.
-          if (desktop && !small && !navigator.connection?.saveData) {
+          const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+          if (desktop && !small && !saveData) {
             const panels = qa<HTMLElement>("#projects [data-project-panel]");
             panels.slice(0, -1).forEach((panel, index) => {
               gsap.to(panel, {

@@ -11,7 +11,8 @@ export function TechMarquee() {
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const small = window.matchMedia("(max-width: 767px)");
-    const update = () => setMotionAllowed(!reduced.matches && !small.matches && !navigator.connection?.saveData);
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+    const update = () => setMotionAllowed(!reduced.matches && !small.matches && !saveData);
     update();
     reduced.addEventListener("change", update);
     small.addEventListener("change", update);
