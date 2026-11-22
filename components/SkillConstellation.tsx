@@ -6,7 +6,7 @@ import type { SkillCategory, Project, SkillLevel } from "@/types";
 
 type Node = { id: string; label: string; kind: "person" | "category" | "skill" | "project"; level?: SkillLevel; category?: string; tech?: string[]; x?: number; y?: number };
 type Edge = { source: string; target: string };
-const categoryName = (name: string) => name === "Programming Languages" ? "Languages" : name === "Mobile Development" ? "Mobile" : name === "Messaging & Infrastructure" ? "Infrastructure" : name;
+const categoryName = (name: string) => name === "Programming Languages" ? "Languages" : name === "Mobile Development" ? "Mobile" : name === "Messaging & Infrastructure" || name === "Tools & Technologies" ? "Infrastructure" : name;
 const nodeData = (skills: SkillCategory[], projects: Project[]) => {
   const categories = ["Languages", "Frontend", "Backend", "Database", "Infrastructure", "Mobile", "Security"];
   const nodes: Node[] = [{ id: "owen", label: "Owen", kind: "person", x: 380, y: 260 }];
