@@ -1,23 +1,21 @@
 import { Section } from "@/components/ui/Section";
 import { ProjectCard } from "@/components/ProjectCard";
 import { projects } from "@/data/projects";
+import { RequestJourney } from "@/components/RequestJourney";
 
 export function Projects() {
-  // The featured project leads at full width; the rest sit beneath it, side by side.
-  const lead = projects.find((p) => p.featured) ?? projects[0];
-  const others = projects.filter((p) => p !== lead);
+  const order = ["tenant-feedback-portal", "chess-practice", "cyber-awareness", "world-scope"];
+  const ordered = [...projects].sort((a, b) => order.indexOf(a.slug) - order.indexOf(b.slug));
+  const lead = ordered[0];
 
   return (
     <Section id="projects" title="Projects" density="roomy">
-      <div className="space-y-4 sm:space-y-6">
-        <ProjectCard project={lead} lead />
-        {/* items-start: cards keep their natural height, so a card without a
-            screenshot is never padded to match one with it. */}
-        <div className="grid items-start gap-4 sm:gap-6 md:grid-cols-2">
-          {others.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
-          ))}
-        </div>
+      <div className="space-y-8 lg:space-y-12">
+        {ordered.map((project, index) => <div key={project.slug} data-project-panel="" className="scroll-mt-24">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.18em] text-muted">{String(index + 1).padStart(2, "0")} / {String(ordered.length).padStart(2, "0")}</p>
+          <ProjectCard project={project} lead={index === 0} />
+          {index === 0 && <RequestJourney />}
+        </div>)}
       </div>
     </Section>
   );
