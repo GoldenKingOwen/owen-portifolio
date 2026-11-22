@@ -1,12 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { EASE, gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
+import { EASE, gsap, ScrollTrigger, SplitText, useGSAP, createMotionContexts } from "@/lib/motion";
 import { setNavActive } from "@/lib/nav-active";
-import { MOTION } from "@/lib/motion-timing";
+import { MOTION } from "@/lib/motion";
 import { whenIntroDone } from "@/lib/intro";
 
-const NAV_IDS = ["about", "skills", "projects", "experience", "education", "contact"];
+const NAV_IDS = ["about", "skills", "projects", "services", "experience", "education", "contact"];
 
 /** Content direction per section: related blocks arrive from the same side. */
 const SECTION_REVEAL: Record<string, { x: number; y: number; stagger: number }> = {
@@ -157,16 +157,10 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
       if (!root.hasAttribute("data-motion")) return; // reduced motion or a low-end device: final states stay as rendered
 
       let cancelled = false;
-      const mm = gsap.matchMedia();
-      mm.add(
-        {
-          ok: "(prefers-reduced-motion: no-preference)",
-          reduce: "(prefers-reduced-motion: reduce)",
-          small: "(max-width: 768px)",
-          fine: "(hover: hover) and (pointer: fine)",
-        },
-        (ctx) => {
-          const { reduce, small, fine } = ctx.conditions as { reduce: boolean; small: boolean; fine: boolean };
+      const mm = createMotionContexts((conditions) => {
+          const { reduce, tablet, desktop } = conditions;
+          const small = tablet || !desktop;
+          const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
           if (reduce) {
             // The preference changed mid-session: show everything now, stop hiding.
@@ -194,6 +188,15 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
 
           const qa = <T extends Element = HTMLElement>(sel: string) => gsap.utils.toArray<T>(sel);
           const cleanups: Array<() => void> = [];
+
+          const blueprintGrid = qa<HTMLElement>(".global-atmosphere-grid");
+          if (blueprintGrid.length) {
+            gsap.fromTo(blueprintGrid, { yPercent: -3 }, {
+              yPercent: 3,
+              ease: "none",
+              scrollTrigger: { trigger: document.documentElement, start: "top top", end: "max", scrub: 0.6 },
+            });
+          }
 
           // Every element that already has a trigger, so the fallback pass at the
           // bottom only picks up content with no section (project pages).
@@ -669,27 +672,27 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
 
           const runHero = () => {
             if (cancelled) return;
-            const nameEl = document.querySelector<HTMLElement>('[data-hero-split="words"]');
+            const nameEls = qa<HTMLElement>('[data-hero-split="chars"]');
             const subEl = document.querySelector<HTMLElement>('[data-hero-split="lines"]');
             const blocks = qa('[data-hero]:not([data-hero="clip"]):not([data-revealed])');
             const portrait = qa('[data-hero="clip"]:not([data-revealed])');
             const accent = qa("[data-hero-accent]:not([data-revealed])");
             const ctas = qa("[data-hero-cta]:not([data-revealed])");
-            if (!nameEl && !blocks.length && !portrait.length && !accent.length && !ctas.length) return;
+            if (!nameEls.length && !blocks.length && !portrait.length && !accent.length && !ctas.length) return;
             // A breakpoint change re-runs this callback; the name plays once per page.
-            if (nameEl?.dataset.played) return;
-            if (nameEl) nameEl.dataset.played = "1";
+            if (nameEls[0]?.dataset.played) return;
+            nameEls.forEach((el) => { el.dataset.played = "1"; });
 
-            const nameSplit = nameEl
-              ? SplitText.create(nameEl, { type: "words,lines", mask: "lines" })
+            const nameSplit = nameEls.length
+              ? SplitText.create(nameEls, { type: "chars,lines", mask: "lines" })
               : null;
+            nameSplit?.chars.forEach((char) => char.classList.add("hero-glyph"));
             const subSplit = subEl ? SplitText.create(subEl, { type: "lines", mask: "lines" }) : null;
 
             const tl = gsap.timeline({
               defaults: { ease: EASE },
               onComplete: () => {
                 markRevealed([...blocks, ...portrait, ...accent, ...ctas, ...portraitInner]);
-                nameSplit?.revert();
                 subSplit?.revert();
                 startBreath();
               },
@@ -697,8 +700,8 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
 
             if (nameSplit) {
               tl.from(
-                nameSplit.words,
-                { yPercent: 110, duration: MOTION.hero.name, stagger: MOTION.stagger.heroWords },
+                nameSplit.chars,
+                { yPercent: 110, duration: 0.9, stagger: 0.035, ease: "expo.out" },
                 0
               );
             }
@@ -720,6 +723,11 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
                 { clipPath: "inset(0% 0% 0% 0%)", duration: MOTION.hero.portrait },
                 0.05
               );
+            }
+            const sun = qa<HTMLElement>("[data-hero-sun]");
+            if (sun.length) {
+              tl.fromTo(sun, { "--sun-rise": "65%" }, { "--sun-rise": "0%", duration: 1.4, ease: "expo.out" }, 0);
+              gsap.to(sun, { "--sun-scroll": "-40px", ease: "none", scrollTrigger: { trigger: "#home", start: "top top", end: "+=100vh", scrub: true } });
             }
             if (portraitInner.length) {
               tl.fromTo(
@@ -751,28 +759,19 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
           if (late) startBreath();
           else cleanups.push(whenIntroDone(runHero));
 
-          // The hero's ambient grid, nodes and availability halo are CSS loops;
-          // pause them when the hero is off-screen.
-          const ambientLoops = qa(
-            "[data-hero-ambient-grid], .hero-node, .availability-ping"
-          );
-          if (ambientLoops.length) {
-            ScrollTrigger.create({
-              trigger: "[data-hero-ambient]",
-              start: "top bottom",
-              end: "bottom top",
-              onToggle: (self) => {
-                ambientLoops.forEach((el) => {
-                  el.style.animationPlayState = self.isActive ? "running" : "paused";
-                });
-              },
-            });
-          }
-
           // ---- Pointer effects: ONE passive pointermove listener, fine pointers only.
           // The native cursor is untouched. Magnets are limited to two primary links;
           // the outer hit target never moves, and keyboard focus is unaffected.
           if (fine) {
+            const glyphs = qa<HTMLElement>(".hero-glyph");
+            const weightTo = new Map(glyphs.map((glyph) => [
+              glyph,
+              gsap.quickTo(glyph, "--glyph-weight", { duration: 0.18, ease: "power2.out" }),
+            ]));
+            const portraitTilt = document.querySelector<HTMLElement>("[data-portrait-tilt]");
+            const rotateXTo = portraitTilt ? gsap.quickTo(portraitTilt, "rotationX", { duration: 0.35, ease: "power2.out" }) : null;
+            const rotateYTo = portraitTilt ? gsap.quickTo(portraitTilt, "rotationY", { duration: 0.35, ease: "power2.out" }) : null;
+            if (portraitTilt) gsap.set(portraitTilt, { transformPerspective: 900, transformOrigin: "center" });
             const magnets = qa("[data-magnetic]")
               .slice(0, 2)
               .map((outer) => {
@@ -811,6 +810,18 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
             };
 
             const onMove = (e: PointerEvent) => {
+              for (const glyph of glyphs) {
+                const rect = glyph.getBoundingClientRect();
+                const distance = Math.hypot(e.clientX - (rect.left + rect.width / 2), e.clientY - (rect.top + rect.height / 2));
+                weightTo.get(glyph)?.(distance < 160 ? Math.min(900, 600 + ((160 - distance) / 160) * 300) : 600);
+              }
+              if (portraitTilt && rotateXTo && rotateYTo) {
+                const rect = portraitTilt.getBoundingClientRect();
+                const dx = (e.clientX - rect.left) / rect.width - 0.5;
+                const dy = (e.clientY - rect.top) / rect.height - 0.5;
+                rotateXTo(Math.max(-6, Math.min(6, -dy * 12)));
+                rotateYTo(Math.max(-6, Math.min(6, dx * 12)));
+              }
               for (const m of magnets) {
                 if (m.hidden) continue;
                 const dx = e.clientX - m.cx;
@@ -826,6 +837,9 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
             };
             const onLeave = () => {
               for (const m of magnets) if (m.active) release(m);
+              weightTo.forEach((to) => to(600));
+              rotateXTo?.(0);
+              rotateYTo?.(0);
             };
 
             const onOut = (e: PointerEvent) => {
@@ -838,12 +852,13 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
               document.removeEventListener("pointerout", onOut);
               ScrollTrigger.removeEventListener("refresh", measure);
               gsap.set(magnets.map((m) => m.inner), { clearProps: "transform" });
+              gsap.set(glyphs, { clearProps: "--glyph-weight" });
+              if (portraitTilt) gsap.set(portraitTilt, { clearProps: "transform,transformPerspective" });
             });
           }
 
           return () => cleanups.forEach((c) => c());
-        }
-      );
+        });
 
       performance.measure("motion:init", { start: t0, end: performance.now() });
       return () => {
