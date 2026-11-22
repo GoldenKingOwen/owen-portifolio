@@ -19,6 +19,7 @@ export function ProjectPreview({ project, lead = false }: { project: Project; le
 
   return (
     <div
+      style={{ viewTransitionName: `project-media-${project.slug}` }}
       className={cn(
         "relative overflow-hidden border-b border-border bg-panel",
         lead ? "aspect-[16/9]" : "aspect-[16/10]"

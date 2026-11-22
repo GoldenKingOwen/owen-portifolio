@@ -9,6 +9,7 @@ import { siteConfig } from "@/data/site-config";
 import { projectJsonLd } from "@/lib/structured-data";
 import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { ExternalLink } from "@/components/ui/ExternalLink";
+import { ProjectToc } from "@/components/ProjectToc";
 
 export const dynamicParams = false;
 
@@ -57,8 +58,9 @@ const linkClass =
   "inline-flex min-h-11 items-center gap-1 text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent";
 
 function Prose({ title, children }: { title: string; children: React.ReactNode }) {
+  const id = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   return (
-    <section data-block data-reveal="" className="border-t border-border pt-6">
+    <section id={id} data-block data-reveal="" className="scroll-mt-28 border-t border-border pt-6">
       <h2 className="text-lg font-semibold text-foreground">{title}</h2>
       <div className="mt-3 max-w-[65ch] text-base leading-relaxed text-foreground">{children}</div>
     </section>
@@ -93,6 +95,9 @@ export default async function ProjectPage({
   // A deployed preview is not a shipped product: label the link honestly.
   const liveLabel = isPlanning ? "Preview" : "Live demo";
   const related = projects.filter((p) => p.slug !== project.slug).slice(0, 2);
+  const projectOrder = ["tenant-feedback-portal", "chess-practice", "cyber-awareness", "world-scope"];
+  const projectIndex = projectOrder.indexOf(project.slug);
+  const nextProject = projects.find((item) => item.slug === projectOrder[(projectIndex + 1) % projectOrder.length]);
 
   return (
     <article className="pb-16 pt-28 sm:pb-24 sm:pt-32">
@@ -116,6 +121,12 @@ export default async function ProjectPage({
           {project.statusNote && (
             <p className="mt-2 text-sm text-muted">{project.statusNote}</p>
           )}
+          <dl className="mt-6 grid max-w-3xl gap-4 border-y border-border py-4 text-sm sm:grid-cols-3">
+            {detail.role && <div><dt className="font-mono text-xs uppercase tracking-wider text-muted">Role</dt><dd className="mt-1 text-foreground">{detail.role}</dd></div>}
+            <div><dt className="font-mono text-xs uppercase tracking-wider text-muted">Status</dt><dd className="mt-1 text-foreground">{project.status}</dd></div>
+            <div><dt className="font-mono text-xs uppercase tracking-wider text-muted">Stack</dt><dd className="mt-1 text-foreground">{project.technologies.join(", ")}</dd></div>
+            {/* TODO(owen): add verified project timeline data before displaying a Timeline field. */}
+          </dl>
           {(project.links.github || project.links.live) && (
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
               {project.links.github && (
@@ -141,7 +152,7 @@ export default async function ProjectPage({
         </header>
 
         {project.image && (
-          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-ui border border-border bg-raised">
+          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-ui border border-border bg-raised" style={{ viewTransitionName: `project-media-${project.slug}` }}>
             <Image
               src={project.image}
               alt={project.imageAlt ?? ""}
@@ -154,7 +165,8 @@ export default async function ProjectPage({
           </div>
         )}
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_15rem]">
+        <div className="mt-12 grid gap-8 lg:grid-cols-[12rem_minmax(0,1fr)_14rem]">
+          <ProjectToc project={project} />
           <div className="space-y-10">
             <Prose title="Overview">
               <p>{detail.overview}</p>
@@ -219,6 +231,7 @@ export default async function ProjectPage({
             {detail.decisions && detail.decisions.length > 0 && (
               <Prose title="Implementation decisions">
                 <List items={detail.decisions} />
+                {/* TODO(owen): add verified trade-offs for these decisions before showing Problem / Decision / Trade-off cards. */}
               </Prose>
             )}
             <Prose title={isPlanning ? "Open design questions" : "Challenges"}>
@@ -306,6 +319,10 @@ export default async function ProjectPage({
             Back to all projects
           </Link>
         </nav>
+        {nextProject && <Link href={`/projects/${nextProject.slug}`} className="group mt-12 flex min-h-48 flex-col justify-center bg-surface-2 px-6 py-10 transition-colors hover:bg-raised sm:px-10">
+          <span className="font-mono text-xs uppercase tracking-widest text-muted">Next project</span>
+          <span className="mt-3 text-3xl font-semibold tracking-tight text-foreground transition-colors group-hover:text-accent sm:text-5xl">{nextProject.name} →</span>
+        </Link>}
       </div>
     </article>
   );
