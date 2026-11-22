@@ -54,7 +54,8 @@ export function GlobalAtmosphere() {
     if (finePointer && !reduce && !saveData) {
       const move = (event: PointerEvent) => {
         const target = event.target instanceof Element ? event.target : null;
-        const cursorType = target?.closest("a,button,[role=button]")
+        const cursorType = target?.closest("[data-cursor=media]") ? "media"
+          : target?.closest("a,button,[role=button]")
           ? target.closest("a")?.getAttribute("target") === "_blank" ? "external" : "link"
           : target?.closest("input,textarea,[contenteditable=true]") ? "text" : "default";
         cursor.current?.setAttribute("data-state", cursorType);

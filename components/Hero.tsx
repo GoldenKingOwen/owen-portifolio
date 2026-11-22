@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { Magnetic } from "@/components/motion/Magnetic";
-import { GlitchImage } from "@/components/motion/GlitchImage";
+import { HeroRoleLine } from "@/components/HeroRoleLine";
 import { LocalTime } from "@/components/LocalTime";
 import { siteConfig } from "@/data/site-config";
 import { experience } from "@/data/experience";
@@ -30,8 +31,8 @@ const facts: { label: string; value: ReactNode }[] = [
           value: (
             <span className="inline-flex items-center gap-2">
               <span aria-hidden="true" className="relative flex h-1.5 w-1.5 shrink-0">
-                <span className="availability-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+                <span className="availability-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
               </span>
               {siteConfig.availabilityLabel}
             </span>
@@ -52,39 +53,13 @@ export function Hero() {
       data-section="home"
       className="relative isolate overflow-hidden pb-14 pt-28 sm:pb-20 sm:pt-36"
     >
-      {/* A restrained technical motif: a slow grid and a small connected-node
-          constellation. Decorative only; GSAP pauses it when the hero leaves view. */}
-      <div
-        data-hero-ambient=""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
-      >
-        <div data-hero-ambient-grid="" className="hero-ambient-grid absolute -inset-[20%]" />
-        <svg
-          className="absolute inset-0 h-full w-full text-border"
-          viewBox="0 0 600 500"
-          preserveAspectRatio="xMidYMid slice"
-          fill="none"
-        >
-          <g stroke="currentColor" strokeWidth="0.6" opacity="0.5">
-            <path d="M80 120 L210 90 L340 150 L470 110" />
-            <path d="M120 300 L260 260 L400 320 L520 270" />
-            <path d="M210 90 L260 260" />
-            <path d="M340 150 L400 320" />
-            <path d="M470 110 L520 270" />
-          </g>
-          <g fill="currentColor" className="text-accent">
-            <circle className="hero-node" cx="210" cy="90" r="2.2" />
-            <circle className="hero-node" cx="340" cy="150" r="1.6" />
-            <circle className="hero-node" cx="260" cy="260" r="2" />
-            <circle className="hero-node" cx="400" cy="320" r="1.6" />
-          </g>
-        </svg>
-      </div>
-
-      {/* A single pool of light behind the portrait, so the photograph reads as
-          lit from the page rather than pasted onto it. */}
-      <div aria-hidden="true" className="hero-pool pointer-events-none absolute inset-0 -z-10" />
+      {/* SVG grade for the portrait window; hover reveals the original colour. */}
+      <svg className="sr-only" aria-hidden="true" focusable="false">
+        <filter id="portrait-duotone">
+          <feColorMatrix type="matrix" values=".22 .62 .16 0 0 .22 .62 .16 0 0 .22 .62 .16 0 0 0 0 0 1 0" />
+          <feComponentTransfer><feFuncR type="table" tableValues=".04 .95" /><feFuncG type="table" tableValues=".09 .72" /><feFuncB type="table" tableValues=".10 .45" /></feComponentTransfer>
+        </filter>
+      </svg>
 
       <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6">
         <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
@@ -95,16 +70,17 @@ export function Hero() {
                 restored afterwards). The mask keeps the reveal clean at any width. */}
             <h1
               id="hero-heading"
-              aria-label={`${siteConfig.name}, Full-Stack Software Developer in Malawi`}
+              aria-label={siteConfig.name}
               className="font-semibold text-foreground"
             >
-              <span data-hero-split="words" className="block text-display">
-                {siteConfig.name}
-              </span>
+              <span data-hero-split="chars" className="hero-name-line block text-display">OWEN</span>
+              <span data-hero-split="chars" className="hero-name-line block text-display">MATOLA</span>
               <span data-hero-split="lines" className="mt-4 block text-lead font-normal text-muted">
                 Full-Stack Software Developer in Malawi
               </span>
             </h1>
+
+            <HeroRoleLine />
 
             <p data-hero="" className="mt-6 max-w-[52ch] text-lead text-foreground [overflow-wrap:anywhere]">
               {siteConfig.tagline}
@@ -184,29 +160,27 @@ export function Hero() {
           {/* Portrait: large, bled slightly left into the text column, its left
               and bottom edges dissolving into the page. The offset hairline
               frame and the corner tick give it depth without a second box. */}
-          <figure className="order-first m-0 lg:order-none lg:-ml-32 lg:w-[24rem]">
-            <div data-hero="clip" className="relative">
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 hidden translate-x-3 translate-y-3 rounded-ui border border-border lg:block"
-              />
+          <figure className="portrait-figure order-first m-0 lg:order-none lg:-ml-32 lg:w-[24rem]">
+            <span data-hero-sun="" aria-hidden="true" className="hero-sun" />
+            <div data-hero="clip" data-portrait-tilt="" data-cursor="media" className="portrait-window group relative aspect-[4/5] w-44 overflow-hidden rounded-t-[999px] border border-border sm:w-56 lg:w-full">
               <span
                 aria-hidden="true"
                 className="absolute -left-1 -top-1 hidden h-3 w-3 border-l-2 border-t-2 border-accent lg:block"
               />
-              <div data-hero-portrait-inner="" className="relative">
-                <GlitchImage
+              <div data-hero-portrait-inner="" className="relative h-full w-full">
+                <Image
                   src="/images/owen.jpeg"
                   alt="Portrait of Owen Matola, full-stack software developer based in Malawi"
+                  fill
                   sizes="(min-width: 1024px) 384px, (min-width: 640px) 224px, 176px"
                   priority
-                  className="hero-plate plate-fade aspect-[4/5] w-44 border border-border sm:w-56 lg:w-full"
+                  className="hero-plate hero-portrait-image portrait-duotone object-cover object-top"
                 />
               </div>
             </div>
-            <figcaption className="mt-4 hidden items-center justify-between gap-4 border-t border-border pt-3 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-muted lg:flex">
+            <figcaption className="mt-4 flex items-center justify-between gap-4 border-t border-border pt-3 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted">
               <span>Owen Matola</span>
-              <span className="tabular">13.97°S / 33.79°E</span>
+              <span className="tabular">13.97°S 33.79°E</span>
             </figcaption>
           </figure>
         </div>
