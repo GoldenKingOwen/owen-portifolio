@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Section } from "@/components/ui/Section";
 import { ExternalLink } from "@/components/ui/ExternalLink";
@@ -54,6 +54,16 @@ export function Contact() {
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const onService = (event: Event) => {
+      const subject = (event as CustomEvent<{ subject?: string }>).detail?.subject;
+      if (subject) setFormData((current) => ({ ...current, subject }));
+    };
+    window.addEventListener("portfolio:service", onService);
+    return () => window.removeEventListener("portfolio:service", onService);
+  }, []);
 
   function updateField(field: FieldName, value: string) {
     setFormData((current) => ({ ...current, [field]: value }));
@@ -149,6 +159,19 @@ export function Contact() {
           </a>
         </Magnetic>
       </div>
+
+      <div className="mt-6 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
+        <button type="button" onClick={async () => { try { await navigator.clipboard.writeText(siteConfig.email); setCopied(true); window.setTimeout(() => setCopied(false), 2200); } catch { window.location.href = `mailto:${siteConfig.email}`; } }} className="min-h-12 rounded-ui border border-field bg-panel px-4 text-left text-sm text-foreground hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
+          <span className="block font-mono text-[0.625rem] uppercase tracking-wider text-muted">Email</span>{copied ? "Copied" : "Copy address"}
+        </button>
+        <ExternalLink href={getWhatsAppLink(siteConfig.whatsapp)} className="min-h-12 rounded-ui border border-field bg-panel px-4 py-2 text-sm text-foreground hover:border-accent">
+          <span className="block font-mono text-[0.625rem] uppercase tracking-wider text-muted">WhatsApp</span>Open chat
+        </ExternalLink>
+        <a href="/cv/Owen-Matola-CV.pdf" download className="min-h-12 rounded-ui border border-field bg-panel px-4 py-2 text-sm text-foreground hover:border-accent">
+          <span className="block font-mono text-[0.625rem] uppercase tracking-wider text-muted">CV</span>PDF · 1 page
+        </a>
+      </div>
+      <p className="sr-only" role="status" aria-live="polite">{copied ? "Email address copied to clipboard." : ""}</p>
 
       {/* A plain list of channels. */}
       <ul data-reveal="" className="mt-10 max-w-[34rem] border-t border-border text-sm">

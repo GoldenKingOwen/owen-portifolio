@@ -1,9 +1,5 @@
 import Image from "next/image";
 import { Section } from "@/components/ui/Section";
-import { education } from "@/data/education";
-
-const earliestStartYear = Math.min(...education.map((e) => Number(e.startYear)));
-const currentProgram = education.find((e) => e.endYear === "In Progress");
 
 /**
  * Prose, deliberately not cards. The lead stays at full opacity; the whole block
@@ -17,7 +13,7 @@ export function About() {
       <div className="grid gap-8 md:grid-cols-[13rem_minmax(0,1fr)] md:items-start md:gap-10">
         <div
           data-about-portrait=""
-          className="relative aspect-[4/5] w-40 overflow-hidden rounded-ui border border-border bg-raised md:w-full"
+          className="relative aspect-[4/5] w-40 overflow-hidden rounded-ui border border-border bg-raised md:sticky md:top-28 md:w-full"
         >
           <Image
             src="/images/owen.jpeg"
@@ -62,17 +58,10 @@ export function About() {
         </div>
       </div>
 
-      <dl data-reveal-soft="" className="mt-10 max-w-[65ch] border-t border-border text-sm">
-        <div className="grid grid-cols-1 gap-1 border-b border-border py-3 sm:grid-cols-[11rem_1fr] sm:gap-4">
-          <dt className="text-muted">Studying computing since</dt>
-          <dd className="tabular font-mono text-foreground">{earliestStartYear}</dd>
-        </div>
-        {currentProgram && (
-          <div className="grid grid-cols-1 gap-1 border-b border-border py-3 sm:grid-cols-[11rem_1fr] sm:gap-4">
-            <dt className="text-muted">Current programme</dt>
-            <dd className="text-foreground">{currentProgram.program}</dd>
-          </div>
-        )}
+      <dl data-reveal-soft="" className="mt-10 grid max-w-[65ch] grid-cols-1 border-y border-border sm:grid-cols-3">
+        <div className="border-b border-border py-4 sm:border-b-0 sm:border-r sm:pr-4"><dd className="font-display text-3xl text-foreground" data-stat="2019">2019</dd><dt className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">Coding since</dt></div>
+        <div className="border-b border-border py-4 sm:border-b-0 sm:border-r sm:px-4"><dd className="font-display text-3xl text-foreground" data-stat="4">4</dd><dt className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">Projects</dt></div>
+        <div className="py-4 sm:pl-4"><dd className="font-display text-3xl text-foreground" data-stat="2">2</dd><dt className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">CTF categories</dt><span className="sr-only">Cryptography and forensics</span></div>
       </dl>
     </Section>
   );

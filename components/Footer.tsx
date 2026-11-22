@@ -1,6 +1,7 @@
 import { siteConfig } from "@/data/site-config";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { getWhatsAppLink } from "@/lib/utils";
+import { LocalTime } from "@/components/LocalTime";
 
 const linkClass =
   "inline-flex min-h-11 items-center text-sm text-muted underline-offset-4 hover:text-foreground hover:underline";
@@ -14,10 +15,14 @@ export function Footer() {
         <span /><span /><span />
       </div>
       <div className="py-8">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <p data-footer-wordmark="" aria-hidden="true" className="footer-wordmark mb-8 text-center font-display text-[clamp(2.5rem,11vw,8rem)] leading-none tracking-tight">OWEN MATOLA</p>
+      </div>
       <div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 sm:px-6 md:flex-row md:items-center md:justify-between">
         <p data-footer-item="" className="text-sm text-muted">
           <span className="font-semibold text-foreground">{siteConfig.name}</span>
-          <span aria-hidden="true"> · </span>© <span className="tabular">{year}</span>. Built with Next.js.
+          <span aria-hidden="true"> · </span>© <span className="tabular">{year}</span>. Built with Next.js and GSAP.
+          <span className="ml-2"><LocalTime /></span>
         </p>
 
         <nav data-footer-item="" aria-label="Elsewhere">
@@ -45,6 +50,7 @@ export function Footer() {
                 Website source
               </ExternalLink>
             </li>
+            <li><a href="#home" className={linkClass}>Back to top ↑</a></li>
           </ul>
         </nav>
       </div>

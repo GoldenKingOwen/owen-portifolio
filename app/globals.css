@@ -314,6 +314,31 @@ html {
   }
 }
 
+@keyframes signal-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(var(--marquee-direction, -1) * -50%)); }
+}
+
+.tech-marquee-track {
+  animation: signal-marquee var(--marquee-speed, 70s) linear infinite;
+}
+
+.tech-marquee-track:hover { animation-play-state: paused; }
+
+.footer-wordmark {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink-muted);
+  background-image: linear-gradient(90deg, var(--sun), var(--coral) 45%, transparent 45%);
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-marquee-track { animation: none; transform: none; }
+}
+
 /* ── Motion contract ─────────────────────────────────────────────
    html[data-motion] is set by an inline script before paint, and only when
    the visitor allows motion. Everything below is therefore invisible to
