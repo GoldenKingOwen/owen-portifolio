@@ -7,7 +7,7 @@ type Theme = "dark" | "light";
 
 interface ThemeContextValue {
   theme: Theme;
-  toggleTheme: () => void;
+  toggleTheme: (origin?: { x: number; y: number }) => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
@@ -23,7 +23,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return (document.documentElement.getAttribute("data-theme") as Theme) ?? "light";
   });
 
-  function toggleTheme() {
+  function toggleTheme(origin?: { x: number; y: number }) {
     const next: Theme = theme === "dark" ? "light" : "dark";
     const apply = () => {
       // flushSync so the toggle icon updates inside the same view-transition frame.
@@ -39,6 +39,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // transitioned. Unsupported browsers and reduced-motion visitors switch instantly.
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduce && typeof document.startViewTransition === "function") {
+      document.documentElement.style.setProperty("--theme-x", `${origin?.x ?? window.innerWidth - 28}px`);
+      document.documentElement.style.setProperty("--theme-y", `${origin?.y ?? 28}px`);
       document.startViewTransition(apply);
     } else {
       apply();
