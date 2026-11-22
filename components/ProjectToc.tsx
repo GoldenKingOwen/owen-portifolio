@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Project } from "@/types";
 
 const slug = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 export function ProjectToc({ project }: { project: Project }) {
   const planning = project.status === "Planning";
-  const items = ["Overview", "Problem statement", "Goals and constraints", ...(project.detail.role ? ["My role and contributions"] : []), planning ? "Planned capabilities" : "Technical approach", planning ? "Planned architecture" : "Architecture", ...(project.detail.decisions?.length ? ["Implementation decisions"] : []), planning ? "Open design questions" : "Challenges", ...(project.detail.solutions.length ? ["Solutions"] : []), "Current status and limitations", ...(project.detail.lessons?.length ? ["Lessons learned"] : [])];
+  const items = useMemo(() => ["Overview", "Problem statement", "Goals and constraints", ...(project.detail.role ? ["My role and contributions"] : []), planning ? "Planned capabilities" : "Technical approach", planning ? "Planned architecture" : "Architecture", ...(project.detail.decisions?.length ? ["Implementation decisions"] : []), planning ? "Open design questions" : "Challenges", ...(project.detail.solutions.length ? ["Solutions"] : []), "Current status and limitations", ...(project.detail.lessons?.length ? ["Lessons learned"] : [])], [project]);
   const [active, setActive] = useState("overview");
   const [progress, setProgress] = useState(0);
   useEffect(() => {
@@ -26,7 +26,7 @@ export function ProjectToc({ project }: { project: Project }) {
     };
     update(); window.addEventListener("scroll", update, { passive: true }); window.addEventListener("resize", update);
     return () => { observer.disconnect(); window.removeEventListener("scroll", update); window.removeEventListener("resize", update); };
-  }, [project.slug]);
+  }, [items]);
   return <nav aria-label="On this page" className="h-fit lg:sticky lg:top-28">
     <p className="font-mono text-[0.625rem] uppercase tracking-widest text-muted">Contents</p>
     <div className="mt-2 h-1 w-full bg-border" role="progressbar" aria-label="Reading progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)}><span className="block h-full bg-accent" style={{ width: `${progress}%` }} /></div>
