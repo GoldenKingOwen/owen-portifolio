@@ -6,8 +6,6 @@ import { RequestJourney } from "@/components/RequestJourney";
 export function Projects() {
   const order = ["tenant-feedback-portal", "chess-practice", "cyber-awareness", "world-scope"];
   const ordered = [...projects].sort((a, b) => order.indexOf(a.slug) - order.indexOf(b.slug));
-  const lead = ordered[0];
-
   return (
     <Section id="projects" title="Projects" density="roomy">
       <div className="space-y-8 lg:space-y-12">
