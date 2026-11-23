@@ -80,14 +80,14 @@ const TICKETS: Record<Tenant, Array<{ id: string; title: string; state: string }
 };
 
 function useJourneyMotion() {
-  const timeline = useRef<gsap.core.Timeline | null>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
   useEffect(
     () => () => {
-      timeline.current?.kill();
+      timelineRef.current?.kill();
     },
     [],
   );
-  return timeline;
+  return timelineRef;
 }
 
 export function RequestJourney() {
@@ -95,13 +95,20 @@ export function RequestJourney() {
   const [running, setRunning] = useState<Action | null>(null);
   const [log, setLog] = useState<string[]>([]);
   const packetRef = useRef<SVGCircleElement>(null);
-  const timeline = useJourneyMotion();
+  const timelineRef = useJourneyMotion();
 
-  useEffect(() => {
-    timeline.current?.kill();
+  function clearJourney() {
+    timelineRef.current?.kill();
     setRunning(null);
     setLog([]);
-  }, [tenant, timeline]);
+    if (packetRef.current) gsap.set(packetRef.current, { opacity: 0 });
+  }
+
+  function chooseTenant(value: Tenant) {
+    if (value === tenant) return;
+    clearJourney();
+    setTenant(value);
+  }
 
   function run(action: Action) {
     if (running) return;
@@ -122,7 +129,7 @@ export function RequestJourney() {
         setRunning(null);
       },
     });
-    timeline.current = tl;
+    timelineRef.current = tl;
     setRunning(action);
 
     const start = POINTS[journey.route[0]];
@@ -180,7 +187,7 @@ export function RequestJourney() {
               key={value}
               type="button"
               aria-pressed={tenant === value}
-              onClick={() => setTenant(value)}
+              onClick={() => chooseTenant(value)}
               className="min-h-9 rounded-ui px-3 font-mono text-xs uppercase tracking-wider text-foreground hover:bg-raised aria-pressed:bg-raised aria-pressed:text-foreground"
             >
               {value}
@@ -268,12 +275,7 @@ export function RequestJourney() {
         ))}
         <button
           type="button"
-          onClick={() => {
-            timeline.current?.kill();
-            setRunning(null);
-            setLog([]);
-            if (packetRef.current) gsap.set(packetRef.current, { opacity: 0 });
-          }}
+          onClick={clearJourney}
           className="min-h-10 px-3 text-sm text-muted underline underline-offset-4"
         >
           Clear log
