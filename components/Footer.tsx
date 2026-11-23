@@ -2,6 +2,7 @@ import { siteConfig } from "@/data/site-config";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { getWhatsAppLink } from "@/lib/utils";
 import { LocalTime } from "@/components/LocalTime";
+import { BackToTop } from "@/components/BackToTop";
 
 const linkClass =
   "inline-flex min-h-11 items-center text-sm text-muted underline-offset-4 hover:text-foreground hover:underline";
@@ -25,7 +26,8 @@ export function Footer() {
           <span className="ml-2"><LocalTime /></span>
         </p>
 
-        <nav data-footer-item="" aria-label="Elsewhere">
+        <div data-footer-item="" className="flex items-center gap-5">
+        <nav aria-label="Elsewhere">
           <ul className="flex flex-wrap gap-x-5">
             <li>
               <ExternalLink href={siteConfig.githubUrl} className={`${linkClass} gap-1`}>
@@ -50,9 +52,10 @@ export function Footer() {
                 Website source
               </ExternalLink>
             </li>
-            <li><a href="#home" className={linkClass}>Back to top ↑</a></li>
           </ul>
         </nav>
+        <BackToTop />
+        </div>
       </div>
       </div>
     </footer>
