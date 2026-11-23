@@ -59,9 +59,9 @@ export function About() {
       </div>
 
       <dl data-reveal-soft="" className="mt-10 grid max-w-[65ch] grid-cols-1 border-y border-border sm:grid-cols-3">
-        <div className="border-b border-border py-4 sm:border-b-0 sm:border-r sm:pr-4"><dd className="font-display text-3xl text-foreground" data-stat="2019">2019</dd><dt className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">Coding since</dt></div>
-        <div className="border-b border-border py-4 sm:border-b-0 sm:border-r sm:px-4"><dd className="font-display text-3xl text-foreground" data-stat="4">4</dd><dt className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">Projects</dt></div>
-        <div className="py-4 sm:pl-4"><dd className="font-display text-3xl text-foreground" data-stat="2">2</dd><dt className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">CTF categories</dt><span className="sr-only">Cryptography and forensics</span></div>
+        <div className="border-b border-border py-4 sm:border-b-0 sm:border-r sm:pr-4"><dd className="font-display text-3xl text-foreground tabular" data-stat-count="2019">2019</dd><dt className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">Coding since</dt></div>
+        <div className="border-b border-border py-4 sm:border-b-0 sm:border-r sm:px-4"><dd className="font-display text-3xl text-foreground tabular" data-stat-count="4">4</dd><dt className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">Projects</dt></div>
+        <div className="py-4 sm:pl-4"><dd className="font-display text-3xl text-foreground tabular" data-stat-count="2">2</dd><dt className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">CTF categories</dt><span className="sr-only">Cryptography and forensics</span></div>
       </dl>
     </Section>
   );
