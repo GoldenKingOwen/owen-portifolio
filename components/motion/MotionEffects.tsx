@@ -374,6 +374,28 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
             });
           }
 
+          // About figures: an instrument readout that settles on the number that
+          // is already in the server HTML. It runs once, and only for motion
+          // visitors; everyone else keeps the printed value.
+          qa<HTMLElement>("[data-stat-count]").forEach((el) => {
+            const target = Number(el.dataset.statCount);
+            if (!Number.isFinite(target) || target <= 0) return;
+            const counter = { value: 0 };
+            gsap.to(counter, {
+              value: target,
+              duration: 1.1,
+              ease: "power2.out",
+              snap: { value: 1 },
+              scrollTrigger: { trigger: el, start: "top 90%", once: true },
+              onUpdate: () => {
+                el.textContent = String(Math.round(counter.value));
+              },
+              onComplete: () => {
+                el.textContent = String(target);
+              },
+            });
+          });
+
           // Skills: categories rise in a short stagger; their category rules
           // draw after the cards have landed.
           const skillGroups = track(qa('[data-section="skills"] [data-skill-group]:not([data-revealed])'));
@@ -514,6 +536,22 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
                 onToggle: (self) => (self.isActive ? signalTl.play() : signalTl.pause()),
               });
             }
+          });
+
+          // Experience graph: each lane rail is a real SVG path, drawn by the
+          // scrub. The commit points themselves are static (the panels open by
+          // click), so the section has one moving idea at a time.
+          qa<SVGPathElement>("[data-git-rail]").forEach((path) => {
+            const graph = path.closest("[data-git-graph]") ?? path;
+            gsap.fromTo(
+              path,
+              { strokeDashoffset: 1 },
+              {
+                strokeDashoffset: 0,
+                ease: "none",
+                scrollTrigger: { trigger: graph, start: "top 78%", end: "bottom 72%", scrub: 0.5 },
+              }
+            );
           });
 
           // Timeline: the rail draws with a scrubbed scaleY; nodes pop in as they

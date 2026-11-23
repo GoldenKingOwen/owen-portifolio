@@ -42,8 +42,8 @@ function validate(values: Record<FieldName, string>): FieldErrors {
 }
 
 const fieldClass =
-  "block w-full rounded-ui border border-field bg-background px-3 py-3 text-base text-foreground transition-[border-color,background-color] duration-200 focus-visible:border-accent focus-visible:outline-offset-1 aria-[invalid=true]:border-danger";
-const labelClass = "mb-1.5 block text-sm font-medium text-foreground";
+  "field-input block w-full rounded-ui border border-field bg-background px-3 text-base text-foreground transition-[border-color,background-color] duration-200 focus-visible:border-accent focus-visible:outline-offset-1 aria-[invalid=true]:border-danger";
+const labelClass = "field-label";
 const errorClass = "mt-1.5 text-sm font-medium text-danger";
 const channelLink =
   "inline-flex min-h-11 min-w-0 [overflow-wrap:anywhere] items-center gap-1 text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent";
@@ -55,6 +55,7 @@ export function Contact() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [ripple, setRipple] = useState(0);
 
   useEffect(() => {
     const onService = (event: Event) => {
@@ -160,9 +161,27 @@ export function Contact() {
         </Magnetic>
       </div>
 
-      <div className="mt-6 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
-        <button type="button" onClick={async () => { try { await navigator.clipboard.writeText(siteConfig.email); setCopied(true); window.setTimeout(() => setCopied(false), 2200); } catch { window.location.href = `mailto:${siteConfig.email}`; } }} className="min-h-12 rounded-ui border border-field bg-panel px-4 text-left text-sm text-foreground hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
-          <span className="block font-mono text-[0.625rem] uppercase tracking-wider text-muted">Email</span>{copied ? "Copied" : "Copy address"}
+      <div className="relative mt-6 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
+        <span aria-hidden="true" className="copy-badge" data-visible={copied}>
+          Copied
+        </span>
+        <button
+          type="button"
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(siteConfig.email);
+              setCopied(true);
+              setRipple((value) => value + 1);
+              window.setTimeout(() => setCopied(false), 2200);
+            } catch {
+              window.location.href = `mailto:${siteConfig.email}`;
+            }
+          }}
+          className="relative min-h-12 overflow-hidden rounded-ui border border-field bg-panel px-4 text-left text-sm text-foreground hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          {ripple > 0 && <span key={ripple} aria-hidden="true" className="copy-ripple" />}
+          <span className="block font-mono text-[0.625rem] uppercase tracking-wider text-muted">Email</span>
+          {copied ? "Copied" : "Copy address"}
         </button>
         <ExternalLink href={getWhatsAppLink(siteConfig.whatsapp)} className="min-h-12 rounded-ui border border-field bg-panel px-4 py-2 text-sm text-foreground hover:border-accent">
           <span className="block font-mono text-[0.625rem] uppercase tracking-wider text-muted">WhatsApp</span>Open chat
@@ -224,10 +243,7 @@ export function Contact() {
           )}
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            <div>
-              <label htmlFor="name" className={labelClass}>
-                Name
-              </label>
+            <div className="field">
               <input
                 id="name"
                 name="name"
@@ -235,22 +251,23 @@ export function Contact() {
                 autoComplete="name"
                 maxLength={80}
                 required
+                placeholder=" "
                 aria-invalid={errors.name ? true : undefined}
                 aria-describedby={errors.name ? "name-error" : undefined}
                 value={formData.name}
                 onChange={(e) => updateField("name", e.target.value)}
                 className={fieldClass}
               />
+              <label htmlFor="name" className={labelClass}>
+                Name
+              </label>
               {errors.name && (
                 <p id="name-error" className={errorClass}>
                   {errors.name}
                 </p>
               )}
             </div>
-            <div>
-              <label htmlFor="email" className={labelClass}>
-                Email
-              </label>
+            <div className="field">
               <input
                 id="email"
                 name="email"
@@ -259,12 +276,16 @@ export function Contact() {
                 autoComplete="email"
                 maxLength={254}
                 required
+                placeholder=" "
                 aria-invalid={errors.email ? true : undefined}
                 aria-describedby={errors.email ? "email-error" : undefined}
                 value={formData.email}
                 onChange={(e) => updateField("email", e.target.value)}
                 className={fieldClass}
               />
+              <label htmlFor="email" className={labelClass}>
+                Email
+              </label>
               {errors.email && (
                 <p id="email-error" className={errorClass}>
                   {errors.email}
@@ -272,44 +293,46 @@ export function Contact() {
               )}
             </div>
           </div>
-          <div>
-            <label htmlFor="subject" className={labelClass}>
-              Subject
-            </label>
+          <div className="field">
             <input
               id="subject"
               name="subject"
               type="text"
               maxLength={120}
               required
+              placeholder=" "
               aria-invalid={errors.subject ? true : undefined}
               aria-describedby={errors.subject ? "subject-error" : undefined}
               value={formData.subject}
               onChange={(e) => updateField("subject", e.target.value)}
               className={fieldClass}
             />
+            <label htmlFor="subject" className={labelClass}>
+              Subject
+            </label>
             {errors.subject && (
               <p id="subject-error" className={errorClass}>
                 {errors.subject}
               </p>
             )}
           </div>
-          <div>
-            <label htmlFor="message" className={labelClass}>
-              Message
-            </label>
+          <div className="field">
             <textarea
               id="message"
               name="message"
               rows={6}
               maxLength={5000}
               required
+              placeholder=" "
               aria-invalid={errors.message ? true : undefined}
               aria-describedby={errors.message ? "message-error" : undefined}
               value={formData.message}
               onChange={(e) => updateField("message", e.target.value)}
               className={fieldClass}
             />
+            <label htmlFor="message" className={labelClass}>
+              Message
+            </label>
             {errors.message && (
               <p id="message-error" className={errorClass}>
                 {errors.message}
@@ -330,6 +353,22 @@ export function Contact() {
                     aria-hidden="true"
                   />
                   Sending...
+                </>
+              ) : status === "success" ? (
+                <>
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="submit-check"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M4 12.5 9.5 18 20 6.5" pathLength={1} />
+                  </svg>
+                  Sent
                 </>
               ) : (
                 <>
