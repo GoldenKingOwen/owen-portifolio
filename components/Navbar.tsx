@@ -104,7 +104,7 @@ export function Navbar() {
             {siteConfig.name}
           </Link>
 
-          <ul className="hidden min-w-0 items-center gap-0.5 md:flex">
+          <ul className="hidden min-w-0 items-center gap-0.5 lg:flex">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
                 <Link href={`/${item.href}`} data-nav-link={item.href.slice(1)} onClick={(event) => { event.preventDefault(); navigate(item.href); }} className={linkClass}>
@@ -118,11 +118,11 @@ export function Navbar() {
             <button type="button" onClick={() => setPaletteOpen(true)} className={`${controlClass} gap-2 px-3 text-xs`} aria-label="Open command palette">
               <CommandIcon size={14} aria-hidden="true" /><span className="hidden sm:inline">Commands</span><kbd className="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[.625rem] sm:inline">Ctrl K / ⌘K</kbd>
             </button>
-            <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile, opens in a new tab" className={`${controlClass} hidden w-10 md:flex`}>
+            <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile, opens in a new tab" className={`${controlClass} hidden w-10 lg:flex`}>
               <GithubIcon size={16} aria-hidden="true" />
             </a>
             <ThemeToggle />
-            <button ref={toggleRef} type="button" onClick={() => setMobileOpen(true)} aria-label="Open menu" aria-expanded={mobileOpen} aria-controls="mobile-menu-dialog" className={`${controlClass} w-10 md:hidden`}>
+            <button ref={toggleRef} type="button" onClick={() => setMobileOpen(true)} aria-label="Open menu" aria-expanded={mobileOpen} aria-controls="mobile-menu-dialog" className={`${controlClass} w-10 lg:hidden`}>
               <Menu size={18} aria-hidden="true" />
             </button>
           </div>
