@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { projects } from "@/data/projects";
 import { JsonLd } from "@/components/JsonLd";
 import { siteConfig } from "@/data/site-config";
 import { projectJsonLd } from "@/lib/structured-data";
 import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { ExternalLink } from "@/components/ui/ExternalLink";
+import { ProjectToc } from "@/components/ProjectToc";
+import { ProjectHeroMedia } from "@/components/ProjectHeroMedia";
+import { DecisionNotes, ProblemCallout } from "@/components/DecisionNotes";
+import type { Project } from "@/types";
 
 export const dynamicParams = false;
 
@@ -57,10 +60,13 @@ const linkClass =
   "inline-flex min-h-11 items-center gap-1 text-sm font-medium text-foreground underline decoration-border decoration-2 underline-offset-4 hover:decoration-accent";
 
 function Prose({ title, children }: { title: string; children: React.ReactNode }) {
+  const id = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   return (
-    <section data-block data-reveal="" className="border-t border-border pt-6">
-      <h2 className="text-lg font-semibold text-foreground">{title}</h2>
-      <div className="mt-3 max-w-[65ch] text-base leading-relaxed text-foreground">{children}</div>
+    <section id={id} data-block data-reveal="" className="scroll-mt-28 border-t border-border pt-7">
+      <h2 className="font-display text-[clamp(1.5rem,2.6vw,2rem)] font-semibold leading-tight tracking-tight text-foreground">
+        {title}
+      </h2>
+      <div className="mt-4 max-w-[65ch] text-base leading-relaxed text-foreground">{children}</div>
     </section>
   );
 }
@@ -72,6 +78,36 @@ function List({ items }: { items: string[] }) {
         <li key={item}>{item}</li>
       ))}
     </ul>
+  );
+}
+
+function NextProjectBand({ project }: { project: Project }) {
+  return (
+    <nav aria-label="Next project" className="mt-20 border-t border-border">
+      <Link
+        href={`/projects/${project.slug}`}
+        data-reveal=""
+        className="next-project group relative block overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent"
+      >
+        <span aria-hidden="true" className="next-project-wipe" />
+        <div className="relative mx-auto flex max-w-6xl flex-col gap-4 px-4 py-12 sm:px-6 sm:py-16 md:flex-row md:items-end md:justify-between">
+          <div className="min-w-0">
+            <span className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted">
+              Next project · {project.status}
+            </span>
+            <span className="mt-3 block text-balance font-display text-[clamp(2.25rem,6vw,5rem)] font-semibold leading-[0.95] tracking-[-0.04em] text-foreground">
+              {project.name}
+            </span>
+          </div>
+          <span
+            aria-hidden="true"
+            className="next-project-arrow inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border text-foreground"
+          >
+            <ArrowRight size={20} />
+          </span>
+        </div>
+      </Link>
+    </nav>
   );
 }
 
@@ -92,12 +128,17 @@ export default async function ProjectPage({
   const isPlanning = project.status === "Planning";
   // A deployed preview is not a shipped product: label the link honestly.
   const liveLabel = isPlanning ? "Preview" : "Live demo";
+  const statusDot =
+    project.status === "Live" ? "bg-success" : isPlanning ? "bg-muted" : "bg-sun";
   const related = projects.filter((p) => p.slug !== project.slug).slice(0, 2);
+  const projectOrder = ["tenant-feedback-portal", "chess-practice", "cyber-awareness", "world-scope"];
+  const projectIndex = projectOrder.indexOf(project.slug);
+  const nextProject = projects.find((item) => item.slug === projectOrder[(projectIndex + 1) % projectOrder.length]);
 
   return (
-    <article className="pb-16 pt-28 sm:pb-24 sm:pt-32">
+    <article data-case-study="" data-view-target={project.slug} className="pb-0 pt-28 sm:pt-32">
       <JsonLd data={projectJsonLd(project)} />
-      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <Link
           href="/#projects"
           data-page-head=""
@@ -107,15 +148,55 @@ export default async function ProjectPage({
           All projects
         </Link>
 
-        <header data-page-head="" className="mt-4 max-w-3xl">
-          <p className="font-mono text-xs text-muted">Status: {project.status}</p>
-          <h1 className="mt-2 text-h2 font-semibold text-foreground sm:text-4xl sm:leading-tight">
+        <header className="mt-5">
+          <p data-page-head="" className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted">
+            Case study · {project.status}
+          </p>
+          {/* The title is the largest-contentful paint: it is never hidden
+              behind the motion gate, so it paints with the server HTML. */}
+          <h1 className="mt-4 max-w-[18ch] text-balance font-display text-[clamp(2.75rem,8vw,6.5rem)] font-semibold leading-[0.92] tracking-[-0.045em] text-foreground [overflow-wrap:anywhere]">
             {project.name}
           </h1>
-          <p className="mt-4 max-w-[60ch] text-lead text-muted">{project.shortDescription}</p>
+          <p data-page-head="" className="mt-6 max-w-[62ch] text-lead text-muted">
+            {project.shortDescription}
+          </p>
           {project.statusNote && (
-            <p className="mt-2 text-sm text-muted">{project.statusNote}</p>
+            <p data-page-head="" className="mt-2 max-w-[62ch] text-sm text-muted">
+              {project.statusNote}
+            </p>
           )}
+
+          <dl
+            data-page-head=""
+            className="mt-8 grid gap-x-8 gap-y-5 border-y border-border py-5 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,0.7fr)_minmax(0,0.9fr)_minmax(0,1.3fr)]"
+          >
+            {detail.role && (
+              <div>
+                <dt className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted">Role</dt>
+                <dd className="mt-1.5 text-sm leading-relaxed text-foreground">{detail.role}</dd>
+              </div>
+            )}
+            <div>
+              <dt className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted">Status</dt>
+              <dd className="mt-1.5 flex items-center gap-2 text-sm text-foreground">
+                <span aria-hidden="true" className={`h-1.5 w-1.5 shrink-0 rounded-full ${statusDot}`} />
+                {project.status}
+              </dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted">Timeline</dt>
+              {/* TODO(owen): add a verified project timeline (start/end or duration) to
+                  data/projects.ts. The page deliberately does not invent dates. */}
+              <dd className="mt-1.5 text-sm text-muted">Not yet documented</dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted">Stack</dt>
+              <dd className="mt-1.5 text-sm leading-relaxed text-foreground">
+                {project.technologies.join(", ")}
+              </dd>
+            </div>
+          </dl>
+
           {(project.links.github || project.links.live) && (
             <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
               {project.links.github && (
@@ -140,27 +221,16 @@ export default async function ProjectPage({
           )}
         </header>
 
-        {project.image && (
-          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-ui border border-border bg-raised">
-            <Image
-              src={project.image}
-              alt={project.imageAlt ?? ""}
-              fill
-              priority
-              sizes="(min-width: 1024px) 960px, 100vw"
-              quality={80}
-              className="object-cover object-top"
-            />
-          </div>
-        )}
+        <ProjectHeroMedia project={project} />
 
-        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_15rem]">
+        <div className="mt-14 grid gap-8 lg:grid-cols-[12rem_minmax(0,1fr)] xl:grid-cols-[12rem_minmax(0,1fr)_13rem]">
+          <ProjectToc project={project} />
           <div className="space-y-10">
             <Prose title="Overview">
               <p>{detail.overview}</p>
             </Prose>
             <Prose title="Problem statement">
-              <p>{detail.problemStatement}</p>
+              <ProblemCallout>{detail.problemStatement}</ProblemCallout>
             </Prose>
             <Prose title="Goals and constraints">
               <p className="font-medium text-foreground">Goals</p>
@@ -218,7 +288,7 @@ export default async function ProjectPage({
             )}
             {detail.decisions && detail.decisions.length > 0 && (
               <Prose title="Implementation decisions">
-                <List items={detail.decisions} />
+                <DecisionNotes decisions={detail.decisions} />
               </Prose>
             )}
             <Prose title={isPlanning ? "Open design questions" : "Challenges"}>
@@ -242,8 +312,9 @@ export default async function ProjectPage({
             )}
           </div>
 
-          <aside aria-label="Project facts" className="lg:sticky lg:top-24 lg:self-start">
-            <dl className="border-t border-border text-sm">
+          <aside aria-label="Project facts" className="hidden xl:sticky xl:top-28 xl:block xl:self-start">
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-muted">Project facts</p>
+            <dl className="mt-3 border-t border-border text-sm">
               <div className="border-b border-border py-3">
                 <dt className="text-muted">Status</dt>
                 <dd className="mt-1 text-foreground">{project.status}</dd>
@@ -307,6 +378,8 @@ export default async function ProjectPage({
           </Link>
         </nav>
       </div>
+
+      {nextProject && <NextProjectBand project={nextProject} />}
     </article>
   );
 }

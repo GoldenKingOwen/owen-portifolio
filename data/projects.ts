@@ -194,7 +194,7 @@ export const projects: Project[] = [
     // documents lives in plannedStack, clearly separated.
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "next-intl"],
     status: "Planning",
-    statusNote: "Currently in the planning and foundation-design stage.",
+    statusNote: "Early preview/concept. Currently in the planning and foundation-design stage.",
     featured: false,
     image: "/projects/world-scope.png",
     imageAlt:

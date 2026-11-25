@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+*.log
 
 # debug
 npm-debug.log*
@@ -44,8 +45,6 @@ next-env.d.ts
 .kilo
 
 # local logs / scripts
-next.log
-launch_chrome.sh
 
 # impeccable scratch (screenshots, build state)
 .impeccable/review/

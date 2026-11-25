@@ -14,10 +14,12 @@ import type { Project } from "@/types";
  * Server component: the imagery is in the HTML, and the hover treatment is CSS.
  */
 export function ProjectPreview({ project, lead = false }: { project: Project; lead?: boolean }) {
-  const index = String(projects.findIndex((p) => p.slug === project.slug) + 1).padStart(2, "0");
+  const displayOrder = ["tenant-feedback-portal", "chess-practice", "cyber-awareness", "world-scope"];
+  const index = String(displayOrder.indexOf(project.slug) + 1).padStart(2, "0");
 
   return (
     <div
+      style={{ viewTransitionName: `project-media-${project.slug}` }}
       className={cn(
         "relative overflow-hidden border-b border-border bg-panel",
         lead ? "aspect-[16/9]" : "aspect-[16/10]"

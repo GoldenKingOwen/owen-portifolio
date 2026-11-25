@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navbar } from "@/components/Navbar";
@@ -7,20 +7,21 @@ import { Footer } from "@/components/Footer";
 import { MotionLoader } from "@/components/motion/MotionLoader";
 import { siteConfig } from "@/data/site-config";
 import { siteUrl } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
+import { LenisProvider } from "@/components/LenisProvider";
+import { GlobalAtmosphere } from "@/components/GlobalAtmosphere";
 
-// Self-hosted so production builds never depend on reaching Google Fonts.
-// Geist is licensed under the SIL Open Font License; see app/fonts/LICENSE.txt.
-const geist = localFont({
-  src: "./fonts/Geist-Variable.woff2",
-  weight: "100 900",
-  variable: "--font-sans",
+// next/font downloads and self-hosts the font files during the build.
+const display = Fraunces({
+  subsets: ["latin"],
+  axes: ["opsz"],
+  variable: "--font-display-face",
   display: "swap",
 });
-
-const geistMono = localFont({
-  src: "./fonts/GeistMono-Variable.woff2",
-  weight: "100 900",
-  variable: "--font-mono",
+const bodyFont = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const labelFont = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-label",
   display: "swap",
 });
 
@@ -80,6 +81,8 @@ export const metadata: Metadata = {
 // there's no flash of the wrong theme on load. Kept tiny and inline.
 const themeInitScript = `
 (function() {
+  document.documentElement.classList.add('js');
+  document.documentElement.setAttribute('data-sky', 'dawn');
   try {
     var stored = localStorage.getItem('portfolio-theme');
     var theme = stored === 'dark' || stored === 'light' ? stored : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -92,8 +95,11 @@ const themeInitScript = `
   // reduced-motion visitors and low-end devices always see the final state.
   try {
     var n = navigator;
+    var connection = n.connection || n.mozConnection || n.webkitConnection;
+    var slow = connection && (connection.saveData || /^(slow-2g|2g)$/.test(connection.effectiveType || ''));
     var low = (n.deviceMemory && n.deviceMemory <= 2) || (n.hardwareConcurrency && n.hardwareConcurrency <= 2);
-    if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches && !low) {
+    if (slow) document.documentElement.setAttribute('data-save-data', 'true');
+    if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches && !low && !slow) {
       document.documentElement.setAttribute('data-motion', 'pending');
       // The opening sequence plays once per session. Its markup is already in the
       // server HTML; this attribute is what makes it visible before first paint,
@@ -122,9 +128,16 @@ export default function RootLayout({
             beforeInteractive queue runs only after the framework chunk loads.) */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body
-        className={`${geist.variable} ${geistMono.variable} font-sans antialiased`}
-      >
+      <body className={`${display.variable} ${bodyFont.variable} ${labelFont.variable} font-sans antialiased`}>
+        <JsonLd data={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: siteConfig.name,
+          jobTitle: "Full-Stack Software Developer",
+          address: { "@type": "PostalAddress", addressLocality: "Lilongwe", addressCountry: "MW" },
+          url: siteUrl,
+          sameAs: [siteConfig.githubUrl],
+        }} />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-ui focus:border focus:border-field focus:bg-background focus:px-4 focus:py-3 focus:text-sm focus:font-medium focus:text-foreground"
@@ -132,12 +145,15 @@ export default function RootLayout({
           Skip to main content
         </a>
         <ThemeProvider>
-          <Navbar />
-          <main id="main-content" tabIndex={-1}>
-            {children}
-          </main>
-          <Footer />
-          <MotionLoader />
+          <LenisProvider>
+            <Navbar />
+            <GlobalAtmosphere />
+            <main id="main-content" tabIndex={-1}>
+              {children}
+            </main>
+            <Footer />
+            <MotionLoader />
+          </LenisProvider>
         </ThemeProvider>
       </body>
     </html>

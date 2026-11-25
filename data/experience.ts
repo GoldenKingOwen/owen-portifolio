@@ -6,7 +6,7 @@ export const experience: Experience[] = [
     organization: "Infi-Tech",
     location: "Malawi",
     startDate: "Aug 2026",
-    endDate: "Present",
+    endDate: "Oct 30, 2026",
     description:
       "Three-month software development internship. Built a multi-tenant client feedback & support portal as the internship assessment project: a NestJS microservices backend with two Next.js frontends.",
     technologies: [

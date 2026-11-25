@@ -1,12 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { EASE, gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
+import { EASE, gsap, ScrollTrigger, SplitText, useGSAP, createMotionContexts } from "@/lib/motion";
 import { setNavActive } from "@/lib/nav-active";
-import { MOTION } from "@/lib/motion-timing";
+import { MOTION } from "@/lib/motion";
 import { whenIntroDone } from "@/lib/intro";
 
-const NAV_IDS = ["about", "skills", "projects", "experience", "education", "contact"];
+const NAV_IDS = ["about", "skills", "projects", "services", "experience", "education", "contact"];
 
 /** Content direction per section: related blocks arrive from the same side. */
 const SECTION_REVEAL: Record<string, { x: number; y: number; stagger: number }> = {
@@ -92,10 +92,29 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
       });
 
       let hasSections = false;
+      const skyStops: Record<string, string> = {
+        home: "dawn",
+        about: "dawn",
+        skills: "midday",
+        projects: "midday",
+        services: "midday",
+        experience: "midday",
+        education: "dusk",
+        testimonials: "dusk",
+        contact: "dusk",
+      };
       NAV_IDS.forEach((id, i) => {
         const section = document.getElementById(id);
         if (!section) return;
         hasSections = true;
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top 55%",
+          end: "bottom 55%",
+          onToggle: (self) => {
+            if (self.isActive) document.documentElement.setAttribute("data-sky", skyStops[id] ?? "midday");
+          },
+        });
         ScrollTrigger.create({
           trigger: section,
           start: "top 35%",
@@ -107,6 +126,17 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
         });
       });
       if (!hasSections) setNavActive("");
+
+      document.querySelectorAll<HTMLElement>(".signal-divider").forEach((divider) => {
+        const paths = divider.querySelectorAll<SVGPathElement>("path");
+        gsap.fromTo(paths, { drawSVG: "0%" }, {
+          drawSVG: "100%",
+          duration: 0.8,
+          ease: EASE,
+          stagger: 0.06,
+          scrollTrigger: { trigger: divider, start: "top 88%", once: true },
+        });
+      });
 
       // Fonts can change line breaks and so section positions; refresh once they settle.
       if (document.fonts?.status === "loading") document.fonts.ready.then(() => ScrollTrigger.refresh());
@@ -127,16 +157,10 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
       if (!root.hasAttribute("data-motion")) return; // reduced motion or a low-end device: final states stay as rendered
 
       let cancelled = false;
-      const mm = gsap.matchMedia();
-      mm.add(
-        {
-          ok: "(prefers-reduced-motion: no-preference)",
-          reduce: "(prefers-reduced-motion: reduce)",
-          small: "(max-width: 768px)",
-          fine: "(hover: hover) and (pointer: fine)",
-        },
-        (ctx) => {
-          const { reduce, small, fine } = ctx.conditions as { reduce: boolean; small: boolean; fine: boolean };
+      const mm = createMotionContexts((conditions) => {
+          const { reduce, tablet, desktop } = conditions;
+          const small = tablet || !desktop;
+          const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
           if (reduce) {
             // The preference changed mid-session: show everything now, stop hiding.
@@ -164,6 +188,54 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
 
           const qa = <T extends Element = HTMLElement>(sel: string) => gsap.utils.toArray<T>(sel);
           const cleanups: Array<() => void> = [];
+
+          const blueprintGrid = qa<HTMLElement>(".global-atmosphere-grid");
+          if (blueprintGrid.length) {
+            gsap.fromTo(blueprintGrid, { yPercent: -3 }, {
+              yPercent: 3,
+              ease: "none",
+              scrollTrigger: { trigger: document.documentElement, start: "top top", end: "max", scrub: 0.6 },
+            });
+          }
+
+          // About prose progressively resolves from muted ink to full text as
+          // each paragraph crosses the reading line. Plain prose remains intact
+          // in the server HTML and SplitText is reverted with the GSAP context.
+          qa<HTMLElement>(".about-prose > p").forEach((paragraph) => {
+            const split = SplitText.create(paragraph, { type: "words" });
+            gsap.fromTo(split.words, { color: "var(--ink-muted)" }, {
+              color: "var(--ink)",
+              stagger: 0.025,
+              ease: "none",
+              scrollTrigger: { trigger: paragraph, start: "top 78%", end: "bottom 48%", scrub: 0.35 },
+            });
+            cleanups.push(() => split.revert());
+          });
+
+          const footerWordmark = qa<HTMLElement>("[data-footer-wordmark]");
+          if (footerWordmark.length) {
+            gsap.to(footerWordmark, {
+              backgroundSize: "100% 100%",
+              ease: "none",
+              scrollTrigger: { trigger: footerWordmark[0], start: "top bottom", end: "bottom 55%", scrub: 0.4 },
+            });
+          }
+
+          // Desktop project panels overlap softly as the next one approaches;
+          // the mobile path stays a normal vertical document flow.
+          const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+          if (desktop && !small && !saveData) {
+            const panels = qa<HTMLElement>("#projects [data-project-panel]");
+            panels.slice(0, -1).forEach((panel, index) => {
+              gsap.to(panel, {
+                scale: 0.94,
+                opacity: 0.6,
+                transformOrigin: "top center",
+                ease: "none",
+                scrollTrigger: { trigger: panels[index + 1], start: "top 82%", end: "top 48%", scrub: 0.5 },
+              });
+            });
+          }
 
           // Every element that already has a trigger, so the fallback pass at the
           // bottom only picks up content with no section (project pages).
@@ -301,6 +373,28 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
               onComplete: () => markRevealed(aboutLead),
             });
           }
+
+          // About figures: an instrument readout that settles on the number that
+          // is already in the server HTML. It runs once, and only for motion
+          // visitors; everyone else keeps the printed value.
+          qa<HTMLElement>("[data-stat-count]").forEach((el) => {
+            const target = Number(el.dataset.statCount);
+            if (!Number.isFinite(target) || target <= 0) return;
+            const counter = { value: 0 };
+            gsap.to(counter, {
+              value: target,
+              duration: 1.1,
+              ease: "power2.out",
+              snap: { value: 1 },
+              scrollTrigger: { trigger: el, start: "top 90%", once: true },
+              onUpdate: () => {
+                el.textContent = String(Math.round(counter.value));
+              },
+              onComplete: () => {
+                el.textContent = String(target);
+              },
+            });
+          });
 
           // Skills: categories rise in a short stagger; their category rules
           // draw after the cards have landed.
@@ -442,6 +536,22 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
                 onToggle: (self) => (self.isActive ? signalTl.play() : signalTl.pause()),
               });
             }
+          });
+
+          // Experience graph: each lane rail is a real SVG path, drawn by the
+          // scrub. The commit points themselves are static (the panels open by
+          // click), so the section has one moving idea at a time.
+          qa<SVGPathElement>("[data-git-rail]").forEach((path) => {
+            const graph = path.closest("[data-git-graph]") ?? path;
+            gsap.fromTo(
+              path,
+              { strokeDashoffset: 1 },
+              {
+                strokeDashoffset: 0,
+                ease: "none",
+                scrollTrigger: { trigger: graph, start: "top 78%", end: "bottom 72%", scrub: 0.5 },
+              }
+            );
           });
 
           // Timeline: the rail draws with a scrubbed scaleY; nodes pop in as they
@@ -602,7 +712,12 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
           root.setAttribute("data-motion", "ready");
 
           // Route change (not the first load): a short fade and rise. Enter only; never delays navigation.
-          if (arrivedFrom !== null && arrivedFrom !== pathname) {
+          // A native View Transition already owns this navigation, so skip the
+          // second library and let the browser animate the shared plate. The
+          // marker is consumed here so a later navigation can use the fallback.
+          const usedNativeTransition = root.hasAttribute("data-vt");
+          if (usedNativeTransition) root.removeAttribute("data-vt");
+          if (arrivedFrom !== null && arrivedFrom !== pathname && !usedNativeTransition) {
             const main = document.querySelector("main");
             if (main) {
               gsap.fromTo(
@@ -639,27 +754,27 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
 
           const runHero = () => {
             if (cancelled) return;
-            const nameEl = document.querySelector<HTMLElement>('[data-hero-split="words"]');
+            const nameEls = qa<HTMLElement>('[data-hero-split="chars"]');
             const subEl = document.querySelector<HTMLElement>('[data-hero-split="lines"]');
             const blocks = qa('[data-hero]:not([data-hero="clip"]):not([data-revealed])');
             const portrait = qa('[data-hero="clip"]:not([data-revealed])');
             const accent = qa("[data-hero-accent]:not([data-revealed])");
             const ctas = qa("[data-hero-cta]:not([data-revealed])");
-            if (!nameEl && !blocks.length && !portrait.length && !accent.length && !ctas.length) return;
+            if (!nameEls.length && !blocks.length && !portrait.length && !accent.length && !ctas.length) return;
             // A breakpoint change re-runs this callback; the name plays once per page.
-            if (nameEl?.dataset.played) return;
-            if (nameEl) nameEl.dataset.played = "1";
+            if (nameEls[0]?.dataset.played) return;
+            nameEls.forEach((el) => { el.dataset.played = "1"; });
 
-            const nameSplit = nameEl
-              ? SplitText.create(nameEl, { type: "words,lines", mask: "lines" })
+            const nameSplit = nameEls.length
+              ? SplitText.create(nameEls, { type: "chars,lines", mask: "lines" })
               : null;
+            nameSplit?.chars.forEach((char) => char.classList.add("hero-glyph"));
             const subSplit = subEl ? SplitText.create(subEl, { type: "lines", mask: "lines" }) : null;
 
             const tl = gsap.timeline({
               defaults: { ease: EASE },
               onComplete: () => {
                 markRevealed([...blocks, ...portrait, ...accent, ...ctas, ...portraitInner]);
-                nameSplit?.revert();
                 subSplit?.revert();
                 startBreath();
               },
@@ -667,8 +782,8 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
 
             if (nameSplit) {
               tl.from(
-                nameSplit.words,
-                { yPercent: 110, duration: MOTION.hero.name, stagger: MOTION.stagger.heroWords },
+                nameSplit.chars,
+                { yPercent: 110, duration: 0.9, stagger: 0.035, ease: "expo.out" },
                 0
               );
             }
@@ -690,6 +805,11 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
                 { clipPath: "inset(0% 0% 0% 0%)", duration: MOTION.hero.portrait },
                 0.05
               );
+            }
+            const sun = qa<HTMLElement>("[data-hero-sun]");
+            if (sun.length) {
+              tl.fromTo(sun, { "--sun-rise": "65%" }, { "--sun-rise": "0%", duration: 1.4, ease: "expo.out" }, 0);
+              gsap.to(sun, { "--sun-scroll": "-40px", ease: "none", scrollTrigger: { trigger: "#home", start: "top top", end: "+=100vh", scrub: true } });
             }
             if (portraitInner.length) {
               tl.fromTo(
@@ -721,28 +841,19 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
           if (late) startBreath();
           else cleanups.push(whenIntroDone(runHero));
 
-          // The hero's ambient grid, nodes and availability halo are CSS loops;
-          // pause them when the hero is off-screen.
-          const ambientLoops = qa(
-            "[data-hero-ambient-grid], .hero-node, .availability-ping"
-          );
-          if (ambientLoops.length) {
-            ScrollTrigger.create({
-              trigger: "[data-hero-ambient]",
-              start: "top bottom",
-              end: "bottom top",
-              onToggle: (self) => {
-                ambientLoops.forEach((el) => {
-                  el.style.animationPlayState = self.isActive ? "running" : "paused";
-                });
-              },
-            });
-          }
-
           // ---- Pointer effects: ONE passive pointermove listener, fine pointers only.
           // The native cursor is untouched. Magnets are limited to two primary links;
           // the outer hit target never moves, and keyboard focus is unaffected.
           if (fine) {
+            const glyphs = qa<HTMLElement>(".hero-glyph");
+            const weightTo = new Map(glyphs.map((glyph) => [
+              glyph,
+              gsap.quickTo(glyph, "--glyph-weight", { duration: 0.18, ease: "power2.out" }),
+            ]));
+            const portraitTilt = document.querySelector<HTMLElement>("[data-portrait-tilt]");
+            const rotateXTo = portraitTilt ? gsap.quickTo(portraitTilt, "rotationX", { duration: 0.35, ease: "power2.out" }) : null;
+            const rotateYTo = portraitTilt ? gsap.quickTo(portraitTilt, "rotationY", { duration: 0.35, ease: "power2.out" }) : null;
+            if (portraitTilt) gsap.set(portraitTilt, { transformPerspective: 900, transformOrigin: "center" });
             const magnets = qa("[data-magnetic]")
               .slice(0, 2)
               .map((outer) => {
@@ -781,6 +892,18 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
             };
 
             const onMove = (e: PointerEvent) => {
+              for (const glyph of glyphs) {
+                const rect = glyph.getBoundingClientRect();
+                const distance = Math.hypot(e.clientX - (rect.left + rect.width / 2), e.clientY - (rect.top + rect.height / 2));
+                weightTo.get(glyph)?.(distance < 160 ? Math.min(900, 600 + ((160 - distance) / 160) * 300) : 600);
+              }
+              if (portraitTilt && rotateXTo && rotateYTo) {
+                const rect = portraitTilt.getBoundingClientRect();
+                const dx = (e.clientX - rect.left) / rect.width - 0.5;
+                const dy = (e.clientY - rect.top) / rect.height - 0.5;
+                rotateXTo(Math.max(-6, Math.min(6, -dy * 12)));
+                rotateYTo(Math.max(-6, Math.min(6, dx * 12)));
+              }
               for (const m of magnets) {
                 if (m.hidden) continue;
                 const dx = e.clientX - m.cx;
@@ -796,6 +919,9 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
             };
             const onLeave = () => {
               for (const m of magnets) if (m.active) release(m);
+              weightTo.forEach((to) => to(600));
+              rotateXTo?.(0);
+              rotateYTo?.(0);
             };
 
             const onOut = (e: PointerEvent) => {
@@ -808,12 +934,13 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
               document.removeEventListener("pointerout", onOut);
               ScrollTrigger.removeEventListener("refresh", measure);
               gsap.set(magnets.map((m) => m.inner), { clearProps: "transform" });
+              gsap.set(glyphs, { clearProps: "--glyph-weight" });
+              if (portraitTilt) gsap.set(portraitTilt, { clearProps: "transform,transformPerspective" });
             });
           }
 
           return () => cleanups.forEach((c) => c());
-        }
-      );
+        });
 
       performance.measure("motion:init", { start: t0, end: performance.now() });
       return () => {

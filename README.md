@@ -1,87 +1,68 @@
 # Owen Matola — Portfolio
 
-A personal portfolio and résumé site for **Owen Matola**, an ICT student at Mzuzu University and software developer building full-stack web applications. Built with Next.js (App Router), React 19, TypeScript, and Tailwind CSS v4.
+[Live portfolio](https://owen-portifolio.vercel.app)
 
-**[GitHub](https://github.com/GoldenKingOwen)**
+<!-- TODO(owen): add the approved hero screenshot at docs/images/portfolio-hero.png, then embed it here. -->
 
----
+## Signal from Lilongwe
 
-## ✨ Features
+A personal portfolio and résumé site built with Next.js App Router, React 19, TypeScript, Tailwind CSS v4, and GSAP. Its visual language pairs a field instrument panel with a notebook, using a rising-sun palette, editorial type, and lightweight motion.
 
-- **Landing sections** — Hero, About, Skills, Projects, Services, Experience, Education, Testimonials, and Contact, all on a single scrollable page with a fixed navbar.
-- **Active-section navigation** — the current section is highlighted in the navbar as you scroll, using a scroll-spy rather than a scroll listener.
-- **Dark / light theme** — persisted preference with a no-flash inline init script; accessible via the toggle in the navbar.
-- **Project detail pages** — each project has its own route (`/projects/[slug]`) with a case-study structure: overview, problem statement, goals, role, technical approach, architecture, decisions, challenges, status, and related work.
-- **Contact form** — validated in the browser and submitted straight to [Formspree](https://formspree.io) (AJAX), so no email credentials are needed on the server.
-- **Polished UI** — GSAP entrance and scroll reveals (opacity and transform only), a view-transition theme fade, hover states, and a design that skips motion entirely for reduced-motion and low-end visitors. Content is server-rendered and remains accessible without JavaScript.
+## Design decisions
 
-## 🛠 Tech Stack
+- **Formspree:** contact submissions go directly from the browser to Formspree, so the site does not need a server-side email service or stored email credentials.
+- **Content in `/data`:** project, experience, education, skills, services, and site copy stay separate from presentation components and are rendered into the initial HTML.
+- **Next.js App Router:** file-based project case studies, metadata, sitemap, robots rules, and server rendering live in the same routing system.
+- **Progressive motion:** GSAP and ScrollTrigger enhance the page after render. Reduced-motion visitors and users on small or data-constrained devices retain the static layout and readable content.
 
-| Layer      | Technologies                                                            |
-| ---------- | ----------------------------------------------------------------------- |
-| Framework  | [Next.js 16](https://nextjs.org) (App Router) · React 19 · TypeScript    |
-| Styling    | [Tailwind CSS v4](https://tailwindcss.com) (CSS-first config via `@theme inline`) |
-| Animation  | [GSAP](https://gsap.com) with ScrollTrigger                              |
-| Icons      | [Lucide React](https://lucide.dev)                                       |
-| Fonts      | Self-hosted Geist and Geist Mono via `next/font/local`                   |
-| Email      | [Formspree](https://formspree.io) (contact form)                                                      |
+## Getting started
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 20+ and npm (or your preferred package manager)
-
-### Install & run
+Requires Node.js 20+ and npm.
 
 ```bash
-npm install
+npm ci
+Copy-Item .env.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the site. The page hot-reloads as you edit.
+Open http://localhost:3000. Set `NEXT_PUBLIC_SITE_URL` to the canonical origin. The contact form uses the Formspree endpoint in `components/Contact.tsx`.
 
-### Environment variables
+## Motion and interaction
 
-Copy `.env.example` to `.env.local` and fill in the values:
+GSAP, `@gsap/react`, ScrollTrigger, and SplitText power scroll reveals and section motion. Lenis provides smooth scrolling when motion is allowed. `cmdk` powers the keyboard command palette, and `d3-force` lays out the optional skills constellation. The skills list and all section copy remain available in server-rendered HTML. Reduced motion, Save-Data, and mobile breakpoints turn off decorative motion or use static layouts.
 
-```bash
-# Used for SEO metadata (Open Graph, canonical links)
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+## Adding a project
+
+1. Add its verified copy, status, links, image path, and technology array in `data/projects.ts`.
+2. Keep planned technologies and features in the explicitly planned fields; do not describe them as shipped.
+3. Add a representative screenshot under `public/projects/` only when one is available. Without one, `ProjectPreview` renders a labelled blueprint plate instead of pretending to show the live interface.
+4. Confirm the slug is included in the project display order in `components/Projects.tsx`. Its technology array also feeds the skills graph links.
+
+## Accessibility and performance
+
+- Page content and project write-ups render without client JavaScript.
+- Motion respects `prefers-reduced-motion`; Lenis and decorative motion are disabled for reduced motion, touch, and Save-Data/slow connections.
+- Skills use a keyboard-operable graph on suitable desktop settings and a readable list by default on mobile or reduced motion.
+- Images declare responsive `sizes`; focus rings, live regions, labelled controls, and visible text provide non-visual paths through interactive sections.
+- Lighthouse and screen-reader scores are not asserted here; re-run the manual QA workflow before release.
+
+## Project structure
+
+```
+app/                 App Router pages, metadata, sitemap, robots, styles
+components/          Page sections, UI, diagrams, command palette, motion
+data/                Site, project, experience, education, and skill content
+lib/                 GSAP setup, scrolling, metadata, and shared utilities
+public/              Images, certificates, and CV download
+types/               Shared TypeScript types
+cv-src/              Source for the downloadable CV
 ```
 
-> The contact form needs **no** API keys — it submits directly to Formspree from the browser (see `components/Contact.tsx`). To change the delivery inbox, update the form ID in that file or the destination in your Formspree dashboard.
+## Scripts
 
-## 📁 Project Structure
-
-```
-app/
-  page.tsx                 # Home page (composes all sections)
-  layout.tsx               # Root layout: fonts, metadata, theme, navbar, footer
-  globals.css              # Tailwind v4 import + theme tokens + base styles
-  fonts/                   # Self-hosted Geist files and OFL license
-  projects/[slug]/page.tsx # Individual project detail pages
-
-components/
-  Navbar.tsx               # Fixed nav with active-section scroll spy
-  Hero.tsx · About.tsx · Skills.tsx · Projects.tsx · Services.tsx
-  Experience.tsx · Education.tsx · Certifications.tsx · Testimonials.tsx
-  Contact.tsx · Footer.tsx
-  ui/                      # Card, Section, ExternalLink
-  motion/                  # Lazy GSAP loader, reveals, magnetic wrapper
-data/                      # Content: projects, experience, education, skills, site config
-types/                     # Shared TypeScript interfaces
-lib/utils.ts               # cn(), getWhatsAppLink(), formatDateRange()
-```
-
-All content lives in `data/` — edit those files to update the site without touching component code.
-
-## 📜 Scripts
-
-| Command            | Description                     |
-| ------------------ | ------------------------------- |
-| `npm run dev`      | Start the dev server            |
-| `npm run build`    | Create an optimized production build |
-| `npm start`        | Run the production build        |
-| `npm run lint`     | Run ESLint                      |
-
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server with Webpack |
+| `npm run lint` | Run ESLint |
+| `npm run build` | Create a Webpack production build |
+| `npm start` | Serve the production build |

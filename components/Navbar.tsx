@@ -1,14 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Command as CommandIcon, Menu, X } from "lucide-react";
 import { GithubIcon } from "@/components/icons/GithubIcon";
-import { cn } from "@/lib/utils";
-import { setNavActive, syncNavLink } from "@/lib/nav-active";
+import { setNavActive } from "@/lib/nav-active";
 import { siteConfig } from "@/data/site-config";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { NavItem } from "@/types";
+import { scrollToSection } from "@/lib/scroll";
+import type { NavItem } from "@/types";
+
+const CommandPalette = dynamic(() => import("@/components/CommandPalette").then((module) => module.CommandPalette), { ssr: false });
 
 const NAV_ITEMS: NavItem[] = [
   { label: "About", href: "#about" },
@@ -19,194 +23,133 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Contact", href: "#contact" },
 ];
 
-// Matches --header-h (4rem) in globals.css, which is also the section[id] scroll-margin-top.
-// Matches --header-h (4rem) in globals.css, which is also the section[id] scroll-margin-top.
-const HEADER_OFFSET = 64;
-
-const controlClass =
-  "flex h-11 w-11 items-center justify-center rounded-ui border border-border text-foreground transition-[color,background-color,transform] duration-200 hover:bg-raised active:scale-[0.98] active:bg-raised-hover";
-
-// The current section is marked with data-active (and aria-current) by the
-// scroll-spy in MotionEffects; the look is pure CSS, so no React state is
-// involved and no scroll listener runs here.
-const linkClass =
-  "relative inline-flex min-h-11 items-center px-3 text-sm text-muted transition-colors after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-200 after:content-[''] hover:text-foreground data-[active=true]:font-medium data-[active=true]:text-foreground data-[active=true]:after:scale-x-100";
+const linkClass = "relative inline-flex min-h-10 items-center px-3 text-sm text-muted transition-colors hover:text-foreground data-[active=true]:font-medium data-[active=true]:text-foreground";
+const controlClass = "flex h-10 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-raised focus-visible:outline-offset-2";
 
 export function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
-  const headerRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [toast, setToast] = useState("");
 
-  // Escape closes the mobile menu and returns focus to its trigger, so keyboard
-  // users are never left with focus on an element that has just unmounted.
   useEffect(() => {
-    if (!mobileOpen) return;
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        setMobileOpen(false);
-        toggleRef.current?.focus();
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (mobileOpen && !dialog.open) dialog.showModal();
+    if (!mobileOpen && dialog.open) dialog.close();
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setPaletteOpen((open) => !open);
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [mobileOpen]);
-
-  // A pointer outside the header dismisses the panel; clicks on its links are
-  // handled by handleNavClick, which closes it after the navigation starts.
-  useEffect(() => {
-    if (!mobileOpen) return;
-    function onPointerDown(e: PointerEvent) {
-      if (!headerRef.current?.contains(e.target as Node)) setMobileOpen(false);
-    }
-    document.addEventListener("pointerdown", onPointerDown);
-    return () => document.removeEventListener("pointerdown", onPointerDown);
-  }, [mobileOpen]);
-
-  // Browser back/forward should not leave the panel open. In-app navigation
-  // closes it in handleNavClick, so no pathname effect is needed.
-  useEffect(() => {
-    function onPopState() {
-      setMobileOpen(false);
-    }
-    window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  // Native smooth scrolling is kept: it costs no JavaScript, and GSAP's
-  // ScrollToPlugin would add weight for the same result.
-  function scrollToSection(href: string) {
-    const el = document.querySelector(href);
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
-    window.scrollTo({ top, behavior: "smooth" });
-  }
+  useEffect(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+    let previous = window.scrollY;
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const current = window.scrollY;
+        if (current < 80 || previous - current > 8) setHidden(false);
+        else if (current - previous > 8) setHidden(true);
+        previous = current;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(frame); };
+  }, []);
 
-  function handleNavClick(href: string) {
-    setNavActive(href.slice(1)); // highlight immediately; the scroll-spy confirms as the page settles
+  useEffect(() => {
+    if (!toast) return;
+    const timeout = window.setTimeout(() => setToast(""), 2600);
+    return () => window.clearTimeout(timeout);
+  }, [toast]);
+
+  function navigate(href: string) {
+    setNavActive(href.slice(1));
     const wasMobileOpen = mobileOpen;
     setMobileOpen(false);
-
-    // The clicked link unmounts with the panel, so keep keyboard focus on the trigger.
     if (wasMobileOpen) window.requestAnimationFrame(() => toggleRef.current?.focus());
-
     if (pathname !== "/") {
-      // On a project page the section doesn't exist: go home and let the hash scroll.
       router.push(`/${href}`);
       return;
     }
+    if (href === "#home") scrollToSection("#home", 0);
+    else scrollToSection(href);
+  }
 
-    if (wasMobileOpen) {
-      // Let the menu collapse first; a smooth scroll started mid-layout can be cancelled on phones.
-      setTimeout(() => scrollToSection(href), 320);
-    } else {
-      scrollToSection(href);
-    }
+  function closeDialog() {
+    setMobileOpen(false);
+    window.requestAnimationFrame(() => toggleRef.current?.focus());
   }
 
   return (
-    <header
-      ref={headerRef}
-      data-site-header
-      // data-scrolled is set by the header ScrollTrigger in MotionEffects.
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b border-transparent bg-background data-[scrolled=true]:border-border",
-        mobileOpen && "border-border"
-      )}
-    >
-      <nav
-        aria-label="Primary"
-        className="mx-auto flex h-[var(--header-h)] max-w-5xl items-center justify-between px-4 sm:px-6"
-      >
-        <a
-          href="#home"
-          onClick={(e) => {
-            e.preventDefault();
-            setMobileOpen(false);
-            if (pathname !== "/") router.push("/");
-            else window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-          className="inline-flex min-h-11 items-center text-base font-semibold tracking-tight text-foreground"
-        >
-          {siteConfig.name}
-        </a>
+    <>
+      <header data-site-header data-hidden={hidden} className="site-nav fixed inset-x-3 top-3 z-50 mx-auto max-w-[min(96vw,1024px)] rounded-full border border-border bg-surface/85 shadow-lg shadow-black/5 backdrop-blur-xl">
+        <nav aria-label="Primary" className="flex h-12 items-center justify-between gap-2 px-3 sm:px-4">
+          <Link href="/#home" onClick={(event) => { event.preventDefault(); navigate("#home"); }} className="shrink-0 text-sm font-semibold tracking-tight text-foreground sm:text-base">
+            {siteConfig.name}
+          </Link>
 
-        <ul className="hidden items-center gap-1 md:flex">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.href}>
-              <a
-                href={`/${item.href}`}
-                data-nav-link={item.href.slice(1)}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(item.href);
-                }}
-                className={linkClass}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex items-center gap-2">
-          <a
-            href={siteConfig.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub profile, opens in a new tab"
-            className={`${controlClass} max-md:hidden`}
-          >
-            <GithubIcon size={16} aria-hidden="true" />
-          </a>
-          <ThemeToggle />
-          <button
-            ref={toggleRef}
-            type="button"
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-menu"
-            className={cn(controlClass, "md:hidden")}
-          >
-            {mobileOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Always mounted so the panel can animate open and closed. The collapsed
-          panel is inert, so its links leave the tab order. */}
-      <div
-        id="mobile-menu"
-        className={cn(
-          "grid bg-background transition-[grid-template-rows,opacity] duration-300 ease-out md:hidden",
-          mobileOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        )}
-        inert={!mobileOpen}
-        aria-hidden={!mobileOpen}
-      >
-        <div className="min-h-0 overflow-hidden">
-          <ul className="px-4 pb-3">
+          <ul className="hidden min-w-0 items-center gap-0.5 lg:flex">
             {NAV_ITEMS.map((item) => (
-              <li key={item.href} className="border-t border-border first:border-t-0">
-                <a
-                  href={`/${item.href}`}
-                  data-nav-link={item.href.slice(1)}
-                  ref={syncNavLink}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(item.href);
-                  }}
-                  className="relative flex min-h-12 items-center text-base text-foreground after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-200 after:content-[''] data-[active=true]:font-medium data-[active=true]:after:scale-x-100"
-                >
-                  {item.label}
-                </a>
+              <li key={item.href}>
+                <Link href={`/${item.href}`} data-nav-link={item.href.slice(1)} onClick={(event) => { event.preventDefault(); navigate(item.href); }} className={linkClass}>
+                  <span className="nav-knight" aria-hidden="true">♞</span>{item.label}
+                </Link>
               </li>
             ))}
           </ul>
+
+          <div className="flex shrink-0 items-center gap-1.5">
+            <button type="button" onClick={() => setPaletteOpen(true)} className={`${controlClass} gap-2 px-3 text-xs`} aria-label="Open command palette">
+              <CommandIcon size={14} aria-hidden="true" /><span className="hidden sm:inline">Commands</span><kbd className="hidden rounded border border-border px-1.5 py-0.5 font-mono text-[.625rem] sm:inline">Ctrl K / ⌘K</kbd>
+            </button>
+            <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile, opens in a new tab" className={`${controlClass} hidden w-10 lg:flex`}>
+              <GithubIcon size={16} aria-hidden="true" />
+            </a>
+            <ThemeToggle />
+            <button ref={toggleRef} type="button" onClick={() => setMobileOpen(true)} aria-label="Open menu" aria-expanded={mobileOpen} aria-controls="mobile-menu-dialog" className={`${controlClass} w-10 lg:hidden`}>
+              <Menu size={18} aria-hidden="true" />
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <dialog ref={dialogRef} id="mobile-menu-dialog" className="mobile-nav-dialog" aria-label="Navigation menu" onClose={() => { setMobileOpen(false); toggleRef.current?.focus(); }} onClick={(event) => { if (event.target === event.currentTarget) closeDialog(); }}>
+        <div className="mobile-nav-top">
+          <span className="font-display text-xl text-foreground">{siteConfig.name}</span>
+          <button type="button" className={`${controlClass} w-11`} onClick={closeDialog} aria-label="Close menu"><X size={19} aria-hidden="true" /></button>
         </div>
-      </div>
-    </header>
+        <nav aria-label="Mobile primary">
+          <ul>
+            {NAV_ITEMS.map((item, index) => (
+              <li key={item.href} style={{ "--nav-index": index } as React.CSSProperties}>
+                <Link href={`/${item.href}`} data-nav-link={item.href.slice(1)} onClick={(event) => { event.preventDefault(); navigate(item.href); }}>
+                  <span className="nav-knight" aria-hidden="true">♞</span>{item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <button type="button" className="mobile-command-link" onClick={() => { closeDialog(); setPaletteOpen(true); }}>Open command palette <kbd>Ctrl K / ⌘K</kbd></button>
+      </dialog>
+
+      {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} onToast={setToast} />}
+      <div className="copy-toast" role="status" aria-live="polite" data-visible={Boolean(toast)}>{toast}</div>
+    </>
   );
 }
