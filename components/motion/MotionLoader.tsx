@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
+import { signalRouteCommit } from "@/lib/view-transition";
 
 // GSAP lives in its own async chunk. It is not requested until the page has
 // hydrated and the browser is idle, so it never competes with first paint.
@@ -14,6 +15,13 @@ const noop = () => () => {};
 
 export function MotionLoader() {
   const pathname = usePathname();
+
+  // Release any View Transition waiting for this route to commit. The effect
+  // runs after React has committed the new page, so the browser captures the
+  // new content instead of the outgoing snapshot.
+  useEffect(() => {
+    signalRouteCommit();
+  }, [pathname]);
   const [ready, setReady] = useState(false);
 
   // The inline script in layout.tsx sets html[data-motion] only for visitors who

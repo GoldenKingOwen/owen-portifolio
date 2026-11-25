@@ -712,7 +712,12 @@ export default function MotionEffects({ pathname }: { pathname: string }) {
           root.setAttribute("data-motion", "ready");
 
           // Route change (not the first load): a short fade and rise. Enter only; never delays navigation.
-          if (arrivedFrom !== null && arrivedFrom !== pathname) {
+          // A native View Transition already owns this navigation, so skip the
+          // second library and let the browser animate the shared plate. The
+          // marker is consumed here so a later navigation can use the fallback.
+          const usedNativeTransition = root.hasAttribute("data-vt");
+          if (usedNativeTransition) root.removeAttribute("data-vt");
+          if (arrivedFrom !== null && arrivedFrom !== pathname && !usedNativeTransition) {
             const main = document.querySelector("main");
             if (main) {
               gsap.fromTo(

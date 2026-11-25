@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ComponentProps, MouseEvent } from "react";
+import { waitForRouteCommit } from "@/lib/view-transition";
 
 type LinkProps = ComponentProps<typeof Link>;
 
@@ -40,8 +41,8 @@ export function ViewTransitionLink({ href, onClick, ...props }: LinkProps) {
       return;
     }
 
-    const hrefString = typeof href === "string" ? href : href.toString();
-    if (!hrefString.startsWith("/") || hrefString === window.location.pathname) return;
+    const hrefString = typeof href === "string" ? href : null;
+    if (!hrefString || !hrefString.startsWith("/") || hrefString === window.location.pathname) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const connection = (
@@ -56,35 +57,31 @@ export function ViewTransitionLink({ href, onClick, ...props }: LinkProps) {
 
     event.preventDefault();
 
-    // Prefetched routes commit quickly; the bounded wait keeps a failed or slow
-    // navigation from trapping the old frame in front of the visitor.
-    const waitForDestination = new Promise<void>((resolve) => {
-      const started = performance.now();
-      const check = () => {
-        const marker = document.querySelector("[data-view-target]");
-        const arrived = marker?.getAttribute("data-view-target") === hrefString.split("/").pop();
-        if ((arrived && window.location.pathname === hrefString) || performance.now() - started > 900) {
-          resolve();
-          return;
-        }
-        requestAnimationFrame(check);
-      };
-      requestAnimationFrame(check);
-    });
+    // Prefetched routes commit quickly. The signal comes from MotionLoader's
+    // pathname effect rather than requestAnimationFrame: rendering is paused
+    // while the browser holds the old snapshot, so rAF would never fire.
+    const committed = waitForRouteCommit();
+
+    // Mark the navigation before the new page commits: MotionEffects reads and
+    // consumes this in its setup, so the GSAP route fade never runs on top of
+    // the browser's snapshot. One element, one library.
+    document.documentElement.setAttribute("data-vt", "active");
 
     try {
       const transition = document.startViewTransition(async () => {
         router.push(hrefString);
-        await waitForDestination;
+        await committed;
       });
 
-      // Tell the GSAP route fade that the browser is already animating this
-      // navigation, so one element is never animated by two libraries.
-      document.documentElement.setAttribute("data-vt", "active");
-      transition.finished.then(
-        () => document.documentElement.removeAttribute("data-vt"),
-        () => document.documentElement.removeAttribute("data-vt"),
-      );
+      // If the motion chunk never loads, the marker must not leak into a later
+      // navigation; clear it once the transition has finished or been skipped.
+      const clearMarker = () =>
+        window.setTimeout(() => {
+          if (document.documentElement.getAttribute("data-vt") === "active") {
+            document.documentElement.removeAttribute("data-vt");
+          }
+        }, 4000);
+      transition.finished.then(clearMarker, clearMarker);
     } catch {
       // The API can refuse a transition while another one is active. Navigation
       // must still happen: fall back to the router and the GSAP fade.
